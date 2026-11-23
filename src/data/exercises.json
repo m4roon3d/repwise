@@ -1,0 +1,903 @@
+[
+  {
+    "id": "goblet_squat",
+    "name": "Goblet Squat",
+    "movement_pattern": "squat",
+    "primary_muscles": [
+      "Quads",
+      "Glutes",
+      "Core"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Dumbbell or Kettlebell",
+    "joint_stress_flags": [],
+    "animation_key": "squat",
+    "cues": [
+      "Hold weight snug at chest with elbows tucked down.",
+      "Sit hips between heels while keeping chest proud.",
+      "Drive through mid-foot and exhale on the way up."
+    ],
+    "regression_id": "box_bodyweight_squat"
+  },
+  {
+    "id": "leg_press",
+    "name": "45\u00b0 Machine Leg Press",
+    "movement_pattern": "squat",
+    "primary_muscles": [
+      "Quads",
+      "Glutes"
+    ],
+    "equipment_tiers": [
+      "commercial_gym"
+    ],
+    "equipment_label": "Leg Press Machine",
+    "joint_stress_flags": [
+      "knee"
+    ],
+    "animation_key": "squat",
+    "cues": [
+      "Keep lower back and tailbone flat against the pad.",
+      "Lower sled smoothly until knees reach ~90 degrees.",
+      "Press smoothly without locking knees hard at the top."
+    ],
+    "regression_id": "goblet_squat"
+  },
+  {
+    "id": "barbell_back_squat",
+    "name": "Barbell Back Squat",
+    "movement_pattern": "squat",
+    "primary_muscles": [
+      "Quads",
+      "Glutes",
+      "Erectors"
+    ],
+    "equipment_tiers": [
+      "commercial_gym"
+    ],
+    "equipment_label": "Barbell & Squat Rack",
+    "joint_stress_flags": [
+      "knee",
+      "lower_back"
+    ],
+    "animation_key": "squat",
+    "cues": [
+      "Brace core 360\u00b0 before initiating the descent.",
+      "Track knees cleanly over second and third toes.",
+      "Control a 2-second lower; stand smoothly without rushing."
+    ],
+    "regression_id": "goblet_squat"
+  },
+  {
+    "id": "box_bodyweight_squat",
+    "name": "Tempo Box / Chair Squat",
+    "movement_pattern": "squat",
+    "primary_muscles": [
+      "Quads",
+      "Glutes"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Bench or Chair (Bodyweight)",
+    "joint_stress_flags": [],
+    "animation_key": "squat",
+    "cues": [
+      "Lower slowly over 3 seconds until glutes lightly tap bench.",
+      "Keep shins relatively vertical to reduce knee shear.",
+      "Stand tall by squeezing glutes without bouncing."
+    ],
+    "regression_id": "glute_bridge"
+  },
+  {
+    "id": "db_romanian_deadlift",
+    "name": "Dumbbell Romanian Deadlift (RDL)",
+    "movement_pattern": "hinge",
+    "primary_muscles": [
+      "Hamstrings",
+      "Glutes",
+      "Back"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Dumbbells",
+    "joint_stress_flags": [
+      "lower_back"
+    ],
+    "animation_key": "hinge",
+    "cues": [
+      "Soften knees slightly and push hips straight back.",
+      "Keep dumbbells grazing thighs with lats engaged.",
+      "Stop once hamstrings feel stretched; drive hips forward."
+    ],
+    "regression_id": "glute_bridge"
+  },
+  {
+    "id": "cable_pull_through",
+    "name": "Cable Pull-Through",
+    "movement_pattern": "hinge",
+    "primary_muscles": [
+      "Glutes",
+      "Hamstrings"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym"
+    ],
+    "equipment_label": "Cable Machine + Rope",
+    "joint_stress_flags": [],
+    "animation_key": "hinge",
+    "cues": [
+      "Step forward until cable has light tension between legs.",
+      "Hinge hips back cleanly with a neutral spine.",
+      "Finish tall by squeezing glutes\u2014don't hyperextend lower back."
+    ],
+    "regression_id": "glute_bridge"
+  },
+  {
+    "id": "trap_bar_deadlift",
+    "name": "Trap Bar Deadlift",
+    "movement_pattern": "hinge",
+    "primary_muscles": [
+      "Glutes",
+      "Hamstrings",
+      "Quads",
+      "Back"
+    ],
+    "equipment_tiers": [
+      "commercial_gym"
+    ],
+    "equipment_label": "Trap / Hex Bar",
+    "joint_stress_flags": [
+      "lower_back"
+    ],
+    "animation_key": "hinge",
+    "cues": [
+      "Pull slack out of the handles before lifting.",
+      "Push the floor away with your legs while keeping chest proud.",
+      "Control the descent back to a quiet touch."
+    ],
+    "regression_id": "cable_pull_through"
+  },
+  {
+    "id": "glute_bridge",
+    "name": "Weighted / Bodyweight Glute Bridge",
+    "movement_pattern": "hinge",
+    "primary_muscles": [
+      "Glutes",
+      "Hamstrings"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Mat (Optional Dumbbell)",
+    "joint_stress_flags": [],
+    "animation_key": "glute_bridge",
+    "cues": [
+      "Tuck ribs down and drive evenly through both heels.",
+      "Pause 1 full second at the top with glutes squeezed.",
+      "Lower under control without arching your lumbar spine."
+    ],
+    "regression_id": null
+  },
+  {
+    "id": "seated_leg_curl",
+    "name": "Seated Hamstring Curl",
+    "movement_pattern": "hinge",
+    "primary_muscles": [
+      "Hamstrings"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym"
+    ],
+    "equipment_label": "Leg Curl Machine",
+    "joint_stress_flags": [],
+    "animation_key": "leg_curl",
+    "cues": [
+      "Align knee joint with the machine's pivot axis.",
+      "Curl heels smoothly under the seat with a brief squeeze.",
+      "Resist the pad for 2 seconds as you extend back."
+    ],
+    "regression_id": "glute_bridge"
+  },
+  {
+    "id": "db_incline_press",
+    "name": "Incline Dumbbell Bench Press",
+    "movement_pattern": "horizontal_push",
+    "primary_muscles": [
+      "Upper Chest",
+      "Front Delts",
+      "Triceps"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Dumbbells + Incline Bench",
+    "joint_stress_flags": [
+      "shoulder"
+    ],
+    "animation_key": "chest_press",
+    "cues": [
+      "Set bench to a gentle 20\u201330\u00b0 angle, not overly steep.",
+      "Tuck elbows ~45\u00b0 from torso to protect shoulder joints.",
+      "Press smoothly up and slightly inward without clanging weights."
+    ],
+    "regression_id": "db_floor_press"
+  },
+  {
+    "id": "machine_chest_press",
+    "name": "Machine Chest Press",
+    "movement_pattern": "horizontal_push",
+    "primary_muscles": [
+      "Chest",
+      "Triceps",
+      "Front Delts"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym"
+    ],
+    "equipment_label": "Chest Press Machine",
+    "joint_stress_flags": [],
+    "animation_key": "chest_press",
+    "cues": [
+      "Adjust seat so handles align with mid-chest.",
+      "Pin shoulder blades softly into the back pad.",
+      "Press evenly and control a 2-second return."
+    ],
+    "regression_id": "incline_pushup"
+  },
+  {
+    "id": "db_floor_press",
+    "name": "Neutral-Grip Dumbbell Floor Press",
+    "movement_pattern": "horizontal_push",
+    "primary_muscles": [
+      "Chest",
+      "Triceps"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Dumbbells + Floor/Mat",
+    "joint_stress_flags": [],
+    "animation_key": "chest_press",
+    "cues": [
+      "Keep palms facing each other to open shoulder space.",
+      "Pause lightly when upper arms touch the floor\u2014no bouncing.",
+      "Press smoothly to lockout while keeping ribs grounded."
+    ],
+    "regression_id": "incline_pushup"
+  },
+  {
+    "id": "incline_pushup",
+    "name": "Hands-Elevated Push-Up",
+    "movement_pattern": "horizontal_push",
+    "primary_muscles": [
+      "Chest",
+      "Triceps",
+      "Core"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Bench or Sturdy Surface",
+    "joint_stress_flags": [],
+    "animation_key": "chest_press",
+    "cues": [
+      "Keep a straight plank line from ears through heels.",
+      "Lower chest toward bench edge with elbows at 45\u00b0.",
+      "Push away firmly while spreading shoulder blades at top."
+    ],
+    "regression_id": null
+  },
+  {
+    "id": "barbell_bench_press",
+    "name": "Barbell Flat Bench Press",
+    "movement_pattern": "horizontal_push",
+    "primary_muscles": [
+      "Chest",
+      "Triceps",
+      "Front Delts"
+    ],
+    "equipment_tiers": [
+      "commercial_gym"
+    ],
+    "equipment_label": "Barbell & Flat Bench",
+    "joint_stress_flags": [
+      "shoulder"
+    ],
+    "animation_key": "chest_press",
+    "cues": [
+      "Plant feet firmly and keep shoulder blades retracted.",
+      "Lower bar cleanly to lower sternum with controlled tempo.",
+      "Drive bar smoothly up and slightly back toward shoulders."
+    ],
+    "regression_id": "machine_chest_press"
+  },
+  {
+    "id": "seated_db_overhead_press",
+    "name": "Seated Neutral-Grip DB Overhead Press",
+    "movement_pattern": "vertical_push",
+    "primary_muscles": [
+      "Shoulders",
+      "Triceps"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Dumbbells + Bench",
+    "joint_stress_flags": [
+      "shoulder"
+    ],
+    "animation_key": "overhead_press",
+    "cues": [
+      "Set bench 1 notch below 90\u00b0 and keep palms facing inward.",
+      "Brace abs so lower back stays flush against pad.",
+      "Press straight overhead until biceps frame your ears."
+    ],
+    "regression_id": "db_lateral_raise"
+  },
+  {
+    "id": "landmine_half_kneeling_press",
+    "name": "Half-Kneeling Landmine / Angled Press",
+    "movement_pattern": "vertical_push",
+    "primary_muscles": [
+      "Shoulders",
+      "Upper Chest",
+      "Core"
+    ],
+    "equipment_tiers": [
+      "commercial_gym"
+    ],
+    "equipment_label": "Landmine Barbell",
+    "joint_stress_flags": [],
+    "animation_key": "overhead_press",
+    "cues": [
+      "Kneel on the pressing-side knee with glute squeezed.",
+      "Press along the natural 45\u00b0 arc\u2014ultra friendly on shoulders.",
+      "Reach slightly forward at the top without shrugging."
+    ],
+    "regression_id": "db_lateral_raise"
+  },
+  {
+    "id": "db_lateral_raise",
+    "name": "Scapular-Plane Dumbbell Lateral Raise",
+    "movement_pattern": "vertical_push",
+    "primary_muscles": [
+      "Side Delts"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Light Dumbbells",
+    "joint_stress_flags": [],
+    "animation_key": "lateral_raise",
+    "cues": [
+      "Raise arms ~30\u00b0 forward of your sides (scapular plane).",
+      "Lead with elbows and stop right at shoulder height.",
+      "Lower slowly over 2\u20133 seconds without swinging torso."
+    ],
+    "regression_id": null
+  },
+  {
+    "id": "pike_pushup_elevated",
+    "name": "Incline Shoulder Press-Up",
+    "movement_pattern": "vertical_push",
+    "primary_muscles": [
+      "Shoulders",
+      "Triceps"
+    ],
+    "equipment_tiers": [
+      "home_setup"
+    ],
+    "equipment_label": "Bodyweight",
+    "joint_stress_flags": [
+      "shoulder"
+    ],
+    "animation_key": "overhead_press",
+    "cues": [
+      "Hinge hips up into a soft inverted V position.",
+      "Lower forehead forward between hands, not straight down.",
+      "Press back smoothly until arms extend."
+    ],
+    "regression_id": "db_lateral_raise"
+  },
+  {
+    "id": "chest_supported_db_row",
+    "name": "Chest-Supported Dumbbell Row",
+    "movement_pattern": "horizontal_pull",
+    "primary_muscles": [
+      "Mid Back",
+      "Lats",
+      "Rear Delts",
+      "Biceps"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Dumbbells + Incline Bench",
+    "joint_stress_flags": [],
+    "animation_key": "row",
+    "cues": [
+      "Rest chest flat on a 30\u00b0 incline bench to unload lower back.",
+      "Drive elbows back toward hips and pause briefly at top.",
+      "Let shoulder blades stretch gently forward on the descent."
+    ],
+    "regression_id": "band_pull_apart"
+  },
+  {
+    "id": "seated_cable_row",
+    "name": "Seated Neutral-Grip Cable Row",
+    "movement_pattern": "horizontal_pull",
+    "primary_muscles": [
+      "Lats",
+      "Rhomboids",
+      "Biceps"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym"
+    ],
+    "equipment_label": "Cable Row Machine",
+    "joint_stress_flags": [],
+    "animation_key": "row",
+    "cues": [
+      "Sit tall with chest lifted\u2014avoid rocking backward.",
+      "Pull handle toward lower ribs, squeezing shoulder blades.",
+      "Control the extension back to a clean stretch."
+    ],
+    "regression_id": "chest_supported_db_row"
+  },
+  {
+    "id": "single_arm_db_row",
+    "name": "Bench-Braced Single-Arm DB Row",
+    "movement_pattern": "horizontal_pull",
+    "primary_muscles": [
+      "Lats",
+      "Mid Back",
+      "Core"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Dumbbell + Bench",
+    "joint_stress_flags": [],
+    "animation_key": "row",
+    "cues": [
+      "Brace free hand firmly on bench with flat back.",
+      "Pull dumbbell in a sweeping arc toward your hip pocket.",
+      "Keep hips level\u2014avoid twisting your torso open."
+    ],
+    "regression_id": "chest_supported_db_row"
+  },
+  {
+    "id": "cable_face_pull",
+    "name": "Rope Face Pull",
+    "movement_pattern": "horizontal_pull",
+    "primary_muscles": [
+      "Rear Delts",
+      "External Rotators",
+      "Upper Back"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym"
+    ],
+    "equipment_label": "Cable Machine + Rope",
+    "joint_stress_flags": [],
+    "animation_key": "row",
+    "cues": [
+      "Set pulley at eye level and pull rope toward your forehead.",
+      "Finish with knuckles back and elbows high in a double-bicep pose.",
+      "Use light, controlled weight\u2014great for posture and shoulders."
+    ],
+    "regression_id": "band_pull_apart"
+  },
+  {
+    "id": "band_pull_apart",
+    "name": "Resistance Band Pull-Apart",
+    "movement_pattern": "horizontal_pull",
+    "primary_muscles": [
+      "Rear Delts",
+      "Upper Back"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Resistance Band",
+    "joint_stress_flags": [],
+    "animation_key": "row",
+    "cues": [
+      "Hold band at shoulder height with soft elbows.",
+      "Pull hands apart until band taps mid-chest.",
+      "Keep shoulders relaxed down away from ears."
+    ],
+    "regression_id": null
+  },
+  {
+    "id": "band_seated_row",
+    "name": "Seated Resistance Band Row",
+    "movement_pattern": "horizontal_pull",
+    "primary_muscles": [
+      "Mid Back",
+      "Lats",
+      "Biceps"
+    ],
+    "equipment_tiers": [
+      "home_setup"
+    ],
+    "equipment_label": "Resistance Band",
+    "joint_stress_flags": [],
+    "animation_key": "row",
+    "cues": [
+      "Loop band securely around feet with knees slightly bent.",
+      "Sit tall and pull elbows cleanly past ribs.",
+      "Pause 1 second at peak contraction."
+    ],
+    "regression_id": "band_pull_apart"
+  },
+  {
+    "id": "lat_pulldown_neutral",
+    "name": "Neutral-Grip Lat Pulldown",
+    "movement_pattern": "vertical_pull",
+    "primary_muscles": [
+      "Lats",
+      "Biceps",
+      "Upper Back"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym"
+    ],
+    "equipment_label": "Lat Pulldown Cable",
+    "joint_stress_flags": [],
+    "animation_key": "pulldown",
+    "cues": [
+      "Use a shoulder-width neutral handle for happy shoulders.",
+      "Initiate by pulling shoulder blades down, then drive elbows to ribs.",
+      "Control the bar all the way up to a comfortable lat stretch."
+    ],
+    "regression_id": "straight_arm_pulldown"
+  },
+  {
+    "id": "assisted_pullup",
+    "name": "Machine Assisted Pull-Up",
+    "movement_pattern": "vertical_pull",
+    "primary_muscles": [
+      "Lats",
+      "Biceps",
+      "Core"
+    ],
+    "equipment_tiers": [
+      "commercial_gym"
+    ],
+    "equipment_label": "Assisted Pull-Up Machine",
+    "joint_stress_flags": [
+      "shoulder"
+    ],
+    "animation_key": "pulldown",
+    "cues": [
+      "Choose enough assistance to complete clean, strict reps.",
+      "Lift chest toward the handles rather than craning your chin.",
+      "Lower smoothly over 2 seconds without dropping into shoulders."
+    ],
+    "regression_id": "lat_pulldown_neutral"
+  },
+  {
+    "id": "straight_arm_pulldown",
+    "name": "Straight-Arm Cable / Band Pulldown",
+    "movement_pattern": "vertical_pull",
+    "primary_muscles": [
+      "Lats",
+      "Core"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "High Cable or Anchored Band",
+    "joint_stress_flags": [],
+    "animation_key": "pulldown",
+    "cues": [
+      "Hinge slightly at the hips with arms long and elbows soft.",
+      "Sweep hands smoothly down to your thighs using your lats.",
+      "Keep ribs down\u2014don't round forward as you pull."
+    ],
+    "regression_id": "band_pull_apart"
+  },
+  {
+    "id": "db_pullover",
+    "name": "Dumbbell Bench / Floor Pullover",
+    "movement_pattern": "vertical_pull",
+    "primary_muscles": [
+      "Lats",
+      "Serratus",
+      "Chest"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Single Dumbbell",
+    "joint_stress_flags": [
+      "shoulder"
+    ],
+    "animation_key": "pulldown",
+    "cues": [
+      "Keep a gentle bend in the elbows throughout the arc.",
+      "Lower dumbbell behind head only as far as ribs stay flat.",
+      "Pull smoothly back over mid-chest using your lats."
+    ],
+    "regression_id": "straight_arm_pulldown"
+  },
+  {
+    "id": "reverse_lunge_db",
+    "name": "Dumbbell Reverse Lunge",
+    "movement_pattern": "lunge",
+    "primary_muscles": [
+      "Quads",
+      "Glutes",
+      "Balance"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Dumbbells (or Bodyweight)",
+    "joint_stress_flags": [
+      "knee"
+    ],
+    "animation_key": "lunge",
+    "cues": [
+      "Step backward to keep front shin vertical and knee comfortable.",
+      "Lean torso slightly forward over front hip to engage glute.",
+      "Drive through front full foot to return to standing."
+    ],
+    "regression_id": "step_up_low"
+  },
+  {
+    "id": "step_up_low",
+    "name": "Controlled Low Box Step-Up",
+    "movement_pattern": "lunge",
+    "primary_muscles": [
+      "Quads",
+      "Glutes"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Low Step / Bench",
+    "joint_stress_flags": [],
+    "animation_key": "lunge",
+    "cues": [
+      "Use a knee-friendly low step height (12\u201316 inches).",
+      "Drive up using only the top leg\u2014avoid pushing off back toes.",
+      "Step down slowly over 2 full seconds."
+    ],
+    "regression_id": "glute_bridge"
+  },
+  {
+    "id": "bulgarian_split_squat",
+    "name": "Rear-Foot-Elevated Split Squat",
+    "movement_pattern": "lunge",
+    "primary_muscles": [
+      "Quads",
+      "Glutes"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Bench + Dumbbells",
+    "joint_stress_flags": [
+      "knee"
+    ],
+    "animation_key": "lunge",
+    "cues": [
+      "Rest rear laces lightly on bench; 85% of weight on front foot.",
+      "Drop straight down with slight forward torso lean.",
+      "Stand smoothly without locking out harshly."
+    ],
+    "regression_id": "step_up_low"
+  },
+  {
+    "id": "dead_bug",
+    "name": "Tempo Dead Bug",
+    "movement_pattern": "core",
+    "primary_muscles": [
+      "Deep Core",
+      "Hip Flexors"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Floor / Mat",
+    "joint_stress_flags": [],
+    "animation_key": "dead_bug",
+    "cues": [
+      "Press lower back firmly into the floor before moving.",
+      "Extend opposite arm and leg slowly while exhaling fully.",
+      "Stop leg extension before your lower back lifts off the mat."
+    ],
+    "regression_id": null
+  },
+  {
+    "id": "pallof_press",
+    "name": "Cable / Band Anti-Rotation Pallof Press",
+    "movement_pattern": "core",
+    "primary_muscles": [
+      "Obliques",
+      "Deep Core"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Cable or Anchored Band",
+    "joint_stress_flags": [],
+    "animation_key": "pallof_press",
+    "cues": [
+      "Stand sideways to anchor with soft knees and tall posture.",
+      "Press handle straight out from sternum and hold 2 seconds.",
+      "Resist the sideways pull without twisting hips or ribs."
+    ],
+    "regression_id": "dead_bug"
+  },
+  {
+    "id": "farmers_carry",
+    "name": "Dumbbell Farmer's Carry",
+    "movement_pattern": "carry",
+    "primary_muscles": [
+      "Grip",
+      "Core",
+      "Upper Back",
+      "Traps"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Pair of Dumbbells",
+    "joint_stress_flags": [],
+    "animation_key": "carry",
+    "cues": [
+      "Walk tall with ribs stacked over hips and shoulders packed.",
+      "Take steady, quiet steps for 30\u201340 seconds per set.",
+      "Avoid letting dumbbells bang against your thighs."
+    ],
+    "regression_id": "pallof_press"
+  },
+  {
+    "id": "suitcase_carry",
+    "name": "Single-Dumbbell Suitcase Carry",
+    "movement_pattern": "carry",
+    "primary_muscles": [
+      "Obliques",
+      "Grip",
+      "Core"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "One Dumbbell",
+    "joint_stress_flags": [],
+    "animation_key": "carry",
+    "cues": [
+      "Hold one dumbbell at your side and stay tall \u2014 don't lean toward the weight.",
+      "Walk slowly for 30\u201340 seconds, then switch hands.",
+      "Keep ribs stacked over hips and breathe steadily."
+    ],
+    "regression_id": "farmers_carry"
+  },
+  {
+    "id": "goblet_carry",
+    "name": "Goblet Carry",
+    "movement_pattern": "carry",
+    "primary_muscles": [
+      "Core",
+      "Upper Back",
+      "Quads"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Dumbbell or Kettlebell",
+    "joint_stress_flags": [],
+    "animation_key": "carry",
+    "cues": [
+      "Hug the weight at chest height with elbows tucked.",
+      "Take short, quiet steps for 30\u201340 seconds per set.",
+      "Stay tall and keep your ribs from flaring."
+    ],
+    "regression_id": "farmers_carry"
+  },
+  {
+    "id": "worlds_greatest_stretch",
+    "name": "World's Greatest Mobility Flow",
+    "movement_pattern": "mobility",
+    "primary_muscles": [
+      "Hips",
+      "Thoracic Spine",
+      "Hamstrings"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Mat / Bodyweight",
+    "joint_stress_flags": [],
+    "animation_key": "mobility",
+    "cues": [
+      "Step into a long lunge, plant opposite hand, rotate chest to sky.",
+      "Breathe deeply for 2 seconds at peak thoracic rotation.",
+      "Move smoothly side-to-side to lubricate hips and upper back."
+    ],
+    "regression_id": "cat_cow_thoracic"
+  },
+  {
+    "id": "cat_cow_thoracic",
+    "name": "Cat-Cow & Scapular Glide",
+    "movement_pattern": "mobility",
+    "primary_muscles": [
+      "Spine",
+      "Shoulders",
+      "Core"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Mat / Bodyweight",
+    "joint_stress_flags": [],
+    "animation_key": "mobility",
+    "cues": [
+      "Inhale as you gently drop belly and lift chest forward.",
+      "Exhale as you round mid-back up toward ceiling.",
+      "Move slowly through pain-free range to warm up the spine."
+    ],
+    "regression_id": null
+  }
+]
