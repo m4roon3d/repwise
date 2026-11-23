@@ -415,6 +415,23 @@ export default function ExerciseAnimator({ animationKey = 'squat', compact = fal
     addWeight('pf-handle', midHand, 5, '#38bdf8');
   }
 
+  if (config.equipment === 'pullup_bar') {
+    addLine('pu-post-l', [0.62, 0, 0], [0.62, 1.96, 0], '#334155', 4.5);
+    addLine('pu-post-r', [-0.62, 0, 0], [-0.62, 1.96, 0], '#334155', 4.5);
+    addLine('pu-bar', [0.62, 1.96, 0], [-0.62, 1.96, 0], '#38bdf8', 5);
+  }
+
+  if (config.equipment === 'pushdown_cable') {
+    const midHand = [
+      (pose3D.lHand[0] + pose3D.rHand[0]) / 2,
+      (pose3D.lHand[1] + pose3D.rHand[1]) / 2,
+      (pose3D.lHand[2] + pose3D.rHand[2]) / 2,
+    ];
+    addLine('pd-tower', [0, 0, 0.36], [0, 2.05, 0.36], '#334155', 4.5);
+    addLine('pd-cable', [0, 2.05, 0.36], midHand, '#10b981', 2.2, '4 3');
+    addLine('pd-bar', pose3D.lHand, pose3D.rHand, '#38bdf8', 4.5);
+  }
+
   if (config.equipment === 'goblet') {
     const midHand = [
       (pose3D.lHand[0] + pose3D.rHand[0]) / 2,

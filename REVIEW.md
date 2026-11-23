@@ -1,6 +1,6 @@
 # Repwise — code review & test notes
 
-Test suite: `npm test` → 198 tests (19 original + 179 new in `src/test/review.*`).
+Test suite: `npm test` → 212 tests (19 original + 193 new in `src/test/review.*`).
 `it.fails(...)` = a **confirmed bug**; the assertion states the correct behaviour. When you fix a bug the test
 turns red ("expected to fail") → just delete the `.fails`.
 
@@ -43,3 +43,9 @@ turns red ("expected to fail") → just delete the `.fails`.
 - ✅ Form coaching: *Form help* shortcut + photo form check (`services/images.js` downsizes to ≤1280 px JPEG; pixels are never persisted).
 - Verified in real Chrome with a mocked Gemini endpoint: no CSP violations, 270 KB photo sent as a 128 KB JPEG.
 - ⏳ Not built: charts/history screen for logs, rest timer.
+
+## Library expansion (38 → 68 exercises)
+- ✅ 30 new exercises incl. two new categories, `arms` and `calves`, and six new animations (curl, pushdown, calf raise, plank, push-up, pull-up) with two new equipment props.
+- ✅ `review.library.test.js` guards record shape, per-tier coverage, regression chains and animation geometry (bone lengths, mirroring, floor contact). It caught a stretched forearm while authoring.
+- Note: the offline (no-key) engine still builds sessions from the original 10 patterns, so arms and calves appear in Gemini plans, swaps and the Exercises tab, not in keyless plans.
+- Note: a few new mobility moves and the 90/90 / thread-the-needle style stretches reuse the generic mobility animation.

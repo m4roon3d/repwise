@@ -12,10 +12,10 @@ import {
 import { DEFAULT_PROFILE } from '../services/storage';
 
 describe('Exercise Catalog Integrity & Joint Pre-Filter', () => {
-  it('has 38 unique exercises with valid animation keys and regression links', () => {
+  it('has 68 unique exercises with valid animation keys and regression links', () => {
     const ids = new Set(exercises.map((e) => e.id));
-    expect(exercises.length).toBe(38);
-    expect(ids.size).toBe(38);
+    expect(exercises.length).toBe(68);
+    expect(ids.size).toBe(68);
 
     for (const ex of exercises) {
       expect(ANIMATION_LIBRARY[ex.animation_key]).toBeDefined();

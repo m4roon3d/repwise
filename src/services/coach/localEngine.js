@@ -60,7 +60,7 @@ export function parseIntakeKeywords(text) {
   return patch;
 }
 
-export const LOWER_PATTERNS = new Set(['squat', 'hinge', 'lunge']);
+export const LOWER_PATTERNS = new Set(['squat', 'hinge', 'lunge', 'calves']);
 
 export const UPPER_PATTERNS = ['horizontal_push', 'horizontal_pull', 'vertical_push', 'vertical_pull'];
 
