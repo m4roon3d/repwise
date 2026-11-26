@@ -76,12 +76,14 @@ export function Figure({ name, className, style }) {
   );
 }
 
+const base = (import.meta.env?.BASE_URL || './').replace(/\/?$/, '/');
+
+/** A washed-out real gym scene behind the app, different on each tab. Decorative only. */
 export default function Watermark({ tab }) {
-  const [big, small] = PAIRS[tab] || PAIRS.assess;
+  const scene = PAIRS[tab] ? tab : 'assess';
   return (
-    <div className="watermark" aria-hidden="true">
-      <Figure name={big} className="wm wm-big" />
-      <Figure name={small} className="wm wm-small" />
+    <div className="bg-scene" aria-hidden="true">
+      <div className="bg-scene-img" style={{ backgroundImage: `url(${base}bg/${scene}.jpg)` }} />
     </div>
   );
 }

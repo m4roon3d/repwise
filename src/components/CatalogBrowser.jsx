@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import exercises from '../data/exercises.json';
-import ExerciseAnimator from './ExerciseAnimator';
+import ExercisePhotos from './ExercisePhotos';
 import { EQUIPMENT_TIER_LABELS } from '../services/catalogFilter';
 
 export default function CatalogBrowser({ defaultTier }) {
@@ -90,7 +90,7 @@ export default function CatalogBrowser({ defaultTier }) {
                 className="secondary-btn"
                 onClick={() => setOpenAnimId(isOpen ? null : ex.id)}
               >
-                {isOpen ? 'Hide Form' : '▶ View Form'}
+                {isOpen ? 'Hide' : '▶ View Form'}
               </button>
             </div>
 
@@ -102,7 +102,7 @@ export default function CatalogBrowser({ defaultTier }) {
 
             {isOpen && (
               <div style={{ marginTop: '12px' }}>
-                <ExerciseAnimator animationKey={ex.animation_key} compact />
+                <ExercisePhotos exerciseId={ex.id} compact />
                 <ul className="cues-list">
                   {ex.cues.map((c, idx) => (
                     <li key={idx}>{c}</li>

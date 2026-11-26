@@ -33,3 +33,6 @@ npm install
 npm run dev
 ```
 See `DEPLOY_HANDOVER.md` for one-step Cloudflare Pages and GitHub Pages deployment instructions.
+
+## Credits
+Exercise and background photos come from [free-exercise-db](https://github.com/yuhonas/free-exercise-db), released into the public domain (Unlicense). Photos are resized and stored in `public/photos` and `public/bg`.

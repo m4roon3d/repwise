@@ -21,7 +21,8 @@
       "Sit hips between heels while keeping chest proud.",
       "Drive through mid-foot and exhale on the way up."
     ],
-    "regression_id": "box_bodyweight_squat"
+    "regression_id": "box_bodyweight_squat",
+    "photo": "Goblet_Squat"
   },
   {
     "id": "leg_press",
@@ -44,7 +45,8 @@
       "Lower sled smoothly until knees reach ~90 degrees.",
       "Press smoothly without locking knees hard at the top."
     ],
-    "regression_id": "goblet_squat"
+    "regression_id": "goblet_squat",
+    "photo": "Leg_Press"
   },
   {
     "id": "barbell_back_squat",
@@ -69,7 +71,8 @@
       "Track knees cleanly over second and third toes.",
       "Control a 2-second lower; stand smoothly without rushing."
     ],
-    "regression_id": "goblet_squat"
+    "regression_id": "goblet_squat",
+    "photo": "Barbell_Squat"
   },
   {
     "id": "box_bodyweight_squat",
@@ -92,7 +95,8 @@
       "Keep shins relatively vertical to reduce knee shear.",
       "Stand tall by squeezing glutes without bouncing."
     ],
-    "regression_id": "glute_bridge"
+    "regression_id": "glute_bridge",
+    "photo": "Bodyweight_Squat"
   },
   {
     "id": "db_romanian_deadlift",
@@ -118,7 +122,8 @@
       "Keep dumbbells grazing thighs with lats engaged.",
       "Stop once hamstrings feel stretched; drive hips forward."
     ],
-    "regression_id": "glute_bridge"
+    "regression_id": "glute_bridge",
+    "photo": "Stiff-Legged_Dumbbell_Deadlift"
   },
   {
     "id": "cable_pull_through",
@@ -140,7 +145,8 @@
       "Hinge hips back cleanly with a neutral spine.",
       "Finish tall by squeezing glutes\u2014don't hyperextend lower back."
     ],
-    "regression_id": "glute_bridge"
+    "regression_id": "glute_bridge",
+    "photo": "Pull_Through"
   },
   {
     "id": "trap_bar_deadlift",
@@ -165,7 +171,8 @@
       "Push the floor away with your legs while keeping chest proud.",
       "Control the descent back to a quiet touch."
     ],
-    "regression_id": "cable_pull_through"
+    "regression_id": "cable_pull_through",
+    "photo": "Trap_Bar_Deadlift"
   },
   {
     "id": "glute_bridge",
@@ -188,7 +195,8 @@
       "Pause 1 full second at the top with glutes squeezed.",
       "Lower under control without arching your lumbar spine."
     ],
-    "regression_id": null
+    "regression_id": null,
+    "photo": "Single_Leg_Glute_Bridge"
   },
   {
     "id": "seated_leg_curl",
@@ -209,7 +217,8 @@
       "Curl heels smoothly under the seat with a brief squeeze.",
       "Resist the pad for 2 seconds as you extend back."
     ],
-    "regression_id": "glute_bridge"
+    "regression_id": "glute_bridge",
+    "photo": "Seated_Leg_Curl"
   },
   {
     "id": "db_incline_press",
@@ -235,7 +244,8 @@
       "Tuck elbows ~45\u00b0 from torso to protect shoulder joints.",
       "Press smoothly up and slightly inward without clanging weights."
     ],
-    "regression_id": "db_floor_press"
+    "regression_id": "db_floor_press",
+    "photo": "Incline_Dumbbell_Press"
   },
   {
     "id": "machine_chest_press",
@@ -258,7 +268,8 @@
       "Pin shoulder blades softly into the back pad.",
       "Press evenly and control a 2-second return."
     ],
-    "regression_id": "incline_pushup"
+    "regression_id": "incline_pushup",
+    "photo": "Machine_Bench_Press"
   },
   {
     "id": "db_floor_press",
@@ -281,7 +292,8 @@
       "Pause lightly when upper arms touch the floor\u2014no bouncing.",
       "Press smoothly to lockout while keeping ribs grounded."
     ],
-    "regression_id": "incline_pushup"
+    "regression_id": "incline_pushup",
+    "photo": "Dumbbell_Floor_Press"
   },
   {
     "id": "incline_pushup",
@@ -305,7 +317,8 @@
       "Lower chest toward bench edge with elbows at 45\u00b0.",
       "Push away firmly while spreading shoulder blades at top."
     ],
-    "regression_id": null
+    "regression_id": null,
+    "photo": "Incline_Push-Up"
   },
   {
     "id": "barbell_bench_press",
@@ -329,7 +342,8 @@
       "Lower bar cleanly to lower sternum with controlled tempo.",
       "Drive bar smoothly up and slightly back toward shoulders."
     ],
-    "regression_id": "machine_chest_press"
+    "regression_id": "machine_chest_press",
+    "photo": "Barbell_Bench_Press_-_Medium_Grip"
   },
   {
     "id": "seated_db_overhead_press",
@@ -354,7 +368,8 @@
       "Brace abs so lower back stays flush against pad.",
       "Press straight overhead until biceps frame your ears."
     ],
-    "regression_id": "db_lateral_raise"
+    "regression_id": "db_lateral_raise",
+    "photo": "Seated_Dumbbell_Press"
   },
   {
     "id": "landmine_half_kneeling_press",
@@ -376,7 +391,8 @@
       "Press along the natural 45\u00b0 arc\u2014ultra friendly on shoulders.",
       "Reach slightly forward at the top without shrugging."
     ],
-    "regression_id": "db_lateral_raise"
+    "regression_id": "db_lateral_raise",
+    "photo": "Dumbbell_One-Arm_Shoulder_Press"
   },
   {
     "id": "db_lateral_raise",
@@ -398,7 +414,8 @@
       "Lead with elbows and stop right at shoulder height.",
       "Lower slowly over 2\u20133 seconds without swinging torso."
     ],
-    "regression_id": null
+    "regression_id": null,
+    "photo": "Side_Lateral_Raise"
   },
   {
     "id": "pike_pushup_elevated",
@@ -421,7 +438,8 @@
       "Lower forehead forward between hands, not straight down.",
       "Press back smoothly until arms extend."
     ],
-    "regression_id": "db_lateral_raise"
+    "regression_id": "db_lateral_raise",
+    "photo": "Decline_Push-Up"
   },
   {
     "id": "chest_supported_db_row",
@@ -446,7 +464,8 @@
       "Drive elbows back toward hips and pause briefly at top.",
       "Let shoulder blades stretch gently forward on the descent."
     ],
-    "regression_id": "band_pull_apart"
+    "regression_id": "band_pull_apart",
+    "photo": "Dumbbell_Incline_Row"
   },
   {
     "id": "seated_cable_row",
@@ -469,7 +488,8 @@
       "Pull handle toward lower ribs, squeezing shoulder blades.",
       "Control the extension back to a clean stretch."
     ],
-    "regression_id": "chest_supported_db_row"
+    "regression_id": "chest_supported_db_row",
+    "photo": "Seated_Cable_Rows"
   },
   {
     "id": "single_arm_db_row",
@@ -493,7 +513,8 @@
       "Pull dumbbell in a sweeping arc toward your hip pocket.",
       "Keep hips level\u2014avoid twisting your torso open."
     ],
-    "regression_id": "chest_supported_db_row"
+    "regression_id": "chest_supported_db_row",
+    "photo": "One-Arm_Dumbbell_Row"
   },
   {
     "id": "cable_face_pull",
@@ -516,7 +537,8 @@
       "Finish with knuckles back and elbows high in a double-bicep pose.",
       "Use light, controlled weight\u2014great for posture and shoulders."
     ],
-    "regression_id": "band_pull_apart"
+    "regression_id": "band_pull_apart",
+    "photo": "Face_Pull"
   },
   {
     "id": "band_pull_apart",
@@ -539,7 +561,8 @@
       "Pull hands apart until band taps mid-chest.",
       "Keep shoulders relaxed down away from ears."
     ],
-    "regression_id": null
+    "regression_id": null,
+    "photo": "Band_Pull_Apart"
   },
   {
     "id": "band_seated_row",
@@ -561,7 +584,8 @@
       "Sit tall and pull elbows cleanly past ribs.",
       "Pause 1 second at peak contraction."
     ],
-    "regression_id": "band_pull_apart"
+    "regression_id": "band_pull_apart",
+    "photo": "Seated_Cable_Rows"
   },
   {
     "id": "lat_pulldown_neutral",
@@ -584,7 +608,8 @@
       "Initiate by pulling shoulder blades down, then drive elbows to ribs.",
       "Control the bar all the way up to a comfortable lat stretch."
     ],
-    "regression_id": "straight_arm_pulldown"
+    "regression_id": "straight_arm_pulldown",
+    "photo": "Close-Grip_Front_Lat_Pulldown"
   },
   {
     "id": "assisted_pullup",
@@ -608,7 +633,8 @@
       "Lift chest toward the handles rather than craning your chin.",
       "Lower smoothly over 2 seconds without dropping into shoulders."
     ],
-    "regression_id": "lat_pulldown_neutral"
+    "regression_id": "lat_pulldown_neutral",
+    "photo": "Band_Assisted_Pull-Up"
   },
   {
     "id": "straight_arm_pulldown",
@@ -631,7 +657,8 @@
       "Sweep hands smoothly down to your thighs using your lats.",
       "Keep ribs down\u2014don't round forward as you pull."
     ],
-    "regression_id": "band_pull_apart"
+    "regression_id": "band_pull_apart",
+    "photo": "Straight-Arm_Pulldown"
   },
   {
     "id": "db_pullover",
@@ -657,7 +684,8 @@
       "Lower dumbbell behind head only as far as ribs stay flat.",
       "Pull smoothly back over mid-chest using your lats."
     ],
-    "regression_id": "straight_arm_pulldown"
+    "regression_id": "straight_arm_pulldown",
+    "photo": "Bent-Arm_Dumbbell_Pullover"
   },
   {
     "id": "reverse_lunge_db",
@@ -683,7 +711,8 @@
       "Lean torso slightly forward over front hip to engage glute.",
       "Drive through front full foot to return to standing."
     ],
-    "regression_id": "step_up_low"
+    "regression_id": "step_up_low",
+    "photo": "Dumbbell_Rear_Lunge"
   },
   {
     "id": "step_up_low",
@@ -706,7 +735,8 @@
       "Drive up using only the top leg\u2014avoid pushing off back toes.",
       "Step down slowly over 2 full seconds."
     ],
-    "regression_id": "glute_bridge"
+    "regression_id": "glute_bridge",
+    "photo": "Dumbbell_Step_Ups"
   },
   {
     "id": "bulgarian_split_squat",
@@ -731,7 +761,8 @@
       "Drop straight down with slight forward torso lean.",
       "Stand smoothly without locking out harshly."
     ],
-    "regression_id": "step_up_low"
+    "regression_id": "step_up_low",
+    "photo": "Split_Squat_with_Dumbbells"
   },
   {
     "id": "dead_bug",
@@ -754,7 +785,8 @@
       "Extend opposite arm and leg slowly while exhaling fully.",
       "Stop leg extension before your lower back lifts off the mat."
     ],
-    "regression_id": null
+    "regression_id": null,
+    "photo": "Dead_Bug"
   },
   {
     "id": "pallof_press",
@@ -777,7 +809,8 @@
       "Press handle straight out from sternum and hold 2 seconds.",
       "Resist the sideways pull without twisting hips or ribs."
     ],
-    "regression_id": "dead_bug"
+    "regression_id": "dead_bug",
+    "photo": "Pallof_Press"
   },
   {
     "id": "farmers_carry",
@@ -802,7 +835,8 @@
       "Take steady, quiet steps for 30\u201340 seconds per set.",
       "Avoid letting dumbbells bang against your thighs."
     ],
-    "regression_id": "pallof_press"
+    "regression_id": "pallof_press",
+    "photo": "Farmers_Walk"
   },
   {
     "id": "suitcase_carry",
@@ -826,7 +860,8 @@
       "Walk slowly for 30\u201340 seconds, then switch hands.",
       "Keep ribs stacked over hips and breathe steadily."
     ],
-    "regression_id": "farmers_carry"
+    "regression_id": "farmers_carry",
+    "photo": "Farmers_Walk"
   },
   {
     "id": "goblet_carry",
@@ -850,7 +885,8 @@
       "Take short, quiet steps for 30\u201340 seconds per set.",
       "Stay tall and keep your ribs from flaring."
     ],
-    "regression_id": "farmers_carry"
+    "regression_id": "farmers_carry",
+    "photo": "Goblet_Squat"
   },
   {
     "id": "worlds_greatest_stretch",
@@ -874,7 +910,8 @@
       "Breathe deeply for 2 seconds at peak thoracic rotation.",
       "Move smoothly side-to-side to lubricate hips and upper back."
     ],
-    "regression_id": "cat_cow_thoracic"
+    "regression_id": "cat_cow_thoracic",
+    "photo": "Worlds_Greatest_Stretch"
   },
   {
     "id": "cat_cow_thoracic",
@@ -898,7 +935,8 @@
       "Exhale as you round mid-back up toward ceiling.",
       "Move slowly through pain-free range to warm up the spine."
     ],
-    "regression_id": null
+    "regression_id": null,
+    "photo": "Cat_Stretch"
   },
   {
     "id": "barbell_front_squat",
@@ -922,7 +960,8 @@
       "Keep your torso tall as you sit between your heels.",
       "Drive up through mid-foot, elbows leading."
     ],
-    "regression_id": "goblet_squat"
+    "regression_id": "goblet_squat",
+    "photo": "Front_Barbell_Squat"
   },
   {
     "id": "sumo_goblet_squat",
@@ -946,7 +985,8 @@
       "Hold the weight at your chest and sit straight down.",
       "Push your knees out over your toes on the way up."
     ],
-    "regression_id": "box_bodyweight_squat"
+    "regression_id": "box_bodyweight_squat",
+    "photo": "Goblet_Squat"
   },
   {
     "id": "smith_machine_squat",
@@ -969,7 +1009,8 @@
       "Sit down and back, keeping your whole foot planted.",
       "Stand tall without locking your knees hard."
     ],
-    "regression_id": "leg_press"
+    "regression_id": "leg_press",
+    "photo": "Smith_Machine_Squat"
   },
   {
     "id": "hip_thrust_bench",
@@ -992,7 +1033,8 @@
       "Tuck your chin and drive your hips up until level.",
       "Squeeze your glutes at the top, then lower slowly."
     ],
-    "regression_id": "glute_bridge"
+    "regression_id": "glute_bridge",
+    "photo": "Barbell_Hip_Thrust"
   },
   {
     "id": "single_leg_glute_bridge",
@@ -1016,7 +1058,8 @@
       "Drive through the planted heel and lift your hips.",
       "Keep your hips level, with no twisting."
     ],
-    "regression_id": "glute_bridge"
+    "regression_id": "glute_bridge",
+    "photo": "Single_Leg_Glute_Bridge"
   },
   {
     "id": "single_leg_rdl_db",
@@ -1042,7 +1085,8 @@
       "Reach the free leg straight back as your torso tips forward.",
       "Keep your hips square to the floor, then stand tall."
     ],
-    "regression_id": "db_romanian_deadlift"
+    "regression_id": "db_romanian_deadlift",
+    "photo": "Kettlebell_One-Legged_Deadlift"
   },
   {
     "id": "db_bench_press",
@@ -1068,7 +1112,8 @@
       "Lower the dumbbells until your elbows are about 45 degrees from your sides.",
       "Press up and slightly together without bouncing."
     ],
-    "regression_id": "db_floor_press"
+    "regression_id": "db_floor_press",
+    "photo": "Dumbbell_Bench_Press"
   },
   {
     "id": "pushup",
@@ -1092,7 +1137,8 @@
       "Lower your chest with elbows about 45 degrees from your sides.",
       "Press the floor away without sagging your hips."
     ],
-    "regression_id": "incline_pushup"
+    "regression_id": "incline_pushup",
+    "photo": "Pushups"
   },
   {
     "id": "band_chest_press",
@@ -1115,7 +1161,8 @@
       "Press forward until your arms are straight, without shrugging.",
       "Return slowly, keeping tension on the band."
     ],
-    "regression_id": "incline_pushup"
+    "regression_id": "incline_pushup",
+    "photo": "Bench_Press_-_With_Bands"
   },
   {
     "id": "machine_shoulder_press",
@@ -1139,7 +1186,8 @@
       "Press up without arching your lower back.",
       "Lower under control to just below ear level."
     ],
-    "regression_id": "db_lateral_raise"
+    "regression_id": "db_lateral_raise",
+    "photo": "Machine_Shoulder_Military_Press"
   },
   {
     "id": "band_overhead_press",
@@ -1163,7 +1211,8 @@
       "Brace your core and press straight overhead.",
       "Lower to shoulder height with control."
     ],
-    "regression_id": "db_lateral_raise"
+    "regression_id": "db_lateral_raise",
+    "photo": "Shoulder_Press_-_With_Bands"
   },
   {
     "id": "cable_lateral_raise",
@@ -1184,7 +1233,8 @@
       "Lift your arm out and slightly forward to shoulder height.",
       "Lower slowly, keeping the tension steady."
     ],
-    "regression_id": "db_lateral_raise"
+    "regression_id": "db_lateral_raise",
+    "photo": "Cable_Seated_Lateral_Raise"
   },
   {
     "id": "machine_row",
@@ -1207,7 +1257,8 @@
       "Pull your elbows back and squeeze your shoulder blades.",
       "Return slowly without rounding forward."
     ],
-    "regression_id": "chest_supported_db_row"
+    "regression_id": "chest_supported_db_row",
+    "photo": "Leverage_Iso_Row"
   },
   {
     "id": "band_face_pull",
@@ -1230,7 +1281,8 @@
       "Pull toward your eyes, elbows high and wide.",
       "Hold a beat and return slowly."
     ],
-    "regression_id": "band_pull_apart"
+    "regression_id": "band_pull_apart",
+    "photo": "Face_Pull"
   },
   {
     "id": "pullup",
@@ -1254,7 +1306,8 @@
       "Drive your elbows toward your hips as your chest rises.",
       "Lower fully under control."
     ],
-    "regression_id": "assisted_pullup"
+    "regression_id": "assisted_pullup",
+    "photo": "Pullups"
   },
   {
     "id": "band_lat_pulldown",
@@ -1276,7 +1329,8 @@
       "Pull your elbows down toward your ribs.",
       "Let the band lift your arms back up slowly."
     ],
-    "regression_id": "straight_arm_pulldown"
+    "regression_id": "straight_arm_pulldown",
+    "photo": "Wide-Grip_Lat_Pulldown"
   },
   {
     "id": "close_grip_pulldown",
@@ -1298,7 +1352,8 @@
       "Pull the handle to your upper chest, elbows in.",
       "Control the bar back up to full arm extension."
     ],
-    "regression_id": "lat_pulldown_neutral"
+    "regression_id": "lat_pulldown_neutral",
+    "photo": "Close-Grip_Front_Lat_Pulldown"
   },
   {
     "id": "walking_lunge_db",
@@ -1324,7 +1379,8 @@
       "Keep your front knee tracking over your middle toes.",
       "Push through the front heel to step into the next rep."
     ],
-    "regression_id": "step_up_low"
+    "regression_id": "step_up_low",
+    "photo": "Bodyweight_Walking_Lunge"
   },
   {
     "id": "bodyweight_split_squat",
@@ -1349,7 +1405,8 @@
       "Lower straight down until your back knee nearly touches.",
       "Drive up through the front foot."
     ],
-    "regression_id": "step_up_low"
+    "regression_id": "step_up_low",
+    "photo": "Split_Squat_with_Dumbbells"
   },
   {
     "id": "forearm_plank",
@@ -1373,7 +1430,8 @@
       "Squeeze your glutes and pull your ribs down.",
       "Breathe steadily and stop when your form slips."
     ],
-    "regression_id": "dead_bug"
+    "regression_id": "dead_bug",
+    "photo": "Plank"
   },
   {
     "id": "thread_the_needle",
@@ -1396,7 +1454,8 @@
       "Slide one arm under your body and rotate your upper back.",
       "Return and reach that arm toward the ceiling."
     ],
-    "regression_id": "cat_cow_thoracic"
+    "regression_id": "cat_cow_thoracic",
+    "photo": "Spinal_Stretch"
   },
   {
     "id": "hip_90_90_switch",
@@ -1419,7 +1478,8 @@
       "Sit tall and lean gently over the front shin.",
       "Rotate your knees across to the other side with control."
     ],
-    "regression_id": "cat_cow_thoracic"
+    "regression_id": "cat_cow_thoracic",
+    "photo": "90_90_Hamstring"
   },
   {
     "id": "half_kneeling_hip_flexor_stretch",
@@ -1444,7 +1504,8 @@
       "Squeeze the glute of the kneeling leg and tuck your pelvis.",
       "Shift forward gently until you feel the front of your hip stretch."
     ],
-    "regression_id": "worlds_greatest_stretch"
+    "regression_id": "worlds_greatest_stretch",
+    "photo": "Kneeling_Hip_Flexor"
   },
   {
     "id": "db_biceps_curl",
@@ -1466,7 +1527,8 @@
       "Curl up without swinging your torso.",
       "Lower for about three seconds."
     ],
-    "regression_id": null
+    "regression_id": null,
+    "photo": "Dumbbell_Bicep_Curl"
   },
   {
     "id": "hammer_curl",
@@ -1489,7 +1551,8 @@
       "Curl up with elbows still, no swinging.",
       "Lower slowly to a full stretch."
     ],
-    "regression_id": "db_biceps_curl"
+    "regression_id": "db_biceps_curl",
+    "photo": "Alternate_Hammer_Curl"
   },
   {
     "id": "band_biceps_curl",
@@ -1510,7 +1573,8 @@
       "Curl to your shoulders and squeeze.",
       "Let the band lower your hands slowly."
     ],
-    "regression_id": "db_biceps_curl"
+    "regression_id": "db_biceps_curl",
+    "photo": "Standing_Biceps_Cable_Curl"
   },
   {
     "id": "cable_triceps_pushdown",
@@ -1531,7 +1595,8 @@
       "Press down to full lockout without leaning on the stack.",
       "Let the handle rise only to about 90 degrees at the elbow."
     ],
-    "regression_id": null
+    "regression_id": null,
+    "photo": "Triceps_Pushdown"
   },
   {
     "id": "band_triceps_pushdown",
@@ -1552,7 +1617,8 @@
       "Press down until your arms are straight.",
       "Return slowly without letting your elbows drift forward."
     ],
-    "regression_id": null
+    "regression_id": null,
+    "photo": "Triceps_Pushdown"
   },
   {
     "id": "standing_calf_raise_db",
@@ -1574,7 +1640,8 @@
       "Rise as high as you can and pause at the top.",
       "Lower slowly until your heels are below the step if you can."
     ],
-    "regression_id": null
+    "regression_id": null,
+    "photo": "Standing_Dumbbell_Calf_Raise"
   },
   {
     "id": "single_leg_calf_raise",
@@ -1596,6 +1663,7 @@
       "Rise straight up as high as you can.",
       "Lower slowly and keep your ankle from rolling."
     ],
-    "regression_id": "standing_calf_raise_db"
+    "regression_id": "standing_calf_raise_db",
+    "photo": "Calf_Raise_On_A_Dumbbell"
   }
 ]

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ExerciseAnimator from './ExerciseAnimator';
+import ExercisePhotos from './ExercisePhotos';
 import { EXERCISE_MAP, EQUIPMENT_TIER_LABELS } from '../services/catalogFilter';
 import { SAFETY_SHORT } from './HealthNotice';
 import LogSets from './LogSets';
@@ -333,7 +333,7 @@ export default function RoutineView({
               </div>
             </div>
 
-            <ExerciseAnimator animationKey={meta.animation_key} />
+            <ExercisePhotos exerciseId={item.exercise_id} />
 
             {item.coach_note && (
               <div className="coach-note">
