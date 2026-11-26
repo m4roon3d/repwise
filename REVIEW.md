@@ -1,6 +1,8 @@
 # Repwise — code review & test notes
 
-Test suite: `npm test` → 241 tests (19 original + 222 new in `src/test/review.*`).
+Test suite: `npm test` → 272 tests across 22 files.
+
+Housekeeping (Nov 2026): removed the retired stick-figure animator (`ExerciseAnimator`, `animations.js`, `animation_key`), the old `Logo` component, unused icons, watermark figures and dead CSS. All Gemini calls now go through `getAI(key, feature)`, which records token usage and timing (`services/usage.js`) for the Diagnostics screen.
 `it.fails(...)` = a **confirmed bug**; the assertion states the correct behaviour. When you fix a bug the test
 turns red ("expected to fail") → just delete the `.fails`.
 

@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import exercises from '../data/exercises.json';
-import { ANIMATION_LIBRARY } from '../data/animations';
 import {
   cmToFeetInches,
   computeReadinessMetrics,
@@ -12,13 +11,13 @@ import {
 import { DEFAULT_PROFILE } from '../services/storage';
 
 describe('Exercise Catalog Integrity & Joint Pre-Filter', () => {
-  it('has 99 unique exercises with valid animation keys and regression links', () => {
+  it('has 99 unique exercises with photos and valid regression links', () => {
     const ids = new Set(exercises.map((e) => e.id));
     expect(exercises.length).toBe(99);
     expect(ids.size).toBe(99);
 
     for (const ex of exercises) {
-      expect(ANIMATION_LIBRARY[ex.animation_key]).toBeDefined();
+      expect(ex.photo).toBeTruthy();
       expect(ex.regression_id === null || ids.has(ex.regression_id)).toBe(true);
       expect(ex.cues.length).toBeGreaterThanOrEqual(3);
       expect(ex.equipment_tiers.length).toBeGreaterThan(0);

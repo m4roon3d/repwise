@@ -80,8 +80,6 @@ h2 { letter-spacing: -0.01em; }
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand h1 { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.03em; }
 .brand small { display: block; font-size: 0.72rem; }
-.brand-logo { border-radius: 11px; box-shadow: 0 2px 8px rgba(6, 182, 212, 0.18); }
-.brand-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--accent); }
 
 .muted { color: var(--muted); font-size: 0.86rem; line-height: 1.5; }
 .accent-text { color: var(--accent-strong); }
@@ -208,26 +206,8 @@ input[type='checkbox'] { accent-color: var(--accent); width: 18px; height: 18px;
 .coach-note { margin-top: 10px; font-size: 0.85rem; padding: 9px 12px; border-radius: 10px; background: var(--accent-soft); color: #065f46; }
 .cues-list { margin: 10px 0 0; padding-left: 18px; font-size: 0.86rem; line-height: 1.55; color: var(--text-2); }
 .cues-list li::marker { color: var(--accent); }
-
-/* ---- Animator ----------------------------------------------------------------------------- */
-.animator-box { border-radius: 14px; padding: 10px; background: var(--surface-2); }
-.animator-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; margin-bottom: 6px; color: var(--muted); }
-.animator-badge { font-weight: 650; color: var(--text-2); }
-.animator-phase { color: var(--accent-strong); font-weight: 600; }
-.angle-toolbar { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; margin-bottom: 8px; }
-.angle-pill { display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--border); background: #fff; color: var(--muted); font-size: 0.72rem; font-weight: 650; cursor: pointer; font-family: inherit; }
-.angle-pill-active { color: var(--accent-strong); border-color: #a7f3d0; background: var(--accent-soft); }
-.angle-deg { margin-left: auto; font-size: 0.72rem; font-variant-numeric: tabular-nums; font-weight: 650; color: var(--muted); }
-.animator-stage { position: relative; border-radius: 12px; background: #fff; border: 1px solid var(--border); cursor: grab; touch-action: pan-y; user-select: none; overflow: hidden; }
-.animator-stage:active { cursor: grabbing; }
-.animator-svg { width: 100%; height: 192px; display: block; }
-.animator-compact .animator-svg { height: 168px; }
-.drag-hint { position: absolute; right: 8px; bottom: 6px; font-size: 0.66rem; color: #94a3b8; pointer-events: none; }
-.angle-hint { margin-top: 6px; font-size: 0.73rem; text-align: center; color: var(--muted); }
-.animator-controls { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
 .mini-btn { display: inline-flex; align-items: center; gap: 5px; background: #fff; color: var(--text-2); border: 1px solid var(--border); padding: 6px 11px; font-size: 0.75rem; white-space: nowrap; }
 .mini-btn-active { color: var(--accent-strong); border-color: #a7f3d0; background: var(--accent-soft); }
-.scrub-slider { flex: 1; }
 
 /* ---- Workout logging ---------------------------------------------------------------------- */
 .log-block { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
@@ -478,11 +458,35 @@ input[type='date'] { width: 100%; padding: 11px 13px; border-radius: var(--radiu
   .tab-ask .main-content, .onboarding { max-width: 820px; }
   .onboarding { margin: 0 auto; }
   .chat-log { max-height: 62vh; }
-
-  .wm-big, .bg-scene-img { opacity: 0.18; }
 }
 
 @media (min-width: 1440px) {
   .app-shell { padding-left: 330px; }
   .routine-view { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
+
+/* ---- Diagnostics -------------------------------------------------------------------------- */
+.diag-range { grid-template-columns: repeat(3, auto); }
+.diag-range button { padding: 6px 12px; font-size: 0.78rem; white-space: nowrap; }
+.diag-stats { margin-bottom: 14px; }
+.diag-stats .stat-value { font-size: 1.2rem; }
+.table-wrap { overflow-x: auto; margin-top: 12px; }
+.diag-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+.diag-table th { text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 650; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+.diag-table td { padding: 8px; border-bottom: 1px solid var(--border); font-variant-numeric: tabular-nums; }
+.diag-table td:not(:first-child), .diag-table th:not(:first-child) { text-align: right; }
+.diag-err { color: #b45309; font-size: 0.78rem; }
+.diag-details { margin-top: 14px; }
+.diag-details summary { cursor: pointer; font-weight: 650; font-size: 0.88rem; }
+.call-list { list-style: none; padding: 0; margin: 8px 0 12px; display: grid; gap: 6px; max-height: 420px; overflow-y: auto; }
+.call-list li { display: flex; justify-content: space-between; gap: 10px; padding: 9px 12px; border-radius: 12px; background: var(--surface-2); font-size: 0.86rem; }
+.call-list li.call-failed { background: #fef2f2; }
+.call-meta { font-size: 0.76rem; }
+.call-error { font-size: 0.78rem; color: #b91c1c; margin-top: 2px; overflow-wrap: anywhere; }
+.call-status { font-weight: 800; }
+.storage-list { list-style: none; padding: 0; margin: 8px 0 12px; display: grid; gap: 6px; }
+.storage-list li { display: grid; grid-template-columns: 1fr auto 64px; gap: 10px; align-items: center; padding: 8px 12px; border-radius: 12px; background: var(--surface-2); font-size: 0.86rem; }
+.diag-dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 8px 0 14px; font-size: 0.88rem; }
+.diag-dl dt { color: var(--muted); }
+.diag-dl dd { margin: 0; overflow-wrap: anywhere; }
+@media (min-width: 1024px) { .diagnostics-view { display: block; column-count: 2; column-gap: 18px; } .diagnostics-view > * { break-inside: avoid; margin: 0 0 18px; display: block; } .diagnostics-view > section:first-child { column-span: all; } }

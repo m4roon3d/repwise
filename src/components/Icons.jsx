@@ -67,32 +67,8 @@ export function ChatIcon({ size = 18 }) {
   );
 }
 
-export function OrbitIcon({ size = 14 }) {
-  return (
-    <svg {...baseProps} width={size} height={size}>
-      <ellipse cx="12" cy="12" rx="9" ry="4.5" />
-      <path d="M16 4l2.5 2.5L16 9" />
-      <path d="M8 20l-2.5-2.5L8 15" />
-    </svg>
-  );
-}
 
-export function PlayIcon({ size = 13 }) {
-  return (
-    <svg {...baseProps} width={size} height={size} fill="currentColor" stroke="none">
-      <polygon points="6,4 20,12 6,20" />
-    </svg>
-  );
-}
 
-export function PauseIcon({ size = 13 }) {
-  return (
-    <svg {...baseProps} width={size} height={size} fill="currentColor" stroke="none">
-      <rect x="5" y="4" width="4.5" height="16" rx="1" />
-      <rect x="14.5" y="4" width="4.5" height="16" rx="1" />
-    </svg>
-  );
-}
 
 export function ProgressIcon({ size = 22 }) {
   return (

@@ -8,6 +8,7 @@ import { SYSTEM_INSTRUCTION, DEFAULT_STRATEGY, DAY_ITEM_SCHEMA, COMPACT_BLOCK_SC
 import { parseGeminiJson, enforceWeeklyVariety } from './coach/validate';
 import { buildIntakePrompt, buildPlanPrompt, buildSwapPrompt, buildAdaptPrompt, ASK_SYSTEM_INSTRUCTION, buildAskContext } from './coach/prompts';
 import { summarizeLogsForPrompt } from './progress';
+import { instrument } from './usage';
 import { applyRpeCap, healthAdjustments, labFinisher, sanitizeHealth } from './health';
 import { buildPlanRationale } from './rationale';
 import { assignDayStyles, isStrengthStyle, modalitiesOf, normalizeDoses, normalizeItem, weaveStyleDays, doseOf } from './styles';
@@ -33,9 +34,9 @@ function loadSdk() {
   return sdkPromise;
 }
 
-async function getAI(apiKey) {
+async function getAI(apiKey, feature = 'other') {
   const { GoogleGenAI } = await loadSdk();
-  return new GoogleGenAI({ apiKey });
+  return instrument(new GoogleGenAI({ apiKey }), feature);
 }
 
 /**
@@ -65,7 +66,7 @@ const mustBeObject = (v) => {
 
 export async function testGeminiConnection(apiKey, model) {
   if (!apiKey) throw new Error('Please paste your Gemini API key first.');
-  const ai = await getAI(apiKey);
+  const ai = await getAI(apiKey, 'test_connection');
   const response = await ai.models.generateContent({
     model,
     contents: 'Reply with strictly the word READY.',
@@ -77,7 +78,7 @@ export async function testGeminiConnection(apiKey, model) {
 export async function runCoachIntakeTurn(messages, currentProfile, apiKey, model) {
   if (!apiKey) return localIntakeTurn(messages);
 
-  const ai = await getAI(apiKey);
+  const ai = await getAI(apiKey, 'intake');
   const prompt = buildIntakePrompt(messages, currentProfile);
 
   const parsed = await requestJson(
@@ -114,7 +115,7 @@ async function generatePlanRaw(
     return buildDeterministicFallbackPlan(profile, safeExercises, metrics, totalWeeks);
   }
 
-  const ai = await getAI(apiKey);
+  const ai = await getAI(apiKey, 'plan');
   const prompt = buildPlanPrompt(profile, safeExercises, metrics, totalWeeks, recentFeedback, logSummary, bodySummary);
 
   const dayCount = Math.max(2, Math.min(5, Number(profile.daysPerWeek) || 3));
@@ -253,7 +254,7 @@ async function swapRaw(
 
   if (!apiKey) return localSwap(currentItem, reason, profile, preferredPool, fallbackPool);
 
-  const ai = await getAI(apiKey);
+  const ai = await getAI(apiKey, 'swap');
   const candidateIds = new Set(fallbackPool.map((e) => e.id));
   const prompt = buildSwapPrompt(currentItem, currentMeta, reason, profile, fallbackPool);
 
@@ -281,7 +282,7 @@ async function swapRaw(
 async function adaptRaw(dayPlan, constraint, profile, safeExercises, apiKey, model) {
   if (!apiKey) return localAdaptDay(dayPlan, constraint, safeExercises);
 
-  const ai = await getAI(apiKey);
+  const ai = await getAI(apiKey, 'adapt');
 
   const prompt = buildAdaptPrompt(dayPlan, constraint, safeExercises);
 
@@ -342,7 +343,7 @@ export async function askCoach({ messages, profile, plan, logs = [], bodySummary
     focusExercise: focusExerciseId ? EXERCISE_MAP[focusExerciseId] : null,
   })}`;
 
-  const ai = await getAI(apiKey);
+  const ai = await getAI(apiKey, 'ask');
   let finishReason;
   for (let attempt = 0; attempt < 2; attempt++) {
     const response = await ai.models.generateContent({
@@ -416,7 +417,7 @@ export async function adaptSingleDay(dayPlan, constraint, profile, ...rest) {
  */
 export async function extractLabReport({ file, apiKey, model }) {
   if (!apiKey) throw new Error('Reading a report needs a Gemini API key. You can type the values in instead.');
-  const ai = await getAI(apiKey);
+  const ai = await getAI(apiKey, 'lab_read');
   const parsed = await requestJson(
     ai,
     {
@@ -445,7 +446,7 @@ export async function extractLabReport({ file, apiKey, model }) {
 /** Reads an InBody (or similar) body-composition result sheet. Returns a sanitized scan or throws. */
 export async function extractBodyScan({ file, apiKey, model }) {
   if (!apiKey) throw new Error('Reading a scan needs a Gemini API key. You can type the numbers in instead.');
-  const ai = await getAI(apiKey);
+  const ai = await getAI(apiKey, 'scan_read');
   const parsed = await requestJson(
     ai,
     {
@@ -488,7 +489,7 @@ export async function analyzeLabReport({ reports, reportId, profile, apiKey, mod
     return `- ${r.name}: ${r.value} ${r.unit} → ${r.status}${r.band ? ` (${r.band})` : ''}${range}${trend}`;
   });
   const h = sanitizeHealth(profile?.health);
-  const ai = await getAI(apiKey);
+  const ai = await getAI(apiKey, 'lab_analysis');
   const parsed = await requestJson(
     ai,
     {

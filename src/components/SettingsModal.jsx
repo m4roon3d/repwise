@@ -16,6 +16,7 @@ export default function SettingsModal({
   model,
   onSaveSettings,
   onDataImported,
+  onOpenDiagnostics,
 }) {
   const [draftKey, setDraftKey] = useState(apiKey);
   const [draftModel, setDraftModel] = useState(model);
@@ -206,6 +207,15 @@ export default function SettingsModal({
               onChange={handleImportFile}
             />
           </div>
+        </div>
+
+        <hr className="divider" />
+        <div className="backup-section">
+          <h3>Usage & diagnostics</h3>
+          <p className="muted">Gemini calls and tokens, storage used, app version and clean-up tools.</p>
+          <button type="button" className="secondary-btn" onClick={onOpenDiagnostics}>
+            Open diagnostics
+          </button>
         </div>
       </div>
     </div>

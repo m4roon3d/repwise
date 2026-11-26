@@ -53,7 +53,7 @@ const where = (fn) => exercises.filter(fn).map((e) => e.id);
 // Exercises that load each area hard. Knee / shoulder / lower back use the catalogue's own joint flags.
 const AREA_EXCLUSIONS = {
   wrist: ['pushup', 'incline_pushup', 'decline_pushup', 'close_grip_pushup', 'mountain_climbers', 'inchworm_down_dog', 'pike_pushup_elevated', 'barbell_front_squat', 'barbell_bench_press', 'worlds_greatest_stretch', 'cat_cow_thoracic', 'thread_the_needle'],
-  elbow: [...where((e) => ['curl', 'pushdown', 'pullup'].includes(e.animation_key)), 'assisted_pullup', 'chin_up', 'bench_dips', 'parallel_bar_dips', 'close_grip_pushup', 'db_pullover', 'barbell_bench_press', 'pike_pushup_elevated'],
+  elbow: [...where((e) => e.movement_pattern === 'arms'), 'pullup', 'assisted_pullup', 'chin_up', 'bench_dips', 'parallel_bar_dips', 'close_grip_pushup', 'db_pullover', 'barbell_bench_press', 'pike_pushup_elevated'],
   hip: [...where((e) => e.movement_pattern === 'lunge'), 'sumo_goblet_squat', 'hip_90_90_switch', 'barbell_back_squat', 'barbell_front_squat', 'single_leg_rdl_db'],
   ankle: [...where((e) => e.movement_pattern === 'lunge' || e.movement_pattern === 'calves'), 'worlds_greatest_stretch', 'jump_rope', 'jump_squat', 'treadmill_run'],
   neck: ['seated_db_overhead_press', 'machine_shoulder_press', 'band_overhead_press', 'pike_pushup_elevated', 'barbell_back_squat', 'farmers_carry', 'suitcase_carry'],

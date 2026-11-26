@@ -222,11 +222,12 @@ function sanitizePreferences(raw) {
 // ---- Onboarding ------------------------------------------------------------------------------------
 /** True once this person finished (or skipped) the guided setup. Anyone with saved data counts as done. */
 export function loadOnboarded() {
-  return safeGet(KEYS.ONBOARDED) === '1' || safeGet(KEYS.PROFILE) !== null || safeGet(KEYS.PLAN) !== null;
+  const flag = safeGet(KEYS.ONBOARDED);
+  if (flag === '0') return false; // the person asked to run the guided setup again
+  return flag === '1' || safeGet(KEYS.PROFILE) !== null || safeGet(KEYS.PLAN) !== null;
 }
 export function saveOnboarded(done = true) {
-  if (done) safeSet(KEYS.ONBOARDED, '1');
-  else safeRemove(KEYS.ONBOARDED);
+  safeSet(KEYS.ONBOARDED, done ? '1' : '0');
 }
 
 export function listProfiles() {
@@ -526,4 +527,48 @@ export function importBackupJson(jsonText) {
     labReports: loadLabReports(),
     skipped,
   };
+}
+
+// ---- Diagnostics / housekeeping ------------------------------------------------------------------
+const AREA_LABELS = {
+  PROFILE: 'Profile & health answers',
+  PLAN: 'Current plan',
+  FEEDBACK: 'Weekly check-ins',
+  WORKOUT_LOGS: 'Workout logs',
+  COACH_CHAT: 'Coach chat',
+  BODY_SCANS: 'Body scans',
+  LAB_REPORTS: 'Blood reports',
+};
+
+/** Bytes used by each area for the current person, plus device totals. Strings count 2 bytes per char. */
+export function storageReport() {
+  const size = (k) => {
+    try {
+      const v = localStorage.getItem(k);
+      return v ? (k.length + v.length) * 2 : 0;
+    } catch {
+      return 0;
+    }
+  };
+  const areas = Object.entries(AREA_LABELS).map(([k, label]) => ({ key: k, label, bytes: size(scoped(KEYS[k])) }));
+  let deviceBytes = 0;
+  let keyCount = 0;
+  try {
+    for (const k of Object.keys(localStorage)) {
+      if (k.startsWith('mf_')) {
+        deviceBytes += size(k);
+        keyCount += 1;
+      }
+    }
+  } catch {
+    /* ignore */
+  }
+  return { areas, personBytes: areas.reduce((n, a) => n + a.bytes, 0), deviceBytes, keyCount };
+}
+
+/** Housekeeping: removes one data area for the current person. */
+export function clearArea(areaKey) {
+  if (!AREA_LABELS[areaKey] || areaKey === 'PROFILE') return false;
+  safeRemove(KEYS[areaKey]);
+  return true;
 }

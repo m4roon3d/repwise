@@ -17,8 +17,10 @@ export const CSP = [
   "form-action 'self'",
 ].join('; ');
 
+const buildId = Date.now().toString(36);
+const buildDate = new Date().toISOString();
+
 function productionHardening() {
-  const buildId = Date.now().toString(36);
   let outDir = 'dist';
   return {
     name: 'repwise-production-hardening',
@@ -42,6 +44,7 @@ function productionHardening() {
 export default defineConfig({
   plugins: [react(), productionHardening()],
   base: './',
+  define: { __APP_BUILD__: JSON.stringify({ id: buildId, date: buildDate }) },
   test: {
     environment: 'jsdom',
     globals: true,

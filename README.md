@@ -29,6 +29,11 @@ A zero-backend, personal-use Progressive Web App (Vite + React) powered by your 
 - **Ask Your Coach (needs a Gemini key):** free-form questions grounded in your profile, plan and logs. Chat history is kept on the device.
 - **Form coaching:** a *Form help* button on every exercise opens the coach focused on that lift, and you can attach up to 3 photos for a form check. Photos are resized in the browser, sent to Gemini with your question and never stored.
 
+## Usage & diagnostics
+Settings → **Open diagnostics** shows every Gemini call made from this device: calls, tokens (input, output and thinking), average response time, a tokens-per-day chart, a per-feature breakdown and the last 25 calls with any errors. Enter your own per-million prices for an estimated cost. Prompts, replies and your API key are never logged; the log keeps the latest 500 calls on this device only.
+
+The same screen shows storage used per area (each can be cleared), "Protect my data" (asks the browser not to evict it), re-running guided setup, the app version, the offline cache, and an "Export diagnostics" JSON for troubleshooting.
+
 ## What's New in v2
 - **20 Parametric Animations for 68 Exercises:** Each exercise has a form animation (squat, hinge, curl, pushdown, calf raise, plank, push-up, pull-up and more), including bespoke silhouettes for **Glute Bridge**, **Bilateral Lateral Raise**, **Seated Hamstring Curl**, and **Anti-Rotation Pallof Press**, with Play/Pause, `0.5x` Slow-Mo, and phase scrubbing.
 - **Conversational AI Coach Intake (`CoachIntakeChat.jsx`):** Chat naturally about sleep, aches, schedule, and preferences to auto-update your profile before generating a plan.

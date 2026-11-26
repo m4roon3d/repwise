@@ -137,9 +137,12 @@ export function MiniBars({ title, bars, max, formatLabel, note }) {
               <text x={bx + (bw - 4) / 2} y={base - bh - 4} textAnchor="middle" className="trend-axis">
                 {b.value}
               </text>
-              <text x={bx + (bw - 4) / 2} y={h - 6} textAnchor="middle" className="trend-axis">
-                {formatLabel(b)}
-              </text>
+              {/* Many bars: label every few, always the latest, so dates never collide. */}
+              {(bars.length <= 8 || i === bars.length - 1 || (bars.length - 1 - i) % Math.ceil(bars.length / 5) === 0) && (
+                <text x={bx + (bw - 4) / 2} y={h - 6} textAnchor="middle" className="trend-axis">
+                  {formatLabel(b)}
+                </text>
+              )}
             </g>
           );
         })}

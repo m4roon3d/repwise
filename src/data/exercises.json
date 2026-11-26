@@ -15,7 +15,6 @@
     ],
     "equipment_label": "Dumbbell or Kettlebell",
     "joint_stress_flags": [],
-    "animation_key": "squat",
     "cues": [
       "Hold weight snug at chest with elbows tucked down.",
       "Sit hips between heels while keeping chest proud.",
@@ -43,7 +42,6 @@
     "joint_stress_flags": [
       "knee"
     ],
-    "animation_key": "squat",
     "cues": [
       "Keep lower back and tailbone flat against the pad.",
       "Lower sled smoothly until knees reach ~90 degrees.",
@@ -73,7 +71,6 @@
       "knee",
       "lower_back"
     ],
-    "animation_key": "squat",
     "cues": [
       "Brace core 360\u00b0 before initiating the descent.",
       "Track knees cleanly over second and third toes.",
@@ -101,7 +98,6 @@
     ],
     "equipment_label": "Bench or Chair (Bodyweight)",
     "joint_stress_flags": [],
-    "animation_key": "squat",
     "cues": [
       "Lower slowly over 3 seconds until glutes lightly tap bench.",
       "Keep shins relatively vertical to reduce knee shear.",
@@ -133,7 +129,6 @@
     "joint_stress_flags": [
       "lower_back"
     ],
-    "animation_key": "hinge",
     "cues": [
       "Soften knees slightly and push hips straight back.",
       "Keep dumbbells grazing thighs with lats engaged.",
@@ -160,7 +155,6 @@
     ],
     "equipment_label": "Cable Machine + Rope",
     "joint_stress_flags": [],
-    "animation_key": "hinge",
     "cues": [
       "Step forward until cable has light tension between legs.",
       "Hinge hips back cleanly with a neutral spine.",
@@ -190,7 +184,6 @@
     "joint_stress_flags": [
       "lower_back"
     ],
-    "animation_key": "hinge",
     "cues": [
       "Pull slack out of the handles before lifting.",
       "Push the floor away with your legs while keeping chest proud.",
@@ -218,7 +211,6 @@
     ],
     "equipment_label": "Mat (Optional Dumbbell)",
     "joint_stress_flags": [],
-    "animation_key": "glute_bridge",
     "cues": [
       "Tuck ribs down and drive evenly through both heels.",
       "Pause 1 full second at the top with glutes squeezed.",
@@ -245,7 +237,6 @@
     ],
     "equipment_label": "Leg Curl Machine",
     "joint_stress_flags": [],
-    "animation_key": "leg_curl",
     "cues": [
       "Align knee joint with the machine's pivot axis.",
       "Curl heels smoothly under the seat with a brief squeeze.",
@@ -276,7 +267,6 @@
     "joint_stress_flags": [
       "shoulder"
     ],
-    "animation_key": "chest_press",
     "cues": [
       "Set bench to a gentle 20\u201330\u00b0 angle, not overly steep.",
       "Tuck elbows ~45\u00b0 from torso to protect shoulder joints.",
@@ -304,7 +294,6 @@
     ],
     "equipment_label": "Chest Press Machine",
     "joint_stress_flags": [],
-    "animation_key": "chest_press",
     "cues": [
       "Adjust seat so handles align with mid-chest.",
       "Pin shoulder blades softly into the back pad.",
@@ -332,7 +321,6 @@
     ],
     "equipment_label": "Dumbbells + Floor/Mat",
     "joint_stress_flags": [],
-    "animation_key": "chest_press",
     "cues": [
       "Keep palms facing each other to open shoulder space.",
       "Pause lightly when upper arms touch the floor\u2014no bouncing.",
@@ -361,7 +349,6 @@
     ],
     "equipment_label": "Bench or Sturdy Surface",
     "joint_stress_flags": [],
-    "animation_key": "chest_press",
     "cues": [
       "Keep a straight plank line from ears through heels.",
       "Lower chest toward bench edge with elbows at 45\u00b0.",
@@ -391,7 +378,6 @@
     "joint_stress_flags": [
       "shoulder"
     ],
-    "animation_key": "chest_press",
     "cues": [
       "Plant feet firmly and keep shoulder blades retracted.",
       "Lower bar cleanly to lower sternum with controlled tempo.",
@@ -421,7 +407,6 @@
     "joint_stress_flags": [
       "shoulder"
     ],
-    "animation_key": "overhead_press",
     "cues": [
       "Set bench 1 notch below 90\u00b0 and keep palms facing inward.",
       "Brace abs so lower back stays flush against pad.",
@@ -448,7 +433,6 @@
     ],
     "equipment_label": "Landmine Barbell",
     "joint_stress_flags": [],
-    "animation_key": "overhead_press",
     "cues": [
       "Kneel on the pressing-side knee with glute squeezed.",
       "Press along the natural 45\u00b0 arc\u2014ultra friendly on shoulders.",
@@ -475,7 +459,6 @@
     ],
     "equipment_label": "Light Dumbbells",
     "joint_stress_flags": [],
-    "animation_key": "lateral_raise",
     "cues": [
       "Raise arms ~30\u00b0 forward of your sides (scapular plane).",
       "Lead with elbows and stop right at shoulder height.",
@@ -503,7 +486,6 @@
     "joint_stress_flags": [
       "shoulder"
     ],
-    "animation_key": "overhead_press",
     "cues": [
       "Hinge hips up into a soft inverted V position.",
       "Lower forehead forward between hands, not straight down.",
@@ -534,7 +516,6 @@
     ],
     "equipment_label": "Dumbbells + Incline Bench",
     "joint_stress_flags": [],
-    "animation_key": "row",
     "cues": [
       "Rest chest flat on a 30\u00b0 incline bench to unload lower back.",
       "Drive elbows back toward hips and pause briefly at top.",
@@ -562,7 +543,6 @@
     ],
     "equipment_label": "Cable Row Machine",
     "joint_stress_flags": [],
-    "animation_key": "row",
     "cues": [
       "Sit tall with chest lifted\u2014avoid rocking backward.",
       "Pull handle toward lower ribs, squeezing shoulder blades.",
@@ -591,7 +571,6 @@
     ],
     "equipment_label": "Dumbbell + Bench",
     "joint_stress_flags": [],
-    "animation_key": "row",
     "cues": [
       "Brace free hand firmly on bench with flat back.",
       "Pull dumbbell in a sweeping arc toward your hip pocket.",
@@ -619,7 +598,6 @@
     ],
     "equipment_label": "Cable Machine + Rope",
     "joint_stress_flags": [],
-    "animation_key": "row",
     "cues": [
       "Set pulley at eye level and pull rope toward your forehead.",
       "Finish with knuckles back and elbows high in a double-bicep pose.",
@@ -647,7 +625,6 @@
     ],
     "equipment_label": "Resistance Band",
     "joint_stress_flags": [],
-    "animation_key": "row",
     "cues": [
       "Hold band at shoulder height with soft elbows.",
       "Pull hands apart until band taps mid-chest.",
@@ -674,7 +651,6 @@
     ],
     "equipment_label": "Resistance Band",
     "joint_stress_flags": [],
-    "animation_key": "row",
     "cues": [
       "Loop band securely around feet with knees slightly bent.",
       "Sit tall and pull elbows cleanly past ribs.",
@@ -702,7 +678,6 @@
     ],
     "equipment_label": "Lat Pulldown Cable",
     "joint_stress_flags": [],
-    "animation_key": "pulldown",
     "cues": [
       "Use a shoulder-width neutral handle for happy shoulders.",
       "Initiate by pulling shoulder blades down, then drive elbows to ribs.",
@@ -731,7 +706,6 @@
     "joint_stress_flags": [
       "shoulder"
     ],
-    "animation_key": "pulldown",
     "cues": [
       "Choose enough assistance to complete clean, strict reps.",
       "Lift chest toward the handles rather than craning your chin.",
@@ -759,7 +733,6 @@
     ],
     "equipment_label": "High Cable or Anchored Band",
     "joint_stress_flags": [],
-    "animation_key": "pulldown",
     "cues": [
       "Hinge slightly at the hips with arms long and elbows soft.",
       "Sweep hands smoothly down to your thighs using your lats.",
@@ -790,7 +763,6 @@
     "joint_stress_flags": [
       "shoulder"
     ],
-    "animation_key": "pulldown",
     "cues": [
       "Keep a gentle bend in the elbows throughout the arc.",
       "Lower dumbbell behind head only as far as ribs stay flat.",
@@ -821,7 +793,6 @@
     "joint_stress_flags": [
       "knee"
     ],
-    "animation_key": "lunge",
     "cues": [
       "Step backward to keep front shin vertical and knee comfortable.",
       "Lean torso slightly forward over front hip to engage glute.",
@@ -849,7 +820,6 @@
     ],
     "equipment_label": "Low Step / Bench",
     "joint_stress_flags": [],
-    "animation_key": "lunge",
     "cues": [
       "Use a knee-friendly low step height (12\u201316 inches).",
       "Drive up using only the top leg\u2014avoid pushing off back toes.",
@@ -880,7 +850,6 @@
     "joint_stress_flags": [
       "knee"
     ],
-    "animation_key": "lunge",
     "cues": [
       "Rest rear laces lightly on bench; 85% of weight on front foot.",
       "Drop straight down with slight forward torso lean.",
@@ -909,7 +878,6 @@
     ],
     "equipment_label": "Floor / Mat",
     "joint_stress_flags": [],
-    "animation_key": "dead_bug",
     "cues": [
       "Press lower back firmly into the floor before moving.",
       "Extend opposite arm and leg slowly while exhaling fully.",
@@ -938,7 +906,6 @@
     ],
     "equipment_label": "Cable or Anchored Band",
     "joint_stress_flags": [],
-    "animation_key": "pallof_press",
     "cues": [
       "Stand sideways to anchor with soft knees and tall posture.",
       "Press handle straight out from sternum and hold 2 seconds.",
@@ -968,7 +935,6 @@
     ],
     "equipment_label": "Pair of Dumbbells",
     "joint_stress_flags": [],
-    "animation_key": "carry",
     "cues": [
       "Walk tall with ribs stacked over hips and shoulders packed.",
       "Take steady, quiet steps for 30\u201340 seconds per set.",
@@ -997,7 +963,6 @@
     ],
     "equipment_label": "One Dumbbell",
     "joint_stress_flags": [],
-    "animation_key": "carry",
     "cues": [
       "Hold one dumbbell at your side and stay tall \u2014 don't lean toward the weight.",
       "Walk slowly for 30\u201340 seconds, then switch hands.",
@@ -1026,7 +991,6 @@
     ],
     "equipment_label": "Dumbbell or Kettlebell",
     "joint_stress_flags": [],
-    "animation_key": "carry",
     "cues": [
       "Hug the weight at chest height with elbows tucked.",
       "Take short, quiet steps for 30\u201340 seconds per set.",
@@ -1055,7 +1019,6 @@
     ],
     "equipment_label": "Mat / Bodyweight",
     "joint_stress_flags": [],
-    "animation_key": "mobility",
     "cues": [
       "Step into a long lunge, plant opposite hand, rotate chest to sky.",
       "Breathe deeply for 2 seconds at peak thoracic rotation.",
@@ -1086,7 +1049,6 @@
     ],
     "equipment_label": "Mat / Bodyweight",
     "joint_stress_flags": [],
-    "animation_key": "mobility",
     "cues": [
       "Inhale as you gently drop belly and lift chest forward.",
       "Exhale as you round mid-back up toward ceiling.",
@@ -1117,7 +1079,6 @@
     "joint_stress_flags": [
       "knee"
     ],
-    "animation_key": "squat",
     "cues": [
       "Rest the bar on your shoulders with elbows high.",
       "Keep your torso tall as you sit between your heels.",
@@ -1146,7 +1107,6 @@
     ],
     "equipment_label": "Dumbbell or Kettlebell",
     "joint_stress_flags": [],
-    "animation_key": "squat",
     "cues": [
       "Stand wide with toes turned out about 30 degrees.",
       "Hold the weight at your chest and sit straight down.",
@@ -1174,7 +1134,6 @@
     "joint_stress_flags": [
       "knee"
     ],
-    "animation_key": "squat",
     "cues": [
       "Place your feet slightly in front of the bar.",
       "Sit down and back, keeping your whole foot planted.",
@@ -1202,7 +1161,6 @@
     ],
     "equipment_label": "Bench + Dumbbell or Barbell",
     "joint_stress_flags": [],
-    "animation_key": "glute_bridge",
     "cues": [
       "Rest your upper back on the bench with feet flat.",
       "Tuck your chin and drive your hips up until level.",
@@ -1231,7 +1189,6 @@
     ],
     "equipment_label": "Mat (Bodyweight)",
     "joint_stress_flags": [],
-    "animation_key": "glute_bridge",
     "cues": [
       "Lie back with one foot flat and the other knee hugged in.",
       "Drive through the planted heel and lift your hips.",
@@ -1263,7 +1220,6 @@
     "joint_stress_flags": [
       "lower_back"
     ],
-    "animation_key": "hinge",
     "cues": [
       "Soften the standing knee and hinge at the hip.",
       "Reach the free leg straight back as your torso tips forward.",
@@ -1294,7 +1250,6 @@
     "joint_stress_flags": [
       "shoulder"
     ],
-    "animation_key": "chest_press",
     "cues": [
       "Plant your feet and set your shoulder blades back and down.",
       "Lower the dumbbells until your elbows are about 45 degrees from your sides.",
@@ -1323,7 +1278,6 @@
     ],
     "equipment_label": "Bodyweight",
     "joint_stress_flags": [],
-    "animation_key": "pushup",
     "cues": [
       "Hands just outside your shoulders, body in one straight line.",
       "Lower your chest with elbows about 45 degrees from your sides.",
@@ -1352,7 +1306,6 @@
     ],
     "equipment_label": "Resistance Band",
     "joint_stress_flags": [],
-    "animation_key": "chest_press",
     "cues": [
       "Anchor the band behind you at chest height.",
       "Press forward until your arms are straight, without shrugging.",
@@ -1381,7 +1334,6 @@
     "joint_stress_flags": [
       "shoulder"
     ],
-    "animation_key": "overhead_press",
     "cues": [
       "Set the seat so the handles start at shoulder height.",
       "Press up without arching your lower back.",
@@ -1410,7 +1362,6 @@
     "joint_stress_flags": [
       "shoulder"
     ],
-    "animation_key": "overhead_press",
     "cues": [
       "Stand on the band with feet hip-width apart.",
       "Brace your core and press straight overhead.",
@@ -1436,7 +1387,6 @@
     ],
     "equipment_label": "Low Cable Machine",
     "joint_stress_flags": [],
-    "animation_key": "lateral_raise",
     "cues": [
       "Stand side-on to the cable with a slight lean away.",
       "Lift your arm out and slightly forward to shoulder height.",
@@ -1464,7 +1414,6 @@
     ],
     "equipment_label": "Seated Row Machine",
     "joint_stress_flags": [],
-    "animation_key": "row",
     "cues": [
       "Sit tall with your chest against the pad.",
       "Pull your elbows back and squeeze your shoulder blades.",
@@ -1492,7 +1441,6 @@
     ],
     "equipment_label": "Resistance Band",
     "joint_stress_flags": [],
-    "animation_key": "row",
     "cues": [
       "Anchor the band at face height and step back.",
       "Pull toward your eyes, elbows high and wide.",
@@ -1521,7 +1469,6 @@
     "joint_stress_flags": [
       "shoulder"
     ],
-    "animation_key": "pullup",
     "cues": [
       "Start from a dead hang with shoulders pulled down.",
       "Drive your elbows toward your hips as your chest rises.",
@@ -1549,7 +1496,6 @@
     ],
     "equipment_label": "Band Anchored Overhead",
     "joint_stress_flags": [],
-    "animation_key": "pulldown",
     "cues": [
       "Kneel or stand under the anchor with arms reaching up.",
       "Pull your elbows down toward your ribs.",
@@ -1576,7 +1522,6 @@
     ],
     "equipment_label": "Lat Pulldown Cable",
     "joint_stress_flags": [],
-    "animation_key": "pulldown",
     "cues": [
       "Use a narrow neutral grip and sit tall.",
       "Pull the handle to your upper chest, elbows in.",
@@ -1607,7 +1552,6 @@
     "joint_stress_flags": [
       "knee"
     ],
-    "animation_key": "lunge",
     "cues": [
       "Take a long step and lower your back knee toward the floor.",
       "Keep your front knee tracking over your middle toes.",
@@ -1637,7 +1581,6 @@
     "joint_stress_flags": [
       "knee"
     ],
-    "animation_key": "lunge",
     "cues": [
       "Stand in a long stance with both feet pointing forward.",
       "Lower straight down until your back knee nearly touches.",
@@ -1667,7 +1610,6 @@
     ],
     "equipment_label": "Floor / Mat",
     "joint_stress_flags": [],
-    "animation_key": "plank",
     "cues": [
       "Elbows under shoulders, body in one straight line.",
       "Squeeze your glutes and pull your ribs down.",
@@ -1696,7 +1638,6 @@
     ],
     "equipment_label": "Mat / Bodyweight",
     "joint_stress_flags": [],
-    "animation_key": "mobility",
     "cues": [
       "Start on hands and knees with hips over knees.",
       "Slide one arm under your body and rotate your upper back.",
@@ -1726,7 +1667,6 @@
     ],
     "equipment_label": "Mat / Bodyweight",
     "joint_stress_flags": [],
-    "animation_key": "mobility",
     "cues": [
       "Sit with both knees bent at 90 degrees, one in front and one to the side.",
       "Sit tall and lean gently over the front shin.",
@@ -1758,7 +1698,6 @@
     "joint_stress_flags": [
       "knee"
     ],
-    "animation_key": "mobility",
     "cues": [
       "Kneel on a pad with the other foot forward.",
       "Squeeze the glute of the kneeling leg and tuck your pelvis.",
@@ -1787,7 +1726,6 @@
     ],
     "equipment_label": "Dumbbells",
     "joint_stress_flags": [],
-    "animation_key": "curl",
     "cues": [
       "Keep your elbows pinned at your sides.",
       "Curl up without swinging your torso.",
@@ -1815,7 +1753,6 @@
     ],
     "equipment_label": "Dumbbells",
     "joint_stress_flags": [],
-    "animation_key": "curl",
     "cues": [
       "Hold the dumbbells with palms facing each other.",
       "Curl up with elbows still, no swinging.",
@@ -1841,7 +1778,6 @@
     ],
     "equipment_label": "Resistance Band",
     "joint_stress_flags": [],
-    "animation_key": "curl",
     "cues": [
       "Stand on the band with elbows at your sides.",
       "Curl to your shoulders and squeeze.",
@@ -1867,7 +1803,6 @@
     ],
     "equipment_label": "Cable Machine + Bar or Rope",
     "joint_stress_flags": [],
-    "animation_key": "pushdown",
     "cues": [
       "Keep your elbows glued to your ribs.",
       "Press down to full lockout without leaning on the stack.",
@@ -1893,7 +1828,6 @@
     ],
     "equipment_label": "Band Anchored Overhead",
     "joint_stress_flags": [],
-    "animation_key": "pushdown",
     "cues": [
       "Anchor the band high and pin your elbows to your sides.",
       "Press down until your arms are straight.",
@@ -1920,7 +1854,6 @@
     ],
     "equipment_label": "Dumbbells (or Bodyweight)",
     "joint_stress_flags": [],
-    "animation_key": "calf_raise",
     "cues": [
       "Stand tall with the balls of your feet on a step or the floor.",
       "Rise as high as you can and pause at the top.",
@@ -1947,7 +1880,6 @@
     ],
     "equipment_label": "Bodyweight + Wall for Balance",
     "joint_stress_flags": [],
-    "animation_key": "calf_raise",
     "cues": [
       "Balance on one foot, lightly touching a wall.",
       "Rise straight up as high as you can.",
@@ -1977,7 +1909,6 @@
     "joint_stress_flags": [
       "shoulder"
     ],
-    "animation_key": "pullup",
     "cues": [
       "Grip the bar with palms facing you, shoulder-width apart.",
       "Pull your chest toward the bar, leading with your elbows.",
@@ -2005,7 +1936,6 @@
     ],
     "equipment_label": "Bar at Hip Height (Smith or Rack)",
     "joint_stress_flags": [],
-    "animation_key": "row",
     "cues": [
       "Hang under the bar with your body in one straight line.",
       "Pull your chest to the bar and squeeze your shoulder blades.",
@@ -2035,7 +1965,6 @@
     "joint_stress_flags": [
       "shoulder"
     ],
-    "animation_key": "pushdown",
     "cues": [
       "Hands on the bench edge behind you, fingers forward.",
       "Lower until your elbows reach about 90 degrees.",
@@ -2064,7 +1993,6 @@
     "joint_stress_flags": [
       "shoulder"
     ],
-    "animation_key": "pushdown",
     "cues": [
       "Start tall at the top with shoulders down.",
       "Lower until your shoulders are just below your elbows.",
@@ -2093,7 +2021,6 @@
     ],
     "equipment_label": "Bench or Step",
     "joint_stress_flags": [],
-    "animation_key": "pushup",
     "cues": [
       "Feet on the bench, hands under your shoulders.",
       "Lower your chest with your body in one straight line.",
@@ -2121,7 +2048,6 @@
     ],
     "equipment_label": "Bodyweight",
     "joint_stress_flags": [],
-    "animation_key": "pushup",
     "cues": [
       "Hands just inside shoulder width, elbows close to your ribs.",
       "Lower your chest to just above the floor.",
@@ -2150,7 +2076,6 @@
     "joint_stress_flags": [
       "shoulder"
     ],
-    "animation_key": "pullup",
     "cues": [
       "Hang from the bar with shoulders pulled down.",
       "Raise your legs by curling your pelvis up, not swinging.",
@@ -2179,7 +2104,6 @@
     ],
     "equipment_label": "Bodyweight",
     "joint_stress_flags": [],
-    "animation_key": "plank",
     "cues": [
       "Start in a high plank with hands under shoulders.",
       "Drive one knee toward your chest, then switch quickly.",
@@ -2210,7 +2134,6 @@
     "joint_stress_flags": [
       "knee"
     ],
-    "animation_key": "squat",
     "cues": [
       "Squat to a comfortable depth with your chest up.",
       "Jump straight up, driving through your whole foot.",
@@ -2241,7 +2164,6 @@
     "joint_stress_flags": [
       "shoulder"
     ],
-    "animation_key": "plank",
     "cues": [
       "Elbow under your shoulder, feet stacked.",
       "Lift your hips so your body forms a straight line.",
@@ -2270,7 +2192,6 @@
     ],
     "equipment_label": "Floor / Mat",
     "joint_stress_flags": [],
-    "animation_key": "dead_bug",
     "cues": [
       "Lie face down with arms reaching forward.",
       "Lift your arms, chest and legs a few centimetres off the floor.",
@@ -2302,7 +2223,6 @@
     "joint_stress_flags": [
       "lower_back"
     ],
-    "animation_key": "dead_bug",
     "cues": [
       "Sit with knees bent and lean back slightly with a tall spine.",
       "Rotate your ribs to one side, then the other.",
@@ -2330,7 +2250,6 @@
     ],
     "equipment_label": "Mat / Bodyweight",
     "joint_stress_flags": [],
-    "animation_key": "mobility",
     "cues": [
       "Stand tall with feet together and weight even.",
       "Sweep your arms overhead and lengthen through your fingertips.",
@@ -2359,7 +2278,6 @@
     ],
     "equipment_label": "Mat / Bodyweight",
     "joint_stress_flags": [],
-    "animation_key": "mobility",
     "cues": [
       "Reach one arm overhead and lean gently to the other side.",
       "Keep both feet grounded and hips square.",
@@ -2390,7 +2308,6 @@
     "joint_stress_flags": [
       "lower_back"
     ],
-    "animation_key": "mobility",
     "cues": [
       "Hinge from your hips and let your upper body hang.",
       "Bend your knees as much as you need.",
@@ -2420,7 +2337,6 @@
     ],
     "equipment_label": "Mat / Bodyweight",
     "joint_stress_flags": [],
-    "animation_key": "mobility",
     "cues": [
       "Fold forward and walk your hands out to a plank.",
       "Push your hips up and back into an upside-down V.",
@@ -2453,7 +2369,6 @@
     "joint_stress_flags": [
       "knee"
     ],
-    "animation_key": "mobility",
     "cues": [
       "Kneel, sit back on your heels and fold forward.",
       "Reach your arms long or rest them by your sides.",
@@ -2483,7 +2398,6 @@
     ],
     "equipment_label": "Mat / Bodyweight",
     "joint_stress_flags": [],
-    "animation_key": "mobility",
     "cues": [
       "Sit with the soles of your feet together.",
       "Sit tall, then fold forward gently from your hips.",
@@ -2514,7 +2428,6 @@
     "joint_stress_flags": [
       "lower_back"
     ],
-    "animation_key": "mobility",
     "cues": [
       "Sit with legs straight and spine tall.",
       "Hinge forward from your hips toward your toes.",
@@ -2545,7 +2458,6 @@
     "joint_stress_flags": [
       "lower_back"
     ],
-    "animation_key": "mobility",
     "cues": [
       "Sit with your legs wide and kneecaps facing up.",
       "Walk your hands forward while keeping a long spine.",
@@ -2575,7 +2487,6 @@
     ],
     "equipment_label": "Mat / Bodyweight",
     "joint_stress_flags": [],
-    "animation_key": "glute_bridge",
     "cues": [
       "Lie on your back with feet hip-width apart.",
       "Press through your feet and lift your hips.",
@@ -2604,7 +2515,6 @@
     ],
     "equipment_label": "Mat / Bodyweight",
     "joint_stress_flags": [],
-    "animation_key": "mobility",
     "cues": [
       "Lie on your back and hug both knees in.",
       "Rock gently side to side if it feels good.",
@@ -2633,7 +2543,6 @@
     ],
     "equipment_label": "Outdoors",
     "joint_stress_flags": [],
-    "animation_key": "carry",
     "cues": [
       "Walk briskly enough that talking takes a little effort.",
       "Swing your arms and stand tall.",
@@ -2661,7 +2570,6 @@
     ],
     "equipment_label": "Treadmill",
     "joint_stress_flags": [],
-    "animation_key": "carry",
     "cues": [
       "Set an incline of 5 to 10% and a brisk walking pace.",
       "Do not hold the handrails; swing your arms.",
@@ -2690,7 +2598,6 @@
     "joint_stress_flags": [
       "knee"
     ],
-    "animation_key": "carry",
     "cues": [
       "Start with 3 minutes of easy walking.",
       "Run at a pace you could hold a short conversation at.",
@@ -2717,7 +2624,6 @@
     ],
     "equipment_label": "Exercise Bike",
     "joint_stress_flags": [],
-    "animation_key": "squat",
     "cues": [
       "Set the seat so your knee is slightly bent at the bottom.",
       "Keep a steady cadence of about 80 to 90 revolutions a minute.",
@@ -2744,7 +2650,6 @@
     ],
     "equipment_label": "Elliptical",
     "joint_stress_flags": [],
-    "animation_key": "lunge",
     "cues": [
       "Stand tall and push and pull the handles.",
       "Keep your whole foot on the pedals.",
@@ -2773,7 +2678,6 @@
     "joint_stress_flags": [
       "lower_back"
     ],
-    "animation_key": "row",
     "cues": [
       "Push with your legs first, then lean back, then pull the handle in.",
       "Reverse the order on the way back.",
@@ -2800,7 +2704,6 @@
     ],
     "equipment_label": "Stair Climber",
     "joint_stress_flags": [],
-    "animation_key": "lunge",
     "cues": [
       "Stand tall and step through your whole foot.",
       "Use the rails only lightly for balance.",
@@ -2831,7 +2734,6 @@
     "joint_stress_flags": [
       "knee"
     ],
-    "animation_key": "calf_raise",
     "cues": [
       "Turn the rope with your wrists, elbows close to your sides.",
       "Jump just high enough to clear the rope, landing softly.",
@@ -2859,7 +2761,6 @@
     ],
     "equipment_label": "Bicycle",
     "joint_stress_flags": [],
-    "animation_key": "squat",
     "cues": [
       "Ride at a pace where you can still talk.",
       "Use easier gears on hills instead of standing.",

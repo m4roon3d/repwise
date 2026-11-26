@@ -7,13 +7,14 @@ import HealthNotice from './components/HealthNotice';
 import AskCoach from './components/AskCoach';
 import Watermark from './components/Watermark';
 import Wordmark from './components/Wordmark';
+import Diagnostics from './components/Diagnostics';
 import Onboarding from './components/Onboarding';
 import PlanWhy from './components/PlanWhy';
 import ProgressView from './components/ProgressView';
 import HealthView from './components/HealthView';
 import { latestLabsForProfile } from './services/labs';
 import { describeBodyCompForPrompt } from './services/bodyComp';
-import { AboutYou, FitnessTest, HealthCheck, InjuryGrid, LabReport, profileCompleteness } from './components/HealthSections';
+import { AboutYou, FitnessTest, HealthCheck, InjuryGrid, profileCompleteness } from './components/HealthSections';
 import { retestDue } from './services/baseline';
 import { ChatIcon, CoachIcon, ExercisesIcon, HealthIcon, KeyIcon, ProgressIcon, WorkoutIcon } from './components/Icons';
 import {
@@ -563,8 +564,6 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
               <ProfileExtras
                 profile={profile}
                 onChange={handleProfileChange}
-                apiKey={apiKey}
-                onExtract={handleExtractLabs}
                 canRemove={profileId !== 'default'}
                 onOpenHealth={() => setTab('health')}
                 onRemove={() => onRemovePerson(profileId)}
@@ -641,6 +640,26 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
             logs={logs}
             onAsk={apiKey ? askQuestion : null}
             onRetest={() => setTab('assess')}
+          />
+        )}
+
+        {tab === 'diagnostics' && (
+          <Diagnostics
+            apiKey={apiKey}
+            model={model}
+            profileName={profile.name}
+            onClose={() => setTab('assess')}
+            onDataChanged={() => {
+              logsRef.current = loadWorkoutLogs();
+              setLogs(logsRef.current);
+              chatRef.current = loadCoachChat();
+              setChat(chatRef.current);
+              scansRef.current = loadBodyScans();
+              setScans(scansRef.current);
+              reportsRef.current = loadLabReports();
+              setReports(reportsRef.current);
+              setOnboarded(loadOnboarded());
+            }}
           />
         )}
 
@@ -723,6 +742,10 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
         model={model}
         onSaveSettings={handleSaveSettings}
         onDataImported={handleDataImported}
+        onOpenDiagnostics={() => {
+          setSettingsOpen(false);
+          setTab('diagnostics');
+        }}
       />
     </div>
     </>
@@ -738,7 +761,7 @@ const EXTRA_SECTIONS = [
 ];
 
 /** The setup questions, editable any time from the Coach tab. */
-function ProfileExtras({ profile, onChange, apiKey, onExtract, canRemove, onRemove, onOpenHealth }) {
+function ProfileExtras({ profile, onChange, canRemove, onRemove, onOpenHealth }) {
   const [open, setOpen] = useState(null);
   const { checks, pct } = profileCompleteness(profile);
   const done = Object.fromEntries(checks.map(([k, v]) => [k, v]));
