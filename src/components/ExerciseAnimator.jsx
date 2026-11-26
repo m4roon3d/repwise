@@ -255,7 +255,7 @@ export default function ExerciseAnimator({ animationKey = 'squat', compact = fal
       depth: q.z + 0.03,
       render: () => (
         <g key={id}>
-          <circle cx={q.x} cy={q.y} r={radius} fill={fill} stroke="#064e3b" strokeWidth="1.6" />
+          <circle cx={q.x} cy={q.y} r={radius} fill={fill} stroke="#047857" strokeWidth="1.6" />
           <circle cx={q.x - 1.5} cy={q.y - 1.5} r={radius * 0.32} fill="rgba(255,255,255,0.32)" />
         </g>
       ),
@@ -272,8 +272,8 @@ export default function ExerciseAnimator({ animationKey = 'squat', compact = fal
         [0.42, 0.01, 0.92],
         [-0.42, 0.01, 0.92],
       ],
-      'rgba(30, 41, 59, 0.72)',
-      '#334155',
+      'rgba(241, 245, 249, 0.95)',
+      '#b6c2d1',
       1.5
     );
   }
@@ -287,12 +287,12 @@ export default function ExerciseAnimator({ animationKey = 'squat', compact = fal
         [0.17, 0.44, 0.28],
         [-0.17, 0.44, 0.28],
       ],
-      'rgba(51, 65, 85, 0.85)',
-      '#64748b',
+      'rgba(226, 232, 240, 0.95)',
+      '#94a3b8',
       1.5
     );
-    addLine('bench-leg-1', [0, 0.44, -0.58], [0, 0, -0.58], '#475569', 4);
-    addLine('bench-leg-2', [0, 0.44, 0.16], [0, 0, 0.16], '#475569', 4);
+    addLine('bench-leg-1', [0, 0.44, -0.58], [0, 0, -0.58], '#a3b1c2', 4);
+    addLine('bench-leg-2', [0, 0.44, 0.16], [0, 0, 0.16], '#a3b1c2', 4);
     addWeight('db-l', p.lHand, 6.2);
     addWeight('db-r', p.rHand, 6.2);
   }
@@ -306,8 +306,8 @@ export default function ExerciseAnimator({ animationKey = 'squat', compact = fal
         [0.18, 0.54, 0.22],
         [-0.18, 0.54, 0.22],
       ],
-      'rgba(51, 65, 85, 0.8)',
-      '#64748b',
+      'rgba(226, 232, 240, 0.95)',
+      '#94a3b8',
       1.3
     );
     addPoly(
@@ -318,11 +318,11 @@ export default function ExerciseAnimator({ animationKey = 'squat', compact = fal
         [0.16, 1.24, -0.22],
         [-0.16, 1.24, -0.22],
       ],
-      'rgba(51, 65, 85, 0.65)',
-      '#64748b',
+      'rgba(226, 232, 240, 0.9)',
+      '#94a3b8',
       1.3
     );
-    addLine('seat-post', [0, 0.54, 0], [0, 0, 0], '#475569', 4);
+    addLine('seat-post', [0, 0.54, 0], [0, 0, 0], '#a3b1c2', 4);
     addWeight('db-l', p.lHand, 5.8);
     addWeight('db-r', p.rHand, 5.8);
   }
@@ -336,8 +336,8 @@ export default function ExerciseAnimator({ animationKey = 'squat', compact = fal
         [0.2, 0.54, 0.24],
         [-0.2, 0.54, 0.24],
       ],
-      'rgba(51, 65, 85, 0.8)',
-      '#64748b',
+      'rgba(226, 232, 240, 0.95)',
+      '#94a3b8',
       1.3
     );
     addPoly(
@@ -348,13 +348,13 @@ export default function ExerciseAnimator({ animationKey = 'squat', compact = fal
         [0.18, 1.18, -0.34],
         [-0.18, 1.18, -0.34],
       ],
-      'rgba(51, 65, 85, 0.6)',
-      '#64748b',
+      'rgba(226, 232, 240, 0.9)',
+      '#94a3b8',
       1.3
     );
-    addLine('lc-post', [0, 0.54, 0], [0, 0, 0], '#475569', 4);
+    addLine('lc-post', [0, 0.54, 0], [0, 0, 0], '#a3b1c2', 4);
     addLine('lc-roller', pose3D.lAnkle, pose3D.rAnkle, '#10b981', 7);
-    addLine('lc-pivot-arm', [0.22, 0.58, 0.28], pose3D.lAnkle, '#64748b', 2.4, '3 2');
+    addLine('lc-pivot-arm', [0.22, 0.58, 0.28], pose3D.lAnkle, '#94a3b8', 2.4, '3 2');
   }
 
   if (config.equipment === 'cable_row') {
@@ -366,12 +366,12 @@ export default function ExerciseAnimator({ animationKey = 'squat', compact = fal
         [0.18, 0.48, 0.04],
         [-0.18, 0.48, 0.04],
       ],
-      'rgba(51, 65, 85, 0.8)',
-      '#64748b',
+      'rgba(226, 232, 240, 0.95)',
+      '#94a3b8',
       1.3
     );
-    addLine('row-post', [0, 0.48, -0.2], [0, 0, -0.2], '#475569', 4);
-    addLine('row-tower', [0, 0, 0.88], [0, 1.45, 0.88], '#334155', 4.5);
+    addLine('row-post', [0, 0.48, -0.2], [0, 0, -0.2], '#a3b1c2', 4);
+    addLine('row-tower', [0, 0, 0.88], [0, 1.45, 0.88], '#b6c2d1', 4.5);
     const midHand = [
       (pose3D.lHand[0] + pose3D.rHand[0]) / 2,
       (pose3D.lHand[1] + pose3D.rHand[1]) / 2,
@@ -390,11 +390,11 @@ export default function ExerciseAnimator({ animationKey = 'squat', compact = fal
         [0.18, 0.52, 0.22],
         [-0.18, 0.52, 0.22],
       ],
-      'rgba(51, 65, 85, 0.8)',
-      '#64748b',
+      'rgba(226, 232, 240, 0.95)',
+      '#94a3b8',
       1.3
     );
-    addLine('lat-post', [0, 0.52, 0], [0, 0, 0], '#475569', 4);
+    addLine('lat-post', [0, 0.52, 0], [0, 0, 0], '#a3b1c2', 4);
     const midHand = [
       (pose3D.lHand[0] + pose3D.rHand[0]) / 2,
       (pose3D.lHand[1] + pose3D.rHand[1]) / 2,
@@ -405,7 +405,7 @@ export default function ExerciseAnimator({ animationKey = 'squat', compact = fal
   }
 
   if (config.equipment === 'pallof_cable') {
-    addLine('pf-tower', [0.88, 0, 0.22], [0.88, 1.75, 0.22], '#334155', 4.5);
+    addLine('pf-tower', [0.88, 0, 0.22], [0.88, 1.75, 0.22], '#b6c2d1', 4.5);
     const midHand = [
       (pose3D.lHand[0] + pose3D.rHand[0]) / 2,
       (pose3D.lHand[1] + pose3D.rHand[1]) / 2,
@@ -416,8 +416,8 @@ export default function ExerciseAnimator({ animationKey = 'squat', compact = fal
   }
 
   if (config.equipment === 'pullup_bar') {
-    addLine('pu-post-l', [0.62, 0, 0], [0.62, 1.96, 0], '#334155', 4.5);
-    addLine('pu-post-r', [-0.62, 0, 0], [-0.62, 1.96, 0], '#334155', 4.5);
+    addLine('pu-post-l', [0.62, 0, 0], [0.62, 1.96, 0], '#b6c2d1', 4.5);
+    addLine('pu-post-r', [-0.62, 0, 0], [-0.62, 1.96, 0], '#b6c2d1', 4.5);
     addLine('pu-bar', [0.62, 1.96, 0], [-0.62, 1.96, 0], '#38bdf8', 5);
   }
 
@@ -427,7 +427,7 @@ export default function ExerciseAnimator({ animationKey = 'squat', compact = fal
       (pose3D.lHand[1] + pose3D.rHand[1]) / 2,
       (pose3D.lHand[2] + pose3D.rHand[2]) / 2,
     ];
-    addLine('pd-tower', [0, 0, 0.36], [0, 2.05, 0.36], '#334155', 4.5);
+    addLine('pd-tower', [0, 0, 0.36], [0, 2.05, 0.36], '#b6c2d1', 4.5);
     addLine('pd-cable', [0, 2.05, 0.36], midHand, '#10b981', 2.2, '4 3');
     addLine('pd-bar', pose3D.lHand, pose3D.rHand, '#38bdf8', 4.5);
   }
@@ -453,16 +453,16 @@ export default function ExerciseAnimator({ animationKey = 'squat', compact = fal
 
   const sideShade = (zVal, primary) => {
     const isNear = zVal >= 0;
-    if (primary) return isNear ? '#34d399' : '#059669';
-    return isNear ? '#38bdf8' : '#0284c7';
+    if (primary) return isNear ? '#10b981' : '#6ee7b7';
+    return isNear ? '#0ea5e9' : '#7dd3fc';
   };
 
   // Anatomical 3D Torso Volume (ribcage-to-pelvis quad)
   addPoly(
     'torso-quad',
     [p.lShoulder, p.rShoulder, p.rHip, p.lHip],
-    torsoPrimary ? 'rgba(16, 185, 129, 0.26)' : 'rgba(226, 232, 240, 0.16)',
-    torsoPrimary ? '#34d399' : '#cbd5e1',
+    torsoPrimary ? 'rgba(16, 185, 129, 0.26)' : 'rgba(148, 163, 184, 0.14)',
+    torsoPrimary ? '#10b981' : '#94a3b8',
     2.2
   );
 
@@ -472,7 +472,7 @@ export default function ExerciseAnimator({ animationKey = 'squat', compact = fal
     (pose3D.lHip[1] + pose3D.rHip[1]) / 2,
     (pose3D.lHip[2] + pose3D.rHip[2]) / 2,
   ];
-  addLine('spine', p.neck, proj(midPelvis), torsoPrimary ? '#6ee7b7' : '#e2e8f0', 4.2);
+  addLine('spine', p.neck, proj(midPelvis), torsoPrimary ? '#059669' : '#64748b', 4.2);
 
   // Legs (Left & Right bilateral segments)
   const lLegColor = sideShade((p.lKnee.z + p.lHip.z) / 2, legPrimary);
@@ -506,7 +506,7 @@ export default function ExerciseAnimator({ animationKey = 'squat', compact = fal
             cx={p.head.x}
             cy={p.head.y}
             r={Math.max(8, p.head.scale * 0.105)}
-            fill="#f8fafc"
+            fill="#ffffff"
             stroke="#10b981"
             strokeWidth="2"
           />
@@ -539,8 +539,8 @@ export default function ExerciseAnimator({ animationKey = 'squat', compact = fal
           cx={jp.x}
           cy={jp.y}
           r="3"
-          fill="#0b0f17"
-          stroke={jp.z >= 0 ? '#34d399' : '#0284c7'}
+          fill="#ffffff"
+          stroke={jp.z >= 0 ? '#10b981' : '#7dd3fc'}
           strokeWidth="1.8"
         />
       ),
@@ -605,7 +605,7 @@ export default function ExerciseAnimator({ animationKey = 'squat', compact = fal
         >
           <defs>
             <radialGradient id={glowId} cx="50%" cy="52%" r="50%">
-              <stop offset="0%" stopColor="rgba(16,185,129,0.20)" />
+              <stop offset="0%" stopColor="rgba(16,185,129,0.10)" />
               <stop offset="100%" stopColor="rgba(16,185,129,0)" />
             </radialGradient>
           </defs>
@@ -613,7 +613,7 @@ export default function ExerciseAnimator({ animationKey = 'squat', compact = fal
           <circle cx="130" cy="96" r="76" fill={`url(#${glowId})`} />
 
           {/* 3D Perspective Floor Grid */}
-          <g stroke="#1e293b" strokeWidth="1" opacity="0.75">
+          <g stroke="#e8edf2" strokeWidth="1" opacity="1">
             {gridLines.map((gl) => (
               <line key={gl.key} x1={gl.x1} y1={gl.y1} x2={gl.x2} y2={gl.y2} />
             ))}

@@ -6,6 +6,7 @@ import SettingsModal from './components/SettingsModal';
 import HealthNotice from './components/HealthNotice';
 import AskCoach from './components/AskCoach';
 import Logo from './components/Logo';
+import Watermark from './components/Watermark';
 import Onboarding from './components/Onboarding';
 import PlanWhy from './components/PlanWhy';
 import { AboutYou, FitnessTest, HealthCheck, InjuryGrid, LabReport, profileCompleteness } from './components/HealthSections';
@@ -417,6 +418,8 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
   };
 
   return (
+    <>
+    <Watermark tab={tab} />
     <div className="app-shell">
       <header className="top-bar">
         <div className="brand">
@@ -608,6 +611,7 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
         onDataImported={handleDataImported}
       />
     </div>
+    </>
   );
 }
 
