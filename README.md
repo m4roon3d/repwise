@@ -4,6 +4,11 @@
 
 A zero-backend, personal-use Progressive Web App (Vite + React) powered by your own **Gemini API key**.
 
+## Training styles: gym, calisthenics, yoga, cardio
+- Pick any mix; the week is laid out automatically (strength days get at least half, yoga/cardio sit between them).
+- **Calisthenics** days use bodyweight exercises only; **yoga** days are a standing-to-floor flow of timed holds (+5 s a week); **cardio** days are a main session in minutes that progresses steady → longer → intervals → longest, with a short cool-down.
+- 99 exercises in total, all with real start/finish photos; holds and minutes can be logged, with next-time suggestions.
+
 ## Health tab (blood reports)
 - Upload a photo or PDF (Gemini reads the values; only numbers are kept) or type values in. Full report history with per-marker trends and "since last report" comparisons.
 - **AI analysis** (Gemini key): plain-language summary, what each flagged marker means, how it should change training, practical food/sleep/activity tips, and questions for your doctor. Offline, the app still flags out-of-range values and shows built-in tips.

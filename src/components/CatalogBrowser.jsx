@@ -10,6 +10,7 @@ export default function CatalogBrowser({ defaultTier }) {
     if (defaultTier) setTierFilter(defaultTier);
   }, [defaultTier]);
   const [patternFilter, setPatternFilter] = useState('all');
+  const [styleFilter, setStyleFilter] = useState('all');
   const [query, setQuery] = useState('');
   const [openAnimId, setOpenAnimId] = useState(exercises[0]?.id || null);
 
@@ -22,6 +23,7 @@ export default function CatalogBrowser({ defaultTier }) {
     return exercises.filter((e) => {
       if (tierFilter !== 'all' && !e.equipment_tiers.includes(tierFilter)) return false;
       if (patternFilter !== 'all' && e.movement_pattern !== patternFilter) return false;
+      if (styleFilter !== 'all' && !(e.modalities || ['gym']).includes(styleFilter)) return false;
       if (
         query.trim() &&
         !`${e.name} ${e.primary_muscles.join(' ')} ${e.equipment_label}`
@@ -32,7 +34,7 @@ export default function CatalogBrowser({ defaultTier }) {
       }
       return true;
     });
-  }, [tierFilter, patternFilter, query]);
+  }, [tierFilter, patternFilter, styleFilter, query]);
 
   return (
     <div className="panel-stack">
@@ -57,6 +59,20 @@ export default function CatalogBrowser({ defaultTier }) {
               </option>
             ))}
           </select>
+        </div>
+
+        <div className="segmented style-filter" role="group" aria-label="Filter by style" style={{ marginTop: '10px' }}>
+          {[
+            ['all', 'All'],
+            ['gym', '🏋️ Gym'],
+            ['calisthenics', '🤸 Body'],
+            ['yoga', '🧘 Yoga'],
+            ['cardio', '🏃 Cardio'],
+          ].map(([v, l]) => (
+            <button key={v} type="button" aria-pressed={styleFilter === v} className={styleFilter === v ? 'seg-active' : ''} onClick={() => setStyleFilter(v)}>
+              {l}
+            </button>
+          ))}
         </div>
 
         <div className="chip-row" style={{ marginTop: '10px' }}>

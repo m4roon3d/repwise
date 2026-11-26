@@ -394,3 +394,35 @@ input[type='date'] { width: 100%; padding: 11px 13px; border-radius: var(--radiu
 .lab-edit-name { font-size: 0.86rem; font-weight: 600; }
 .lab-edit-unit { font-size: 0.74rem; color: var(--muted); overflow-wrap: anywhere; }
 .finisher-card { background: rgba(236, 253, 245, 0.92); }
+
+/* ---- Wordmark ----------------------------------------------------------------------------- */
+.wordmark { display: inline-flex; flex-direction: column; gap: 1px; color: var(--text); line-height: 1; }
+.wordmark-word { display: inline-block; font-size: 1.55rem; font-weight: 800; letter-spacing: -0.045em; line-height: 1.05; white-space: nowrap; }
+.wordmark-r { display: inline-block; height: 0.76em; width: auto; vertical-align: baseline; margin-right: 0.02em; overflow: visible; }
+.wordmark-rest { font: inherit; }
+.wordmark-bar { width: 92%; height: 8px; margin-top: 1px; color: var(--text); overflow: visible; }
+.wordmark-bar .plate { transform-box: fill-box; transform-origin: center; }
+@media (prefers-reduced-motion: no-preference) {
+  .wordmark-bar .plate-l { animation: plate-in-l 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both 0.15s; }
+  .wordmark-bar .plate-r { animation: plate-in-r 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both 0.15s; }
+}
+@keyframes plate-in-l { from { transform: translateX(-14px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes plate-in-r { from { transform: translateX(14px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* ---- Training styles ---------------------------------------------------------------------- */
+.style-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.style-tile { display: grid; gap: 2px; text-align: left; padding: 12px; border-radius: 14px; border: 1px solid var(--border); background: #fff; color: var(--text); cursor: pointer; font-family: inherit; transition: border-color 0.15s, box-shadow 0.15s, background 0.15s; }
+.style-tile small { color: var(--muted); font-size: 0.74rem; }
+.style-icon { font-size: 1.3rem; }
+.style-on { border-color: var(--accent); background: var(--accent-soft); box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12); }
+.style-week { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 0; }
+.style-day { font-size: 0.74rem; font-weight: 650; padding: 4px 9px; border-radius: 999px; background: var(--surface-2); color: var(--text-2); }
+.style-day-yoga { background: #f5f3ff; color: #6d28d9; }
+.style-day-cardio { background: #fff7ed; color: #c2410c; }
+.style-day-calisthenics { background: #eff6ff; color: #1d4ed8; }
+.style-filter { grid-template-columns: repeat(5, 1fr); }
+.style-filter button { font-size: 0.74rem; padding: 8px 0; }
+.rx-grid-2 { grid-template-columns: repeat(2, 1fr); }
+.rx-intensity { margin: -4px 0 12px; font-size: 0.86rem; color: var(--text-2); background: #fff7ed; padding: 9px 12px; border-radius: 10px; }
+.log-row-timed { grid-template-columns: 52px 1fr auto; }
+.brand-h1 { margin: 0; font-size: inherit; }

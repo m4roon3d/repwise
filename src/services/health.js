@@ -52,15 +52,16 @@ const where = (fn) => exercises.filter(fn).map((e) => e.id);
 
 // Exercises that load each area hard. Knee / shoulder / lower back use the catalogue's own joint flags.
 const AREA_EXCLUSIONS = {
-  wrist: ['pushup', 'incline_pushup', 'pike_pushup_elevated', 'barbell_front_squat', 'barbell_bench_press', 'worlds_greatest_stretch', 'cat_cow_thoracic', 'thread_the_needle'],
-  elbow: [...where((e) => ['curl', 'pushdown', 'pullup'].includes(e.animation_key)), 'assisted_pullup', 'db_pullover', 'barbell_bench_press', 'pike_pushup_elevated'],
+  wrist: ['pushup', 'incline_pushup', 'decline_pushup', 'close_grip_pushup', 'mountain_climbers', 'inchworm_down_dog', 'pike_pushup_elevated', 'barbell_front_squat', 'barbell_bench_press', 'worlds_greatest_stretch', 'cat_cow_thoracic', 'thread_the_needle'],
+  elbow: [...where((e) => ['curl', 'pushdown', 'pullup'].includes(e.animation_key)), 'assisted_pullup', 'chin_up', 'bench_dips', 'parallel_bar_dips', 'close_grip_pushup', 'db_pullover', 'barbell_bench_press', 'pike_pushup_elevated'],
   hip: [...where((e) => e.movement_pattern === 'lunge'), 'sumo_goblet_squat', 'hip_90_90_switch', 'barbell_back_squat', 'barbell_front_squat', 'single_leg_rdl_db'],
-  ankle: [...where((e) => e.movement_pattern === 'lunge' || e.movement_pattern === 'calves'), 'worlds_greatest_stretch'],
+  ankle: [...where((e) => e.movement_pattern === 'lunge' || e.movement_pattern === 'calves'), 'worlds_greatest_stretch', 'jump_rope', 'jump_squat', 'treadmill_run'],
   neck: ['seated_db_overhead_press', 'machine_shoulder_press', 'band_overhead_press', 'pike_pushup_elevated', 'barbell_back_squat', 'farmers_carry', 'suitcase_carry'],
 };
 
-const SUPINE = ['glute_bridge', 'single_leg_glute_bridge', 'dead_bug', 'barbell_bench_press', 'db_bench_press', 'db_floor_press', 'db_pullover'];
-const ABDOMINAL_PRESSURE = ['forearm_plank', 'pushup', 'pike_pushup_elevated'];
+const SUPINE = ['glute_bridge', 'single_leg_glute_bridge', 'dead_bug', 'bridge_pose', 'knees_to_chest', 'superman_hold', 'russian_twist', 'barbell_bench_press', 'db_bench_press', 'db_floor_press', 'db_pullover'];
+const ABDOMINAL_PRESSURE = ['forearm_plank', 'side_plank', 'mountain_climbers', 'hanging_leg_raise', 'pushup', 'decline_pushup', 'pike_pushup_elevated'];
+const IMPACT = ['jump_squat', 'jump_rope', 'treadmill_run'];
 const HEAVY_BARBELL = ['barbell_back_squat', 'barbell_front_squat', 'trap_bar_deadlift', 'barbell_bench_press'];
 
 export const EMPTY_HEALTH = {
@@ -171,7 +172,7 @@ export function healthAdjustments(profile) {
     caps.push(7);
     advise('advised');
     notes.push({ kind: 'safety', text: 'Pregnancy: you should be able to talk through every set. Stop for dizziness, bleeding, fluid loss or pain, and check this plan with your doctor or midwife.' });
-    exclude('Pregnancy: heavy barbell lifts', HEAVY_BARBELL);
+    exclude('Pregnancy: heavy barbell lifts and jumping', [...HEAVY_BARBELL, ...IMPACT]);
     if (preg !== 'pregnant_t1') {
       exclude('Pregnancy: no lying flat on your back', SUPINE);
       exclude('Pregnancy: avoids strain on the abdominal wall', ABDOMINAL_PRESSURE);
@@ -180,7 +181,7 @@ export function healthAdjustments(profile) {
     caps.push(6.5);
     advise('advised');
     notes.push({ kind: 'safety', text: 'Early postpartum: wait for your 6-week check before loading, rebuild breathing and pelvic floor first, and stop for heaviness, leaking or pain.' });
-    exclude('Early postpartum: abdominal-wall and heavy loading', [...ABDOMINAL_PRESSURE, ...HEAVY_BARBELL, 'pullup']);
+    exclude('Early postpartum: abdominal-wall, impact and heavy loading', [...ABDOMINAL_PRESSURE, ...HEAVY_BARBELL, ...IMPACT, 'pullup', 'chin_up']);
   } else if (preg === 'postpartum') {
     caps.push(7.5);
     notes.push({ kind: 'info', text: 'Postpartum: if you notice leaking, heaviness or doming of the belly, mention it to a women\'s health physio.' });

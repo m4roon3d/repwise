@@ -9,6 +9,7 @@ export function compactCatalogForPrompt(safeExercises) {
     pattern: e.movement_pattern,
     muscles: e.primary_muscles,
     equipment: e.equipment_label,
+    styles: e.modalities || ['gym'],
   }));
 }
 
@@ -72,7 +73,7 @@ ${describeHealthForPrompt(profile)}
 ${logSummary || 'None logged yet'}
 
 PROGRAMMING GUIDELINES:
-- Output ONE balanced Week 1 blueprint in "base_days" with exactly ${profile.daysPerWeek} day(s).
+- Output ONE balanced Week 1 blueprint in "base_days" with exactly ${profile.daysPerWeek} day(s).${profile._strengthStyles?.includes('calisthenics') ? `\n- DAY STYLES: ${profile._strengthStyles.map((st, i) => `Day ${i + 1} = ${st}`).join(', ')}. A calisthenics day must use ONLY exercises whose styles include "calisthenics" (bodyweight); a gym day may use anything.` : ''}\n- The person's full weekly mix also includes ${(profile.styles || []).filter((x) => x === 'yoga' || x === 'cardio').join(' and ') || 'no'} sessions, added separately, so keep these days strength-focused and balance total leg and core fatigue.
 - Each day should have ${profile.sessionMinutes <= 30 ? '4' : profile.sessionMinutes <= 45 ? '5' : '6'} exercises balanced across push, pull, legs, and core/mobility, plus a concise 3-item warm-up checklist.
 - IMPORTANT VARIETY RULE: Do NOT repeat the same exercise_id across Day 1, Day 2, Day 3, etc. Use distinct variations from ALLOWED_EXERCISES across different days of the week.
 - Output exactly ${totalWeeks} entry/entries in "week_progressions" describing how Week 1..${totalWeeks} progress (Week 1 has rpe_delta: 0, set_delta: 0, rep_delta: 0; later weeks nudge rpe_delta by +0.5 to +1.0, set_delta by 0 or 1, rep_delta by 0 to 2, or deload if needed).

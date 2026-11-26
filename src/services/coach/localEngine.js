@@ -156,12 +156,19 @@ export function buildDeterministicFallbackPlan(profile, safeExercises, metrics, 
 
   // Track week-wide usage across ALL days so every day rotates through fresh variations
   const weekUsage = new Map();
+  // Each strength day draws from its style's pool (calisthenics = bodyweight only; gym = everything gym-tagged).
+  const dayStyles = profile._strengthStyles || [];
+  const pools = {
+    gym: safeExercises.filter((e) => (e.modalities || ['gym']).includes('gym')),
+    calisthenics: safeExercises.filter((e) => (e.modalities || []).includes('calisthenics')),
+  };
   const baseDays = dayTemplates.slice(0, count).map((tpl, dIdx) => {
     const dayUsed = new Set();
     const picked = [];
+    const pool = pools[dayStyles[dIdx]]?.length ? pools[dayStyles[dIdx]] : safeExercises;
     for (const pattern of tpl.patterns) {
       if (picked.length >= perDayCount) break;
-      const ex = pickLeastUsedExercise(safeExercises, pattern, dayUsed, weekUsage);
+      const ex = pickLeastUsedExercise(pool, pattern, dayUsed, weekUsage);
       if (ex) {
         dayUsed.add(ex.id);
         weekUsage.set(ex.id, (weekUsage.get(ex.id) || 0) + 1);

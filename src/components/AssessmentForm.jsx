@@ -1,5 +1,6 @@
 import React from 'react';
 import CoachIntakeChat from './CoachIntakeChat';
+import StylePicker from './StylePicker';
 import {
   EQUIPMENT_TIER_LABELS,
   cmToFeetInches,
@@ -282,6 +283,7 @@ export default function AssessmentForm({
       {/* Goal, Multi-Week Block Length, Schedule & Joint Safety */}
       <section className="card">
         <h2>3. Goal, Schedule & Block Length</h2>
+        <StylePicker profile={profile} onChange={onChange} />
         <div className="grid-2">
           <div className="form-group">
             <label htmlFor="f-goal">Primary Goal</label>

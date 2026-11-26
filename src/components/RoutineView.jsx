@@ -4,6 +4,8 @@ import { EXERCISE_MAP, EQUIPMENT_TIER_LABELS } from '../services/catalogFilter';
 import { SAFETY_SHORT } from './HealthNotice';
 import LogSets from './LogSets';
 
+const STYLE_ICON = { gym: '🏋️', calisthenics: '🤸', yoga: '🧘', cardio: '🏃' };
+
 const SWAP_REASONS = [
   'Equipment is busy',
   'Joint feels tight today',
@@ -151,8 +153,10 @@ export default function RoutineView({
               setSwapMenuKey(null);
             }}
           >
-            <span>Day {idx + 1}</span>
-            <small>{d.estimated_minutes}m</small>
+            <span>
+              {STYLE_ICON[d.style] ? `${STYLE_ICON[d.style]} ` : ''}Day {idx + 1}
+            </span>
+            <small>{d.estimated_minutes || ''}{d.estimated_minutes ? 'm' : d.style || ''}</small>
           </button>
         ))}
       </div>
@@ -314,24 +318,42 @@ export default function RoutineView({
             )}
 
             {/* Structured Log-Ready Prescription Badges */}
-            <div className="rx-grid">
-              <div className="rx-pill">
-                <span>Sets</span>
-                <strong>{item.sets}</strong>
+            {item.dose === 'duration' ? (
+              <>
+                <div className="rx-grid rx-grid-2">
+                  <div className="rx-pill">
+                    <span>Time</span>
+                    <strong>{item.minutes} min</strong>
+                  </div>
+                  <div className="rx-pill">
+                    <span>Effort</span>
+                    <strong>RPE {item.target_rpe}</strong>
+                  </div>
+                </div>
+                {item.intensity && <p className="rx-intensity">{item.intensity}</p>}
+              </>
+            ) : (
+              <div className="rx-grid">
+                <div className="rx-pill">
+                  <span>{item.dose === 'time' && item.sets === 1 ? 'Hold' : 'Sets'}</span>
+                  <strong>{item.dose === 'time' && item.sets === 1 ? '×1' : item.sets}</strong>
+                </div>
+                <div className="rx-pill">
+                  <span>{item.dose === 'time' ? 'Seconds' : 'Reps'}</span>
+                  <strong>
+                    {item.dose === 'time' ? `${item.time_sec_min}–${item.time_sec_max}` : `${item.rep_min}–${item.rep_max}`}
+                  </strong>
+                </div>
+                <div className="rx-pill">
+                  <span>{item.target_rpe <= 4 ? 'Feel' : 'Target RPE'}</span>
+                  <strong>{item.target_rpe <= 4 ? 'Easy' : item.target_rpe}</strong>
+                </div>
+                <div className="rx-pill">
+                  <span>Rest</span>
+                  <strong>{item.rest_seconds}s</strong>
+                </div>
               </div>
-              <div className="rx-pill">
-                <span>Reps</span>
-                <strong>{item.rep_min}–{item.rep_max}</strong>
-              </div>
-              <div className="rx-pill">
-                <span>Target RPE</span>
-                <strong>{item.target_rpe}</strong>
-              </div>
-              <div className="rx-pill">
-                <span>Rest</span>
-                <strong>{item.rest_seconds}s</strong>
-              </div>
-            </div>
+            )}
 
             <ExercisePhotos exerciseId={item.exercise_id} />
 
@@ -361,6 +383,7 @@ export default function RoutineView({
               dayTitle={day.day_title}
               onLog={onLogExercise}
               onUndo={onUndoLog}
+              dayStyle={day.style}
             />
           </article>
         );

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AboutYou, FitnessTest, HealthCheck, InjuryGrid, LabReport, ClearanceBanner } from './HealthSections';
 import { EQUIPMENT_TIER_LABELS, cmToFeetInches, feetInchesToCm, kgToLbs, lbsToKg } from '../services/catalogFilter';
 import { parqComplete } from '../services/health';
+import StylePicker from './StylePicker';
 
 const GOALS = [
   ['general_fitness', 'General fitness & health'],
@@ -102,6 +103,7 @@ export default function Onboarding({ profile, onChange, apiKey, onExtract, onFin
           ))}
         </select>
       </div>
+      <StylePicker profile={profile} onChange={onChange} />
       <div className="form-group">
         <label htmlFor="ob-equip">Where do you train?</label>
         <select id="ob-equip" value={profile.equipmentTier} onChange={(e) => set('equipmentTier', e.target.value)}>
@@ -196,7 +198,7 @@ export default function Onboarding({ profile, onChange, apiKey, onExtract, onFin
       <ClearanceBanner profile={profile} />
       <ul className="ob-summary">
         <li>🎯 {GOALS.find(([v]) => v === profile.goal)?.[1]}</li>
-        <li>📅 {profile.daysPerWeek} days a week, {profile.sessionMinutes} min</li>
+        <li>📅 {profile.daysPerWeek} days a week, {profile.sessionMinutes} min · {(profile.styles || ['gym']).join(', ')}</li>
         <li>🏋️ {EQUIPMENT_TIER_LABELS[profile.equipmentTier]}</li>
         <li>{(profile.baselines || []).length ? '🧪 Fitness test done' : '🧪 No fitness test yet (you can do it later)'}</li>
         <li>{profile.labs ? '🩸 Blood report added' : '🩸 No blood report (optional)'}</li>

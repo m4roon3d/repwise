@@ -28,6 +28,18 @@ export function suggestNext(entry, item, unitSystem = 'metric') {
   if (!entry || !item) {
     return { action: 'start', weightKg: null, message: 'No history yet. Pick a weight you could lift for about 3 more reps than the target, then log it.' };
   }
+  if (entry.unit === 'min') {
+    const mins = Math.max(...entry.sets.map((s) => s.reps));
+    return mins >= (item.minutes || 0)
+      ? { action: 'reps', weightKg: null, message: `You did the full ${mins} minutes. Next time add 2 to 3 minutes, or pick up the pace slightly.` }
+      : { action: 'hold', weightKg: null, message: `Aim for the full ${item.minutes || mins} minutes at an easy, steady pace.` };
+  }
+  if (entry.unit === 's') {
+    const allTop = entry.sets.every((s) => s.reps >= (item.time_sec_max || 30));
+    return allTop
+      ? { action: 'reps', weightKg: null, message: 'You held the full time on every set. Add 5 to 10 seconds next time.' }
+      : { action: 'hold', weightKg: null, message: `Build up to ${item.time_sec_max || 30} seconds on every set with steady breathing.` };
+  }
   const unit = weightUnit(unitSystem);
   const top = heaviest(entry);
   const reps = entry.sets.map((s) => s.reps);
@@ -72,7 +84,7 @@ export function summarizeLogsForPrompt(logs, unitSystem = 'metric', maxLines = 1
     seen.add(l.exercise_id);
     const name = EXERCISE_MAP[l.exercise_id]?.name || l.exercise_id;
     const sets = l.sets
-      .map((s) => (s.weightKg > 0 ? `${s.reps}x${toDisplayWeight(s.weightKg, unitSystem)}` : `${s.reps}`))
+      .map((s) => (l.unit ? `${s.reps}${l.unit}` : s.weightKg > 0 ? `${s.reps}x${toDisplayWeight(s.weightKg, unitSystem)}` : `${s.reps}`))
       .join(', ');
     const ago = Math.max(0, Math.round((Date.now() - l.ts) / day));
     lines.push(`- ${name}: ${sets}${weightUnitTag(l, unitSystem)}${l.rpe ? ` @RPE ${l.rpe}` : ''} (${ago === 0 ? 'today' : `${ago}d ago`})`);
@@ -80,7 +92,7 @@ export function summarizeLogsForPrompt(logs, unitSystem = 'metric', maxLines = 1
   }
   return lines.join('\n');
 }
-const weightUnitTag = (l, u) => (l.sets.some((s) => s.weightKg > 0) ? ` ${weightUnit(u)}` : ' reps');
+const weightUnitTag = (l, u) => (l.unit ? '' : l.sets.some((s) => s.weightKg > 0) ? ` ${weightUnit(u)}` : ' reps');
 
 /** Whole-history counts for a small "you've done X" line. */
 export function logStats(logs) {

@@ -22,7 +22,11 @@
       "Drive through mid-foot and exhale on the way up."
     ],
     "regression_id": "box_bodyweight_squat",
-    "photo": "Goblet_Squat"
+    "photo": "Goblet_Squat",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "leg_press",
@@ -46,7 +50,11 @@
       "Press smoothly without locking knees hard at the top."
     ],
     "regression_id": "goblet_squat",
-    "photo": "Leg_Press"
+    "photo": "Leg_Press",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "barbell_back_squat",
@@ -72,7 +80,11 @@
       "Control a 2-second lower; stand smoothly without rushing."
     ],
     "regression_id": "goblet_squat",
-    "photo": "Barbell_Squat"
+    "photo": "Barbell_Squat",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "box_bodyweight_squat",
@@ -96,7 +108,12 @@
       "Stand tall by squeezing glutes without bouncing."
     ],
     "regression_id": "glute_bridge",
-    "photo": "Bodyweight_Squat"
+    "photo": "Bodyweight_Squat",
+    "modalities": [
+      "gym",
+      "calisthenics"
+    ],
+    "dose": "reps"
   },
   {
     "id": "db_romanian_deadlift",
@@ -123,7 +140,11 @@
       "Stop once hamstrings feel stretched; drive hips forward."
     ],
     "regression_id": "glute_bridge",
-    "photo": "Stiff-Legged_Dumbbell_Deadlift"
+    "photo": "Stiff-Legged_Dumbbell_Deadlift",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "cable_pull_through",
@@ -146,7 +167,11 @@
       "Finish tall by squeezing glutes\u2014don't hyperextend lower back."
     ],
     "regression_id": "glute_bridge",
-    "photo": "Pull_Through"
+    "photo": "Pull_Through",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "trap_bar_deadlift",
@@ -172,7 +197,11 @@
       "Control the descent back to a quiet touch."
     ],
     "regression_id": "cable_pull_through",
-    "photo": "Trap_Bar_Deadlift"
+    "photo": "Trap_Bar_Deadlift",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "glute_bridge",
@@ -196,7 +225,12 @@
       "Lower under control without arching your lumbar spine."
     ],
     "regression_id": null,
-    "photo": "Single_Leg_Glute_Bridge"
+    "photo": "Single_Leg_Glute_Bridge",
+    "modalities": [
+      "gym",
+      "calisthenics"
+    ],
+    "dose": "reps"
   },
   {
     "id": "seated_leg_curl",
@@ -218,7 +252,11 @@
       "Resist the pad for 2 seconds as you extend back."
     ],
     "regression_id": "glute_bridge",
-    "photo": "Seated_Leg_Curl"
+    "photo": "Seated_Leg_Curl",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "db_incline_press",
@@ -245,7 +283,11 @@
       "Press smoothly up and slightly inward without clanging weights."
     ],
     "regression_id": "db_floor_press",
-    "photo": "Incline_Dumbbell_Press"
+    "photo": "Incline_Dumbbell_Press",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "machine_chest_press",
@@ -269,7 +311,11 @@
       "Press evenly and control a 2-second return."
     ],
     "regression_id": "incline_pushup",
-    "photo": "Machine_Bench_Press"
+    "photo": "Machine_Bench_Press",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "db_floor_press",
@@ -293,7 +339,11 @@
       "Press smoothly to lockout while keeping ribs grounded."
     ],
     "regression_id": "incline_pushup",
-    "photo": "Dumbbell_Floor_Press"
+    "photo": "Dumbbell_Floor_Press",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "incline_pushup",
@@ -318,7 +368,12 @@
       "Push away firmly while spreading shoulder blades at top."
     ],
     "regression_id": null,
-    "photo": "Incline_Push-Up"
+    "photo": "Incline_Push-Up",
+    "modalities": [
+      "gym",
+      "calisthenics"
+    ],
+    "dose": "reps"
   },
   {
     "id": "barbell_bench_press",
@@ -343,7 +398,11 @@
       "Drive bar smoothly up and slightly back toward shoulders."
     ],
     "regression_id": "machine_chest_press",
-    "photo": "Barbell_Bench_Press_-_Medium_Grip"
+    "photo": "Barbell_Bench_Press_-_Medium_Grip",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "seated_db_overhead_press",
@@ -369,7 +428,11 @@
       "Press straight overhead until biceps frame your ears."
     ],
     "regression_id": "db_lateral_raise",
-    "photo": "Seated_Dumbbell_Press"
+    "photo": "Seated_Dumbbell_Press",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "landmine_half_kneeling_press",
@@ -392,7 +455,11 @@
       "Reach slightly forward at the top without shrugging."
     ],
     "regression_id": "db_lateral_raise",
-    "photo": "Dumbbell_One-Arm_Shoulder_Press"
+    "photo": "Dumbbell_One-Arm_Shoulder_Press",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "db_lateral_raise",
@@ -415,7 +482,11 @@
       "Lower slowly over 2\u20133 seconds without swinging torso."
     ],
     "regression_id": null,
-    "photo": "Side_Lateral_Raise"
+    "photo": "Side_Lateral_Raise",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "pike_pushup_elevated",
@@ -439,7 +510,12 @@
       "Press back smoothly until arms extend."
     ],
     "regression_id": "db_lateral_raise",
-    "photo": "Decline_Push-Up"
+    "photo": "Decline_Push-Up",
+    "modalities": [
+      "gym",
+      "calisthenics"
+    ],
+    "dose": "reps"
   },
   {
     "id": "chest_supported_db_row",
@@ -465,7 +541,11 @@
       "Let shoulder blades stretch gently forward on the descent."
     ],
     "regression_id": "band_pull_apart",
-    "photo": "Dumbbell_Incline_Row"
+    "photo": "Dumbbell_Incline_Row",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "seated_cable_row",
@@ -489,7 +569,11 @@
       "Control the extension back to a clean stretch."
     ],
     "regression_id": "chest_supported_db_row",
-    "photo": "Seated_Cable_Rows"
+    "photo": "Seated_Cable_Rows",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "single_arm_db_row",
@@ -514,7 +598,11 @@
       "Keep hips level\u2014avoid twisting your torso open."
     ],
     "regression_id": "chest_supported_db_row",
-    "photo": "One-Arm_Dumbbell_Row"
+    "photo": "One-Arm_Dumbbell_Row",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "cable_face_pull",
@@ -538,7 +626,11 @@
       "Use light, controlled weight\u2014great for posture and shoulders."
     ],
     "regression_id": "band_pull_apart",
-    "photo": "Face_Pull"
+    "photo": "Face_Pull",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "band_pull_apart",
@@ -562,7 +654,11 @@
       "Keep shoulders relaxed down away from ears."
     ],
     "regression_id": null,
-    "photo": "Band_Pull_Apart"
+    "photo": "Band_Pull_Apart",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "band_seated_row",
@@ -585,7 +681,11 @@
       "Pause 1 second at peak contraction."
     ],
     "regression_id": "band_pull_apart",
-    "photo": "Seated_Cable_Rows"
+    "photo": "Seated_Cable_Rows",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "lat_pulldown_neutral",
@@ -609,7 +709,11 @@
       "Control the bar all the way up to a comfortable lat stretch."
     ],
     "regression_id": "straight_arm_pulldown",
-    "photo": "Close-Grip_Front_Lat_Pulldown"
+    "photo": "Close-Grip_Front_Lat_Pulldown",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "assisted_pullup",
@@ -634,7 +738,11 @@
       "Lower smoothly over 2 seconds without dropping into shoulders."
     ],
     "regression_id": "lat_pulldown_neutral",
-    "photo": "Band_Assisted_Pull-Up"
+    "photo": "Band_Assisted_Pull-Up",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "straight_arm_pulldown",
@@ -658,7 +766,11 @@
       "Keep ribs down\u2014don't round forward as you pull."
     ],
     "regression_id": "band_pull_apart",
-    "photo": "Straight-Arm_Pulldown"
+    "photo": "Straight-Arm_Pulldown",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "db_pullover",
@@ -685,7 +797,11 @@
       "Pull smoothly back over mid-chest using your lats."
     ],
     "regression_id": "straight_arm_pulldown",
-    "photo": "Bent-Arm_Dumbbell_Pullover"
+    "photo": "Bent-Arm_Dumbbell_Pullover",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "reverse_lunge_db",
@@ -712,7 +828,11 @@
       "Drive through front full foot to return to standing."
     ],
     "regression_id": "step_up_low",
-    "photo": "Dumbbell_Rear_Lunge"
+    "photo": "Dumbbell_Rear_Lunge",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "step_up_low",
@@ -736,7 +856,12 @@
       "Step down slowly over 2 full seconds."
     ],
     "regression_id": "glute_bridge",
-    "photo": "Dumbbell_Step_Ups"
+    "photo": "Dumbbell_Step_Ups",
+    "modalities": [
+      "gym",
+      "calisthenics"
+    ],
+    "dose": "reps"
   },
   {
     "id": "bulgarian_split_squat",
@@ -762,7 +887,12 @@
       "Stand smoothly without locking out harshly."
     ],
     "regression_id": "step_up_low",
-    "photo": "Split_Squat_with_Dumbbells"
+    "photo": "Split_Squat_with_Dumbbells",
+    "modalities": [
+      "gym",
+      "calisthenics"
+    ],
+    "dose": "reps"
   },
   {
     "id": "dead_bug",
@@ -786,7 +916,12 @@
       "Stop leg extension before your lower back lifts off the mat."
     ],
     "regression_id": null,
-    "photo": "Dead_Bug"
+    "photo": "Dead_Bug",
+    "modalities": [
+      "gym",
+      "calisthenics"
+    ],
+    "dose": "reps"
   },
   {
     "id": "pallof_press",
@@ -810,7 +945,11 @@
       "Resist the sideways pull without twisting hips or ribs."
     ],
     "regression_id": "dead_bug",
-    "photo": "Pallof_Press"
+    "photo": "Pallof_Press",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "farmers_carry",
@@ -836,7 +975,11 @@
       "Avoid letting dumbbells bang against your thighs."
     ],
     "regression_id": "pallof_press",
-    "photo": "Farmers_Walk"
+    "photo": "Farmers_Walk",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "suitcase_carry",
@@ -861,7 +1004,11 @@
       "Keep ribs stacked over hips and breathe steadily."
     ],
     "regression_id": "farmers_carry",
-    "photo": "Farmers_Walk"
+    "photo": "Farmers_Walk",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "goblet_carry",
@@ -886,7 +1033,11 @@
       "Stay tall and keep your ribs from flaring."
     ],
     "regression_id": "farmers_carry",
-    "photo": "Goblet_Squat"
+    "photo": "Goblet_Squat",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "worlds_greatest_stretch",
@@ -911,7 +1062,13 @@
       "Move smoothly side-to-side to lubricate hips and upper back."
     ],
     "regression_id": "cat_cow_thoracic",
-    "photo": "Worlds_Greatest_Stretch"
+    "photo": "Worlds_Greatest_Stretch",
+    "flow_order": 6,
+    "modalities": [
+      "gym",
+      "yoga"
+    ],
+    "dose": "reps"
   },
   {
     "id": "cat_cow_thoracic",
@@ -936,7 +1093,13 @@
       "Move slowly through pain-free range to warm up the spine."
     ],
     "regression_id": null,
-    "photo": "Cat_Stretch"
+    "photo": "Cat_Stretch",
+    "flow_order": 5,
+    "modalities": [
+      "gym",
+      "yoga"
+    ],
+    "dose": "reps"
   },
   {
     "id": "barbell_front_squat",
@@ -961,7 +1124,11 @@
       "Drive up through mid-foot, elbows leading."
     ],
     "regression_id": "goblet_squat",
-    "photo": "Front_Barbell_Squat"
+    "photo": "Front_Barbell_Squat",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "sumo_goblet_squat",
@@ -986,7 +1153,11 @@
       "Push your knees out over your toes on the way up."
     ],
     "regression_id": "box_bodyweight_squat",
-    "photo": "Goblet_Squat"
+    "photo": "Goblet_Squat",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "smith_machine_squat",
@@ -1010,7 +1181,11 @@
       "Stand tall without locking your knees hard."
     ],
     "regression_id": "leg_press",
-    "photo": "Smith_Machine_Squat"
+    "photo": "Smith_Machine_Squat",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "hip_thrust_bench",
@@ -1034,7 +1209,11 @@
       "Squeeze your glutes at the top, then lower slowly."
     ],
     "regression_id": "glute_bridge",
-    "photo": "Barbell_Hip_Thrust"
+    "photo": "Barbell_Hip_Thrust",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "single_leg_glute_bridge",
@@ -1059,7 +1238,12 @@
       "Keep your hips level, with no twisting."
     ],
     "regression_id": "glute_bridge",
-    "photo": "Single_Leg_Glute_Bridge"
+    "photo": "Single_Leg_Glute_Bridge",
+    "modalities": [
+      "gym",
+      "calisthenics"
+    ],
+    "dose": "reps"
   },
   {
     "id": "single_leg_rdl_db",
@@ -1086,7 +1270,11 @@
       "Keep your hips square to the floor, then stand tall."
     ],
     "regression_id": "db_romanian_deadlift",
-    "photo": "Kettlebell_One-Legged_Deadlift"
+    "photo": "Kettlebell_One-Legged_Deadlift",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "db_bench_press",
@@ -1113,7 +1301,11 @@
       "Press up and slightly together without bouncing."
     ],
     "regression_id": "db_floor_press",
-    "photo": "Dumbbell_Bench_Press"
+    "photo": "Dumbbell_Bench_Press",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "pushup",
@@ -1138,7 +1330,12 @@
       "Press the floor away without sagging your hips."
     ],
     "regression_id": "incline_pushup",
-    "photo": "Pushups"
+    "photo": "Pushups",
+    "modalities": [
+      "gym",
+      "calisthenics"
+    ],
+    "dose": "reps"
   },
   {
     "id": "band_chest_press",
@@ -1162,7 +1359,11 @@
       "Return slowly, keeping tension on the band."
     ],
     "regression_id": "incline_pushup",
-    "photo": "Bench_Press_-_With_Bands"
+    "photo": "Bench_Press_-_With_Bands",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "machine_shoulder_press",
@@ -1187,7 +1388,11 @@
       "Lower under control to just below ear level."
     ],
     "regression_id": "db_lateral_raise",
-    "photo": "Machine_Shoulder_Military_Press"
+    "photo": "Machine_Shoulder_Military_Press",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "band_overhead_press",
@@ -1212,7 +1417,11 @@
       "Lower to shoulder height with control."
     ],
     "regression_id": "db_lateral_raise",
-    "photo": "Shoulder_Press_-_With_Bands"
+    "photo": "Shoulder_Press_-_With_Bands",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "cable_lateral_raise",
@@ -1234,7 +1443,11 @@
       "Lower slowly, keeping the tension steady."
     ],
     "regression_id": "db_lateral_raise",
-    "photo": "Cable_Seated_Lateral_Raise"
+    "photo": "Cable_Seated_Lateral_Raise",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "machine_row",
@@ -1258,7 +1471,11 @@
       "Return slowly without rounding forward."
     ],
     "regression_id": "chest_supported_db_row",
-    "photo": "Leverage_Iso_Row"
+    "photo": "Leverage_Iso_Row",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "band_face_pull",
@@ -1282,7 +1499,11 @@
       "Hold a beat and return slowly."
     ],
     "regression_id": "band_pull_apart",
-    "photo": "Face_Pull"
+    "photo": "Face_Pull",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "pullup",
@@ -1307,7 +1528,12 @@
       "Lower fully under control."
     ],
     "regression_id": "assisted_pullup",
-    "photo": "Pullups"
+    "photo": "Pullups",
+    "modalities": [
+      "gym",
+      "calisthenics"
+    ],
+    "dose": "reps"
   },
   {
     "id": "band_lat_pulldown",
@@ -1330,7 +1556,11 @@
       "Let the band lift your arms back up slowly."
     ],
     "regression_id": "straight_arm_pulldown",
-    "photo": "Wide-Grip_Lat_Pulldown"
+    "photo": "Wide-Grip_Lat_Pulldown",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "close_grip_pulldown",
@@ -1353,7 +1583,11 @@
       "Control the bar back up to full arm extension."
     ],
     "regression_id": "lat_pulldown_neutral",
-    "photo": "Close-Grip_Front_Lat_Pulldown"
+    "photo": "Close-Grip_Front_Lat_Pulldown",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "walking_lunge_db",
@@ -1380,7 +1614,11 @@
       "Push through the front heel to step into the next rep."
     ],
     "regression_id": "step_up_low",
-    "photo": "Bodyweight_Walking_Lunge"
+    "photo": "Bodyweight_Walking_Lunge",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "bodyweight_split_squat",
@@ -1406,7 +1644,12 @@
       "Drive up through the front foot."
     ],
     "regression_id": "step_up_low",
-    "photo": "Split_Squat_with_Dumbbells"
+    "photo": "Split_Squat_with_Dumbbells",
+    "modalities": [
+      "gym",
+      "calisthenics"
+    ],
+    "dose": "reps"
   },
   {
     "id": "forearm_plank",
@@ -1431,7 +1674,12 @@
       "Breathe steadily and stop when your form slips."
     ],
     "regression_id": "dead_bug",
-    "photo": "Plank"
+    "photo": "Plank",
+    "modalities": [
+      "gym",
+      "calisthenics"
+    ],
+    "dose": "time"
   },
   {
     "id": "thread_the_needle",
@@ -1455,7 +1703,13 @@
       "Return and reach that arm toward the ceiling."
     ],
     "regression_id": "cat_cow_thoracic",
-    "photo": "Spinal_Stretch"
+    "photo": "Spinal_Stretch",
+    "flow_order": 5.5,
+    "modalities": [
+      "gym",
+      "yoga"
+    ],
+    "dose": "reps"
   },
   {
     "id": "hip_90_90_switch",
@@ -1479,7 +1733,13 @@
       "Rotate your knees across to the other side with control."
     ],
     "regression_id": "cat_cow_thoracic",
-    "photo": "90_90_Hamstring"
+    "photo": "90_90_Hamstring",
+    "flow_order": 8.5,
+    "modalities": [
+      "gym",
+      "yoga"
+    ],
+    "dose": "reps"
   },
   {
     "id": "half_kneeling_hip_flexor_stretch",
@@ -1505,7 +1765,13 @@
       "Shift forward gently until you feel the front of your hip stretch."
     ],
     "regression_id": "worlds_greatest_stretch",
-    "photo": "Kneeling_Hip_Flexor"
+    "photo": "Kneeling_Hip_Flexor",
+    "flow_order": 7,
+    "modalities": [
+      "gym",
+      "yoga"
+    ],
+    "dose": "reps"
   },
   {
     "id": "db_biceps_curl",
@@ -1528,7 +1794,11 @@
       "Lower for about three seconds."
     ],
     "regression_id": null,
-    "photo": "Dumbbell_Bicep_Curl"
+    "photo": "Dumbbell_Bicep_Curl",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "hammer_curl",
@@ -1552,7 +1822,11 @@
       "Lower slowly to a full stretch."
     ],
     "regression_id": "db_biceps_curl",
-    "photo": "Alternate_Hammer_Curl"
+    "photo": "Alternate_Hammer_Curl",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "band_biceps_curl",
@@ -1574,7 +1848,11 @@
       "Let the band lower your hands slowly."
     ],
     "regression_id": "db_biceps_curl",
-    "photo": "Standing_Biceps_Cable_Curl"
+    "photo": "Standing_Biceps_Cable_Curl",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "cable_triceps_pushdown",
@@ -1596,7 +1874,11 @@
       "Let the handle rise only to about 90 degrees at the elbow."
     ],
     "regression_id": null,
-    "photo": "Triceps_Pushdown"
+    "photo": "Triceps_Pushdown",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "band_triceps_pushdown",
@@ -1618,7 +1900,11 @@
       "Return slowly without letting your elbows drift forward."
     ],
     "regression_id": null,
-    "photo": "Triceps_Pushdown"
+    "photo": "Triceps_Pushdown",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "standing_calf_raise_db",
@@ -1641,7 +1927,11 @@
       "Lower slowly until your heels are below the step if you can."
     ],
     "regression_id": null,
-    "photo": "Standing_Dumbbell_Calf_Raise"
+    "photo": "Standing_Dumbbell_Calf_Raise",
+    "modalities": [
+      "gym"
+    ],
+    "dose": "reps"
   },
   {
     "id": "single_leg_calf_raise",
@@ -1664,6 +1954,922 @@
       "Lower slowly and keep your ankle from rolling."
     ],
     "regression_id": "standing_calf_raise_db",
-    "photo": "Calf_Raise_On_A_Dumbbell"
+    "photo": "Calf_Raise_On_A_Dumbbell",
+    "modalities": [
+      "gym",
+      "calisthenics"
+    ],
+    "dose": "reps"
+  },
+  {
+    "id": "chin_up",
+    "name": "Chin-Up",
+    "movement_pattern": "vertical_pull",
+    "primary_muscles": [
+      "Lats",
+      "Biceps"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym"
+    ],
+    "equipment_label": "Pull-Up Bar",
+    "joint_stress_flags": [
+      "shoulder"
+    ],
+    "animation_key": "pullup",
+    "cues": [
+      "Grip the bar with palms facing you, shoulder-width apart.",
+      "Pull your chest toward the bar, leading with your elbows.",
+      "Lower all the way down with control."
+    ],
+    "regression_id": "inverted_row",
+    "photo": "Chin-Up",
+    "modalities": [
+      "calisthenics"
+    ],
+    "dose": "reps"
+  },
+  {
+    "id": "inverted_row",
+    "name": "Inverted Row",
+    "movement_pattern": "horizontal_pull",
+    "primary_muscles": [
+      "Upper Back",
+      "Lats",
+      "Biceps"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym"
+    ],
+    "equipment_label": "Bar at Hip Height (Smith or Rack)",
+    "joint_stress_flags": [],
+    "animation_key": "row",
+    "cues": [
+      "Hang under the bar with your body in one straight line.",
+      "Pull your chest to the bar and squeeze your shoulder blades.",
+      "Lower slowly; bend your knees to make it easier."
+    ],
+    "regression_id": "single_arm_db_row",
+    "photo": "Inverted_Row",
+    "modalities": [
+      "calisthenics"
+    ],
+    "dose": "reps"
+  },
+  {
+    "id": "bench_dips",
+    "name": "Bench Dips",
+    "movement_pattern": "arms",
+    "primary_muscles": [
+      "Triceps",
+      "Chest"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Bench or Sturdy Chair",
+    "joint_stress_flags": [
+      "shoulder"
+    ],
+    "animation_key": "pushdown",
+    "cues": [
+      "Hands on the bench edge behind you, fingers forward.",
+      "Lower until your elbows reach about 90 degrees.",
+      "Press back up without shrugging your shoulders."
+    ],
+    "regression_id": null,
+    "photo": "Bench_Dips",
+    "modalities": [
+      "calisthenics"
+    ],
+    "dose": "reps"
+  },
+  {
+    "id": "parallel_bar_dips",
+    "name": "Parallel Bar Dips",
+    "movement_pattern": "horizontal_push",
+    "primary_muscles": [
+      "Chest",
+      "Triceps",
+      "Shoulders"
+    ],
+    "equipment_tiers": [
+      "commercial_gym"
+    ],
+    "equipment_label": "Dip Bars",
+    "joint_stress_flags": [
+      "shoulder"
+    ],
+    "animation_key": "pushdown",
+    "cues": [
+      "Start tall at the top with shoulders down.",
+      "Lower until your shoulders are just below your elbows.",
+      "Press up to straight arms without swinging."
+    ],
+    "regression_id": "bench_dips",
+    "photo": "Dips_-_Triceps_Version",
+    "modalities": [
+      "calisthenics"
+    ],
+    "dose": "reps"
+  },
+  {
+    "id": "decline_pushup",
+    "name": "Decline Push-Up",
+    "movement_pattern": "horizontal_push",
+    "primary_muscles": [
+      "Upper Chest",
+      "Shoulders",
+      "Triceps"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Bench or Step",
+    "joint_stress_flags": [],
+    "animation_key": "pushup",
+    "cues": [
+      "Feet on the bench, hands under your shoulders.",
+      "Lower your chest with your body in one straight line.",
+      "Press up without letting your hips sag."
+    ],
+    "regression_id": "pushup",
+    "photo": "Decline_Push-Up",
+    "modalities": [
+      "calisthenics"
+    ],
+    "dose": "reps"
+  },
+  {
+    "id": "close_grip_pushup",
+    "name": "Close-Grip Push-Up",
+    "movement_pattern": "arms",
+    "primary_muscles": [
+      "Triceps",
+      "Chest"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Bodyweight",
+    "joint_stress_flags": [],
+    "animation_key": "pushup",
+    "cues": [
+      "Hands just inside shoulder width, elbows close to your ribs.",
+      "Lower your chest to just above the floor.",
+      "Press up and lock out your elbows."
+    ],
+    "regression_id": "incline_pushup",
+    "photo": "Push-Ups_-_Close_Triceps_Position",
+    "modalities": [
+      "calisthenics"
+    ],
+    "dose": "reps"
+  },
+  {
+    "id": "hanging_leg_raise",
+    "name": "Hanging Leg Raise",
+    "movement_pattern": "core",
+    "primary_muscles": [
+      "Abs",
+      "Hip Flexors"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym"
+    ],
+    "equipment_label": "Pull-Up Bar",
+    "joint_stress_flags": [
+      "shoulder"
+    ],
+    "animation_key": "pullup",
+    "cues": [
+      "Hang from the bar with shoulders pulled down.",
+      "Raise your legs by curling your pelvis up, not swinging.",
+      "Lower slowly to a dead hang."
+    ],
+    "regression_id": "dead_bug",
+    "photo": "Hanging_Leg_Raise",
+    "modalities": [
+      "calisthenics"
+    ],
+    "dose": "reps"
+  },
+  {
+    "id": "mountain_climbers",
+    "name": "Mountain Climbers",
+    "movement_pattern": "core",
+    "primary_muscles": [
+      "Core",
+      "Shoulders",
+      "Hip Flexors"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Bodyweight",
+    "joint_stress_flags": [],
+    "animation_key": "plank",
+    "cues": [
+      "Start in a high plank with hands under shoulders.",
+      "Drive one knee toward your chest, then switch quickly.",
+      "Keep your hips level and breathe steadily."
+    ],
+    "regression_id": "forearm_plank",
+    "photo": "Mountain_Climbers",
+    "modalities": [
+      "calisthenics"
+    ],
+    "dose": "time"
+  },
+  {
+    "id": "jump_squat",
+    "name": "Jump Squat",
+    "movement_pattern": "squat",
+    "primary_muscles": [
+      "Quads",
+      "Glutes",
+      "Calves"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Bodyweight",
+    "joint_stress_flags": [
+      "knee"
+    ],
+    "animation_key": "squat",
+    "cues": [
+      "Squat to a comfortable depth with your chest up.",
+      "Jump straight up, driving through your whole foot.",
+      "Land softly with bent knees and reset."
+    ],
+    "regression_id": "box_bodyweight_squat",
+    "photo": "Freehand_Jump_Squat",
+    "modalities": [
+      "calisthenics"
+    ],
+    "dose": "reps"
+  },
+  {
+    "id": "side_plank",
+    "name": "Side Plank",
+    "movement_pattern": "core",
+    "primary_muscles": [
+      "Obliques",
+      "Glutes",
+      "Shoulders"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Floor / Mat",
+    "joint_stress_flags": [
+      "shoulder"
+    ],
+    "animation_key": "plank",
+    "cues": [
+      "Elbow under your shoulder, feet stacked.",
+      "Lift your hips so your body forms a straight line.",
+      "Hold without letting your hips drop, then switch sides."
+    ],
+    "regression_id": "forearm_plank",
+    "photo": "Side_Bridge",
+    "modalities": [
+      "calisthenics"
+    ],
+    "dose": "time"
+  },
+  {
+    "id": "superman_hold",
+    "name": "Superman (Locust Pose)",
+    "movement_pattern": "hinge",
+    "primary_muscles": [
+      "Lower Back",
+      "Glutes",
+      "Upper Back"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Floor / Mat",
+    "joint_stress_flags": [],
+    "animation_key": "dead_bug",
+    "cues": [
+      "Lie face down with arms reaching forward.",
+      "Lift your arms, chest and legs a few centimetres off the floor.",
+      "Hold while breathing, then lower slowly."
+    ],
+    "regression_id": null,
+    "photo": "Superman",
+    "modalities": [
+      "calisthenics",
+      "yoga"
+    ],
+    "dose": "time",
+    "flow_order": 9
+  },
+  {
+    "id": "russian_twist",
+    "name": "Russian Twist",
+    "movement_pattern": "core",
+    "primary_muscles": [
+      "Obliques",
+      "Abs"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Bodyweight (or a light weight)",
+    "joint_stress_flags": [
+      "lower_back"
+    ],
+    "animation_key": "dead_bug",
+    "cues": [
+      "Sit with knees bent and lean back slightly with a tall spine.",
+      "Rotate your ribs to one side, then the other.",
+      "Keep the movement controlled; lift your feet only if it stays easy on your back."
+    ],
+    "regression_id": "dead_bug",
+    "photo": "Russian_Twist",
+    "modalities": [
+      "calisthenics"
+    ],
+    "dose": "reps"
+  },
+  {
+    "id": "upward_salute",
+    "name": "Upward Salute (Urdhva Hastasana)",
+    "movement_pattern": "yoga",
+    "primary_muscles": [
+      "Shoulders",
+      "Side Body"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Mat / Bodyweight",
+    "joint_stress_flags": [],
+    "animation_key": "mobility",
+    "cues": [
+      "Stand tall with feet together and weight even.",
+      "Sweep your arms overhead and lengthen through your fingertips.",
+      "Keep your ribs soft and breathe slowly."
+    ],
+    "regression_id": null,
+    "photo": "Upward_Stretch",
+    "modalities": [
+      "yoga"
+    ],
+    "dose": "time",
+    "flow_order": 1
+  },
+  {
+    "id": "standing_side_bend",
+    "name": "Standing Side Bend",
+    "movement_pattern": "yoga",
+    "primary_muscles": [
+      "Obliques",
+      "Lats"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Mat / Bodyweight",
+    "joint_stress_flags": [],
+    "animation_key": "mobility",
+    "cues": [
+      "Reach one arm overhead and lean gently to the other side.",
+      "Keep both feet grounded and hips square.",
+      "Breathe into the stretched side, then switch."
+    ],
+    "regression_id": null,
+    "photo": "Standing_Lateral_Stretch",
+    "modalities": [
+      "yoga"
+    ],
+    "dose": "time",
+    "flow_order": 2
+  },
+  {
+    "id": "standing_forward_fold",
+    "name": "Standing Forward Fold (Uttanasana)",
+    "movement_pattern": "yoga",
+    "primary_muscles": [
+      "Hamstrings",
+      "Lower Back"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Mat / Bodyweight",
+    "joint_stress_flags": [
+      "lower_back"
+    ],
+    "animation_key": "mobility",
+    "cues": [
+      "Hinge from your hips and let your upper body hang.",
+      "Bend your knees as much as you need.",
+      "Let your head and neck relax completely."
+    ],
+    "regression_id": null,
+    "photo": "Standing_Toe_Touches",
+    "modalities": [
+      "yoga"
+    ],
+    "dose": "time",
+    "flow_order": 3
+  },
+  {
+    "id": "inchworm_down_dog",
+    "name": "Inchworm to Downward Dog",
+    "movement_pattern": "yoga",
+    "primary_muscles": [
+      "Hamstrings",
+      "Shoulders",
+      "Calves"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Mat / Bodyweight",
+    "joint_stress_flags": [],
+    "animation_key": "mobility",
+    "cues": [
+      "Fold forward and walk your hands out to a plank.",
+      "Push your hips up and back into an upside-down V.",
+      "Press your heels toward the floor and breathe."
+    ],
+    "regression_id": null,
+    "photo": "Inchworm",
+    "modalities": [
+      "yoga",
+      "calisthenics"
+    ],
+    "dose": "time",
+    "flow_order": 4
+  },
+  {
+    "id": "childs_pose",
+    "name": "Child\u2019s Pose (Balasana)",
+    "movement_pattern": "yoga",
+    "primary_muscles": [
+      "Lower Back",
+      "Hips",
+      "Shoulders"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Mat / Bodyweight",
+    "joint_stress_flags": [
+      "knee"
+    ],
+    "animation_key": "mobility",
+    "cues": [
+      "Kneel, sit back on your heels and fold forward.",
+      "Reach your arms long or rest them by your sides.",
+      "Breathe into your back and relax your shoulders."
+    ],
+    "regression_id": null,
+    "photo": "Childs_Pose",
+    "modalities": [
+      "yoga"
+    ],
+    "dose": "time",
+    "flow_order": 12
+  },
+  {
+    "id": "butterfly_pose",
+    "name": "Butterfly (Baddha Konasana)",
+    "movement_pattern": "yoga",
+    "primary_muscles": [
+      "Hips",
+      "Groin",
+      "Lower Back"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Mat / Bodyweight",
+    "joint_stress_flags": [],
+    "animation_key": "mobility",
+    "cues": [
+      "Sit with the soles of your feet together.",
+      "Sit tall, then fold forward gently from your hips.",
+      "Let your knees drop naturally; never push them down."
+    ],
+    "regression_id": null,
+    "photo": "Groin_and_Back_Stretch",
+    "modalities": [
+      "yoga"
+    ],
+    "dose": "time",
+    "flow_order": 8
+  },
+  {
+    "id": "seated_forward_fold",
+    "name": "Seated Forward Fold (Paschimottanasana)",
+    "movement_pattern": "yoga",
+    "primary_muscles": [
+      "Hamstrings",
+      "Lower Back"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Mat / Bodyweight",
+    "joint_stress_flags": [
+      "lower_back"
+    ],
+    "animation_key": "mobility",
+    "cues": [
+      "Sit with legs straight and spine tall.",
+      "Hinge forward from your hips toward your toes.",
+      "Stop where you feel a stretch, not pain, and breathe."
+    ],
+    "regression_id": null,
+    "photo": "Seated_Floor_Hamstring_Stretch",
+    "modalities": [
+      "yoga"
+    ],
+    "dose": "time",
+    "flow_order": 10
+  },
+  {
+    "id": "wide_leg_fold",
+    "name": "Wide-Leg Seated Fold",
+    "movement_pattern": "yoga",
+    "primary_muscles": [
+      "Hamstrings",
+      "Adductors"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Mat / Bodyweight",
+    "joint_stress_flags": [
+      "lower_back"
+    ],
+    "animation_key": "mobility",
+    "cues": [
+      "Sit with your legs wide and kneecaps facing up.",
+      "Walk your hands forward while keeping a long spine.",
+      "Back off if you feel it behind your knees."
+    ],
+    "regression_id": null,
+    "photo": "The_Straddle",
+    "modalities": [
+      "yoga"
+    ],
+    "dose": "time",
+    "flow_order": 11
+  },
+  {
+    "id": "bridge_pose",
+    "name": "Bridge Pose (Setu Bandhasana)",
+    "movement_pattern": "yoga",
+    "primary_muscles": [
+      "Glutes",
+      "Hamstrings",
+      "Spine"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Mat / Bodyweight",
+    "joint_stress_flags": [],
+    "animation_key": "glute_bridge",
+    "cues": [
+      "Lie on your back with feet hip-width apart.",
+      "Press through your feet and lift your hips.",
+      "Hold with steady breath, then roll down slowly."
+    ],
+    "regression_id": null,
+    "photo": "Pelvic_Tilt_Into_Bridge",
+    "modalities": [
+      "yoga"
+    ],
+    "dose": "time",
+    "flow_order": 13
+  },
+  {
+    "id": "knees_to_chest",
+    "name": "Knees to Chest (Apanasana)",
+    "movement_pattern": "yoga",
+    "primary_muscles": [
+      "Lower Back",
+      "Hips"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Mat / Bodyweight",
+    "joint_stress_flags": [],
+    "animation_key": "mobility",
+    "cues": [
+      "Lie on your back and hug both knees in.",
+      "Rock gently side to side if it feels good.",
+      "Relax your shoulders to the floor."
+    ],
+    "regression_id": null,
+    "photo": "Hug_Knees_To_Chest",
+    "modalities": [
+      "yoga"
+    ],
+    "dose": "time",
+    "flow_order": 14
+  },
+  {
+    "id": "brisk_walk_outdoor",
+    "name": "Brisk Walk or Easy Jog (Outdoors)",
+    "movement_pattern": "cardio",
+    "primary_muscles": [
+      "Heart & Lungs",
+      "Legs"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Outdoors",
+    "joint_stress_flags": [],
+    "animation_key": "carry",
+    "cues": [
+      "Walk briskly enough that talking takes a little effort.",
+      "Swing your arms and stand tall.",
+      "Jog in short bursts only if it stays comfortable."
+    ],
+    "regression_id": null,
+    "photo": "Trail_Running_Walking",
+    "modalities": [
+      "cardio"
+    ],
+    "dose": "duration"
+  },
+  {
+    "id": "incline_treadmill_walk",
+    "name": "Incline Treadmill Walk",
+    "movement_pattern": "cardio",
+    "primary_muscles": [
+      "Heart & Lungs",
+      "Glutes",
+      "Calves"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym"
+    ],
+    "equipment_label": "Treadmill",
+    "joint_stress_flags": [],
+    "animation_key": "carry",
+    "cues": [
+      "Set an incline of 5 to 10% and a brisk walking pace.",
+      "Do not hold the handrails; swing your arms.",
+      "You should be able to talk, but not sing."
+    ],
+    "regression_id": "brisk_walk_outdoor",
+    "photo": "Walking_Treadmill",
+    "modalities": [
+      "cardio"
+    ],
+    "dose": "duration"
+  },
+  {
+    "id": "treadmill_run",
+    "name": "Treadmill Run",
+    "movement_pattern": "cardio",
+    "primary_muscles": [
+      "Heart & Lungs",
+      "Legs"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym"
+    ],
+    "equipment_label": "Treadmill",
+    "joint_stress_flags": [
+      "knee"
+    ],
+    "animation_key": "carry",
+    "cues": [
+      "Start with 3 minutes of easy walking.",
+      "Run at a pace you could hold a short conversation at.",
+      "Land softly under your hips with short, quick steps."
+    ],
+    "regression_id": "incline_treadmill_walk",
+    "photo": "Running_Treadmill",
+    "modalities": [
+      "cardio"
+    ],
+    "dose": "duration"
+  },
+  {
+    "id": "stationary_bike",
+    "name": "Stationary Bike",
+    "movement_pattern": "cardio",
+    "primary_muscles": [
+      "Heart & Lungs",
+      "Quads"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym"
+    ],
+    "equipment_label": "Exercise Bike",
+    "joint_stress_flags": [],
+    "animation_key": "squat",
+    "cues": [
+      "Set the seat so your knee is slightly bent at the bottom.",
+      "Keep a steady cadence of about 80 to 90 revolutions a minute.",
+      "Add resistance rather than bouncing in the saddle."
+    ],
+    "regression_id": null,
+    "photo": "Bicycling_Stationary",
+    "modalities": [
+      "cardio"
+    ],
+    "dose": "duration"
+  },
+  {
+    "id": "elliptical",
+    "name": "Elliptical Cross Trainer",
+    "movement_pattern": "cardio",
+    "primary_muscles": [
+      "Heart & Lungs",
+      "Full Body"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym"
+    ],
+    "equipment_label": "Elliptical",
+    "joint_stress_flags": [],
+    "animation_key": "lunge",
+    "cues": [
+      "Stand tall and push and pull the handles.",
+      "Keep your whole foot on the pedals.",
+      "Use resistance to make it work, not just speed."
+    ],
+    "regression_id": null,
+    "photo": "Elliptical_Trainer",
+    "modalities": [
+      "cardio"
+    ],
+    "dose": "duration"
+  },
+  {
+    "id": "rowing_machine",
+    "name": "Rowing Machine",
+    "movement_pattern": "cardio",
+    "primary_muscles": [
+      "Heart & Lungs",
+      "Back",
+      "Legs"
+    ],
+    "equipment_tiers": [
+      "commercial_gym"
+    ],
+    "equipment_label": "Rower",
+    "joint_stress_flags": [
+      "lower_back"
+    ],
+    "animation_key": "row",
+    "cues": [
+      "Push with your legs first, then lean back, then pull the handle in.",
+      "Reverse the order on the way back.",
+      "Keep a smooth rhythm of about 24 strokes a minute."
+    ],
+    "regression_id": "stationary_bike",
+    "photo": "Rowing_Stationary",
+    "modalities": [
+      "cardio"
+    ],
+    "dose": "duration"
+  },
+  {
+    "id": "stair_climber",
+    "name": "Stair Climber",
+    "movement_pattern": "cardio",
+    "primary_muscles": [
+      "Heart & Lungs",
+      "Glutes",
+      "Quads"
+    ],
+    "equipment_tiers": [
+      "commercial_gym"
+    ],
+    "equipment_label": "Stair Climber",
+    "joint_stress_flags": [],
+    "animation_key": "lunge",
+    "cues": [
+      "Stand tall and step through your whole foot.",
+      "Use the rails only lightly for balance.",
+      "Pick a pace you can hold steadily."
+    ],
+    "regression_id": "incline_treadmill_walk",
+    "photo": "Stairmaster",
+    "modalities": [
+      "cardio"
+    ],
+    "dose": "duration"
+  },
+  {
+    "id": "jump_rope",
+    "name": "Jump Rope",
+    "movement_pattern": "cardio",
+    "primary_muscles": [
+      "Heart & Lungs",
+      "Calves",
+      "Shoulders"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Skipping Rope",
+    "joint_stress_flags": [
+      "knee"
+    ],
+    "animation_key": "calf_raise",
+    "cues": [
+      "Turn the rope with your wrists, elbows close to your sides.",
+      "Jump just high enough to clear the rope, landing softly.",
+      "Work in rounds: 30 to 60 seconds on, 30 seconds easy."
+    ],
+    "regression_id": "brisk_walk_outdoor",
+    "photo": "Rope_Jumping",
+    "modalities": [
+      "cardio"
+    ],
+    "dose": "duration"
+  },
+  {
+    "id": "outdoor_cycling",
+    "name": "Outdoor Cycling",
+    "movement_pattern": "cardio",
+    "primary_muscles": [
+      "Heart & Lungs",
+      "Legs"
+    ],
+    "equipment_tiers": [
+      "commercial_gym",
+      "apartment_gym",
+      "home_setup"
+    ],
+    "equipment_label": "Bicycle",
+    "joint_stress_flags": [],
+    "animation_key": "squat",
+    "cues": [
+      "Ride at a pace where you can still talk.",
+      "Use easier gears on hills instead of standing.",
+      "Wear a helmet and stay visible."
+    ],
+    "regression_id": null,
+    "photo": "Bicycling",
+    "modalities": [
+      "cardio"
+    ],
+    "dose": "duration"
   }
 ]

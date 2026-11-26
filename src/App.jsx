@@ -5,8 +5,8 @@ import CatalogBrowser from './components/CatalogBrowser';
 import SettingsModal from './components/SettingsModal';
 import HealthNotice from './components/HealthNotice';
 import AskCoach from './components/AskCoach';
-import Logo from './components/Logo';
 import Watermark from './components/Watermark';
+import Wordmark from './components/Wordmark';
 import Onboarding from './components/Onboarding';
 import PlanWhy from './components/PlanWhy';
 import ProgressView from './components/ProgressView';
@@ -489,11 +489,9 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
     <div className="app-shell">
       <header className="top-bar">
         <div className="brand">
-          <Logo size={38} />
-          <div>
-            <h1>Repwise</h1>
-            <small className="muted">Personal BYOK AI Coach</small>
-          </div>
+          <h1 className="brand-h1" aria-label="Repwise">
+            <Wordmark />
+          </h1>
         </div>
 
         <select

@@ -3,6 +3,7 @@ import { sanitizeBaselines } from './baseline';
 import { sanitizeLabs, sanitizeReports } from './labs';
 import { sanitizeScans } from './bodyComp';
 import exerciseCatalog from '../data/exercises.json';
+import { sanitizeStyles } from './styles';
 
 const KEYS = {
   API_KEY: 'mf_byok_gemini_api_key',
@@ -99,6 +100,7 @@ export const DEFAULT_PROFILE = {
   baselines: [], // fitness test history, newest first
   labs: null, // { date, source, markers: [{ id, name, value, unit }] } — never the image itself
   preferences: { specificGoal: '', goalWhy: '', activity: '', sports: '', timeOfDay: '', likes: [], dislikes: [] },
+  styles: ['gym'], // gym | calisthenics | yoga | cardio
 };
 
 /**
@@ -192,6 +194,7 @@ export function sanitizeProfile(raw) {
   out.baselines = sanitizeBaselines(src.baselines);
   out.labs = sanitizeLabs(src.labs);
   out.preferences = sanitizePreferences(src.preferences);
+  out.styles = sanitizeStyles(src.styles);
   if (src.jointFlags && typeof src.jointFlags === 'object') {
     for (const joint of Object.keys(DEFAULT_PROFILE.jointFlags)) {
       if (typeof src.jointFlags[joint] === 'boolean') out.jointFlags[joint] = src.jointFlags[joint];
@@ -370,7 +373,7 @@ export function sanitizeLogs(raw) {
     if (!Number.isFinite(ts) || ts <= 0) continue;
     const sets = e.sets
       .map((s) => ({
-        reps: Math.max(0, Math.min(200, Math.round(Number(s?.reps) || 0))),
+        reps: Math.max(0, Math.min(e.unit === 's' ? 900 : 200, Math.round(Number(s?.reps) || 0))),
         weightKg: Math.max(0, Math.min(1000, Number(Number(s?.weightKg).toFixed(2)) || 0)),
       }))
       .filter((s) => s.reps > 0)
@@ -385,6 +388,7 @@ export function sanitizeLogs(raw) {
       dayTitle: typeof e.dayTitle === 'string' ? e.dayTitle.slice(0, 80) : '',
       rpe: rpe >= 1 && rpe <= 10 ? rpe : null,
       sets,
+      ...(e.unit === 's' || e.unit === 'min' ? { unit: e.unit } : {}),
     });
   }
   // Newest first, capped so storage can't grow without bound.

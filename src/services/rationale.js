@@ -41,11 +41,15 @@ export function buildPlanRationale(profile, plan, { bodySummary } = {}) {
   const adj = healthAdjustments(profile);
   const h = sanitizeHealth(profile.health);
 
+  const mix = (plan?.day_styles || []).filter(Boolean);
+  const mixText = mix.length && mix.some((x) => x !== 'gym')
+    ? ` Your week: ${mix.map((x, i) => `Day ${i + 1} ${x}`).join(', ')}. Strength days get at least half the week; ${mix.includes('yoga') ? 'yoga sits between them for recovery and mobility' : ''}${mix.includes('yoga') && mix.includes('cardio') ? ', and ' : ''}${mix.includes('cardio') ? 'cardio builds your heart and lungs, progressing from steady to intervals' : ''}.`
+    : '';
   add(
     'schedule',
     '📅',
     'Your schedule',
-    `${s.days} days a week, about ${profile.sessionMinutes} minutes each, so each day has ${s.perDay} exercises. That is what you said you can fit in, and consistency beats a perfect plan you skip.`,
+    `${s.days} days a week, about ${profile.sessionMinutes} minutes each.${mixText} That is what you said you can fit in, and consistency beats a perfect plan you skip.`,
     `Why ${s.days} days and ${s.perDay} exercises per session for me?`
   );
 

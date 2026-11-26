@@ -10,6 +10,7 @@ import { buildIntakePrompt, buildPlanPrompt, buildSwapPrompt, buildAdaptPrompt, 
 import { summarizeLogsForPrompt } from './progress';
 import { applyRpeCap, healthAdjustments, labFinisher, sanitizeHealth } from './health';
 import { buildPlanRationale } from './rationale';
+import { assignDayStyles, isStrengthStyle, modalitiesOf, normalizeDoses, normalizeItem, weaveStyleDays, doseOf } from './styles';
 import { sanitizeLabs, analyzeLabs, sanitizeAnalysis, previousValue, MARKER_MAP } from './labs';
 import { LAB_REPORT_SCHEMA, BODY_SCAN_SCHEMA, LAB_ANALYSIS_SCHEMA } from './coach/schemas';
 import { normalizeExtracted } from './bodyComp';
@@ -369,19 +370,40 @@ const capItem = (item, profile) => {
   return rpeCap && Number(item?.target_rpe) > rpeCap ? { ...item, target_rpe: rpeCap } : item;
 };
 
-export async function generateAdaptivePlan(profile, ...rest) {
-  const plan = applyRpeCap(await generatePlanRaw(profile, ...rest), profile);
-  const bodySummary = rest[5];
+export async function generateAdaptivePlan(profile, safeExercises, ...rest) {
+  // Strength days (gym / calisthenics) come from Gemini or the local engine; yoga and cardio days are woven in.
+  const styles = assignDayStyles(profile);
+  const strengthStyles = styles.filter(isStrengthStyle);
+  const strengthPool = safeExercises.filter((e) => modalitiesOf(e).some((m) => m === 'gym' || m === 'calisthenics'));
+  let base;
+  if (strengthStyles.length) {
+    const sp = { ...profile, daysPerWeek: Math.max(2, strengthStyles.length), _strengthStyles: strengthStyles };
+    base = await generatePlanRaw(sp, strengthPool, ...rest);
+    if (strengthStyles.length === 1) base = { ...base, weeks: base.weeks.map((w) => ({ ...w, days: w.days.slice(0, 1) })) };
+  } else {
+    const metrics = computeReadinessMetrics(profile);
+    const totalWeeks = Math.max(1, Math.min(4, Number(profile.programWeeks) || 4));
+    const skel = buildDeterministicFallbackPlan({ ...profile, daysPerWeek: 2 }, strengthPool, metrics, totalWeeks);
+    base = { ...skel, program_strategy: 'Yoga and cardio block: steady aerobic base and mobility, progressing a little each week.', weeks: skel.weeks.map((w) => ({ ...w, days: [] })) };
+  }
+  const woven = normalizeDoses(weaveStyleDays(base, profile, safeExercises), profile);
+  const plan = applyRpeCap(woven, profile);
+  const bodySummary = rest[4];
   const finisher = labFinisher(profile);
   const withFinisher = finisher
-    ? { ...plan, weeks: plan.weeks.map((w) => ({ ...w, days: w.days.map((d) => ({ ...d, finisher })) })) }
+    ? { ...plan, weeks: plan.weeks.map((w) => ({ ...w, days: w.days.map((d) => (isStrengthStyle(d.style || 'gym') ? { ...d, finisher } : d)) })) }
     : plan;
   return { ...withFinisher, rationale: buildPlanRationale(profile, withFinisher, { bodySummary }), generated_at: Date.now() };
 }
 
 export async function swapExercise(currentItem, reason, profile, ...rest) {
-  return capItem(await swapRaw(currentItem, reason, profile, ...rest), profile);
+  const out = await swapRaw(currentItem, reason, profile, ...rest);
+  // A swapped-in hold or cardio piece needs its own kind of prescription.
+  const keep = doseOf(out.exercise_id) === doseOf(currentItem.exercise_id) && doseOf(out.exercise_id) !== 'reps';
+  const normalized = keep ? { ...out, ...pickDose(currentItem) } : normalizeItem({ ...out, time_sec_min: 0, minutes: 0 }, 0, profile);
+  return capItem(normalized, profile);
 }
+const pickDose = (it) => Object.fromEntries(['dose', 'time_sec_min', 'time_sec_max', 'minutes', 'intensity', 'sets', 'target_rpe', 'rest_seconds'].filter((k) => it[k] !== undefined).map((k) => [k, it[k]]));
 
 export async function adaptSingleDay(dayPlan, constraint, profile, ...rest) {
   const day = await adaptRaw(dayPlan, constraint, profile, ...rest);

@@ -6,7 +6,7 @@ import { filterSafeExercises } from '../services/catalogFilter';
 import { DEFAULT_PROFILE } from '../services/storage';
 
 const TIERS = ['commercial_gym', 'apartment_gym', 'home_setup'];
-const PATTERNS = ['squat', 'hinge', 'horizontal_push', 'vertical_push', 'horizontal_pull', 'vertical_pull', 'lunge', 'core', 'carry', 'mobility', 'arms', 'calves'];
+const PATTERNS = ['squat', 'hinge', 'horizontal_push', 'vertical_push', 'horizontal_pull', 'vertical_pull', 'lunge', 'core', 'carry', 'mobility', 'arms', 'calves', 'yoga', 'cardio'];
 const JOINTS = ['knee', 'shoulder', 'lower_back'];
 const KEYS = ['head', 'neck', 'lShoulder', 'rShoulder', 'lElbow', 'rElbow', 'lHand', 'rHand', 'lHip', 'rHip', 'lKnee', 'rKnee', 'lAnkle', 'rAnkle', 'lFoot', 'rFoot'];
 const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
@@ -43,7 +43,7 @@ describe('exercise records', () => {
     for (const tier of TIERS) {
       for (const p of PATTERNS) {
         const n = exercises.filter((e) => e.movement_pattern === p && e.equipment_tiers.includes(tier)).length;
-        const need = p === 'calves' ? 2 : p === 'arms' ? 2 : 3;
+        const need = p === 'calves' || p === 'arms' ? 2 : 3;
         expect(n, `${tier} / ${p}`).toBeGreaterThanOrEqual(need);
       }
     }
