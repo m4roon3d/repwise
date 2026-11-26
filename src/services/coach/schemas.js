@@ -191,3 +191,18 @@ export const LAB_REPORT_SCHEMA = {
   },
   required: ['is_lab_report', 'markers'],
 };
+
+const num = { type: Type.NUMBER, nullable: true };
+export const BODY_SCAN_SCHEMA = {
+  type: Type.OBJECT,
+  properties: {
+    is_body_composition_report: { type: Type.BOOLEAN },
+    device: { type: Type.STRING },
+    test_date: { type: Type.STRING },
+    mass_unit: { type: Type.STRING },
+    weightKg: num, smmKg: num, bfmKg: num, pbf: num, visceralFat: num, bmi: num, ffmKg: num, bmr: num, tbwL: num,
+    proteinKg: num, mineralsKg: num, inbodyScore: num, whr: num,
+    leanRightArm: num, leanLeftArm: num, leanTrunk: num, leanRightLeg: num, leanLeftLeg: num,
+  },
+  required: ['is_body_composition_report'],
+};

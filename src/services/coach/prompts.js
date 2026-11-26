@@ -44,7 +44,7 @@ TASK:
 3. Set ready_to_generate = true once you have enough context to craft a strong, personalised training plan.`;
 }
 
-export function buildPlanPrompt(profile, safeExercises, metrics, totalWeeks, recentFeedback, logSummary = '') {
+export function buildPlanPrompt(profile, safeExercises, metrics, totalWeeks, recentFeedback, logSummary = '', bodySummary = '') {
   const activeJoints = Object.entries(profile.jointFlags || {})
     .filter(([, v]) => v)
     .map(([k]) => k);
@@ -62,6 +62,7 @@ USER VITALS & PROFILE:
 - Flagged Joints to Protect: ${activeJoints.length ? activeJoints.join(', ') : 'None'}
 - Personal Notes / Chat Intake Summary: ${profile.notes || 'None'}
 ${describeHealthForPrompt(profile)}
+- Body composition: ${bodySummary || 'No scans'}
 - Recent Weekly Feedback: ${
     recentFeedback.length
       ? recentFeedback.slice(0, 2).map((f) => f.rating).join(', ')
@@ -119,7 +120,7 @@ const fmtItem = (it) => {
   return `${m?.name || it.exercise_id} ${it.sets}x${it.rep_min}-${it.rep_max} @RPE ${it.target_rpe}`;
 };
 
-export function buildAskContext({ profile, plan, logSummary, focusExercise }) {
+export function buildAskContext({ profile, plan, logSummary, focusExercise, bodySummary }) {
   const joints = Object.entries(profile?.jointFlags || {})
     .filter(([, v]) => v)
     .map(([k]) => k);
@@ -137,6 +138,7 @@ export function buildAskContext({ profile, plan, logSummary, focusExercise }) {
     lines.push('CURRENT PLAN: none generated yet.');
   }
   lines.push(`RECENT LOGS:\n${logSummary || 'none yet'}`);
+  lines.push(`BODY COMPOSITION: ${bodySummary || 'no scans'}`);
   if (focusExercise) {
     lines.push(
       `FOCUS EXERCISE: ${focusExercise.name} (${focusExercise.movement_pattern}, ${focusExercise.equipment_label}). Standard cues: ${(focusExercise.cues || []).join(' ')}`

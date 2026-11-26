@@ -5,15 +5,16 @@ import userEvent from '@testing-library/user-event';
 import App from '../App';
 
 describe('Repwise End-to-End UI Flow', () => {
-  it('renders clean vector bottom tabs (Coach, Workout, Ask, Exercises) without raw emojis', () => {
+  it('renders clean vector bottom tabs (Coach, Workout, Ask, Progress, Exercises) without raw emojis', () => {
     render(<App />);
     const nav = screen.getByRole('navigation', { name: /Primary navigation/i });
     expect(nav).toHaveTextContent('Coach');
     expect(nav).toHaveTextContent('Workout');
     expect(nav).toHaveTextContent('Ask');
+    expect(nav).toHaveTextContent('Progress');
     expect(nav).toHaveTextContent('Exercises');
     expect(nav.textContent).not.toMatch(/[🎯⚡📚]/);
-    expect(nav.querySelectorAll('svg').length).toBe(4);
+    expect(nav.querySelectorAll('svg').length).toBe(5);
   });
 
   it('generates a 4-week training block and shows real start/finish photos for each exercise', async () => {
@@ -32,9 +33,10 @@ describe('Repwise End-to-End UI Flow', () => {
     expect(finishes[0].getAttribute('src')).toMatch(/photos\/[^/]+\/1\.jpg$/);
 
     // Holding the finish position stops the loop on that frame
+    expect(starts[0].parentElement).toHaveClass('is-looping'); // CSS-driven loop, no JS timer
     await user.click(screen.getAllByRole('button', { name: 'Finish' })[0]);
-    expect(finishes[0]).toHaveClass('is-on');
-    expect(starts[0]).not.toHaveClass('is-on');
+    expect(finishes[0].parentElement).toHaveClass('is-finish');
+    expect(finishes[0].parentElement).not.toHaveClass('is-looping');
     expect(screen.getAllByRole('button', { name: 'Play' }).length).toBeGreaterThan(0);
   });
 

@@ -1,6 +1,7 @@
 import { sanitizeHealth, EMPTY_HEALTH } from './health';
 import { sanitizeBaselines } from './baseline';
 import { sanitizeLabs } from './labs';
+import { sanitizeScans } from './bodyComp';
 import exerciseCatalog from '../data/exercises.json';
 
 const KEYS = {
@@ -13,6 +14,7 @@ const KEYS = {
   WORKOUT_LOGS: 'mf_workout_logs_v1',
   COACH_CHAT: 'mf_coach_chat_v1',
   ONBOARDED: 'mf_onboarded_v1',
+  BODY_SCANS: 'mf_body_scans_v1',
   PROFILES: 'mf_profiles_v1', // device-level: [{ id, name }]
   ACTIVE_PROFILE: 'mf_active_profile_v1', // device-level
 };
@@ -402,6 +404,21 @@ export function saveWorkoutLogs(logs) {
   return clean;
 }
 
+// ---- Body-composition scans (InBody etc.) --------------------------------------------------------
+export function loadBodyScans() {
+  try {
+    return sanitizeScans(JSON.parse(safeGet(KEYS.BODY_SCANS) || '[]'));
+  } catch {
+    return [];
+  }
+}
+
+export function saveBodyScans(scans) {
+  const clean = sanitizeScans(scans);
+  safeSet(KEYS.BODY_SCANS, JSON.stringify(clean));
+  return clean;
+}
+
 // ---- Ask-your-coach chat ------------------------------------------------------------------------
 const MAX_CHAT_MESSAGES = 30;
 
@@ -439,6 +456,7 @@ export function exportBackupJson() {
     activePlan: loadPlan(),
     feedbackHistory: loadFeedbackHistory(),
     workoutLogs: logs,
+    bodyScans: loadBodyScans(),
   };
 
   return JSON.stringify(payload, null, 2);
@@ -468,11 +486,15 @@ export function importBackupJson(jsonText) {
   if (Array.isArray(data.workoutLogs)) {
     saveWorkoutLogs(data.workoutLogs);
   }
+  if (Array.isArray(data.bodyScans)) {
+    saveBodyScans(data.bodyScans);
+  }
   return {
     profile: loadProfile(),
     activePlan: loadPlan(),
     feedbackHistory: loadFeedbackHistory(),
     workoutLogs: loadWorkoutLogs(),
+    bodyScans: loadBodyScans(),
     skipped,
   };
 }

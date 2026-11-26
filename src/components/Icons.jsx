@@ -93,3 +93,13 @@ export function PauseIcon({ size = 13 }) {
     </svg>
   );
 }
+
+export function ProgressIcon({ size = 22 }) {
+  return (
+    <svg {...baseProps} width={size} height={size}>
+      <path d="M4 19h16" />
+      <path d="M5 15l4.5-4.5 3.5 3L19 7" />
+      <path d="M15 7h4v4" />
+    </svg>
+  );
+}

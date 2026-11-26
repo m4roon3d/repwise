@@ -11,7 +11,8 @@ import { summarizeLogsForPrompt } from './progress';
 import { applyRpeCap, healthAdjustments } from './health';
 import { buildPlanRationale } from './rationale';
 import { sanitizeLabs } from './labs';
-import { LAB_REPORT_SCHEMA } from './coach/schemas';
+import { LAB_REPORT_SCHEMA, BODY_SCAN_SCHEMA } from './coach/schemas';
+import { normalizeExtracted } from './bodyComp';
 import { buildDeterministicFallbackPlan, localIntakeTurn, localSwap, localAdaptDay } from './coach/localEngine';
 
 // Public API (kept stable): everything the UI and tests import comes from this file.
@@ -102,7 +103,8 @@ async function generatePlanRaw(
   apiKey,
   model,
   recentFeedback = [],
-  logSummary = ''
+  logSummary = '',
+  bodySummary = ''
 ) {
   const metrics = computeReadinessMetrics(profile);
   const totalWeeks = Math.max(1, Math.min(4, Number(profile.programWeeks) || 4));
@@ -112,7 +114,7 @@ async function generatePlanRaw(
   }
 
   const ai = await getAI(apiKey);
-  const prompt = buildPlanPrompt(profile, safeExercises, metrics, totalWeeks, recentFeedback, logSummary);
+  const prompt = buildPlanPrompt(profile, safeExercises, metrics, totalWeeks, recentFeedback, logSummary, bodySummary);
 
   const dayCount = Math.max(2, Math.min(5, Number(profile.daysPerWeek) || 3));
   let cleanedDays = [];
@@ -316,7 +318,7 @@ async function adaptRaw(dayPlan, constraint, profile, safeExercises, apiKey, mod
  * question being asked. `photos` ({ mimeType, data }) are attached to that last question only.
  * Needs a Gemini key: there is no local fallback for open questions.
  */
-export async function askCoach({ messages, profile, plan, logs = [], focusExerciseId, photos = [], apiKey, model }) {
+export async function askCoach({ messages, profile, plan, logs = [], bodySummary = '', focusExerciseId, photos = [], apiKey, model }) {
   if (!apiKey) throw new Error('Ask Your Coach needs a Gemini API key. Add one in Settings.');
   const turns = (messages || [])
     .filter((m) => (m.role === 'user' || m.role === 'coach') && typeof m.text === 'string' && m.text.trim())
@@ -335,6 +337,7 @@ export async function askCoach({ messages, profile, plan, logs = [], focusExerci
     profile,
     plan,
     logSummary: summarizeLogsForPrompt(logs, profile?.unitSystem),
+    bodySummary,
     focusExercise: focusExerciseId ? EXERCISE_MAP[focusExerciseId] : null,
   })}`;
 
@@ -368,7 +371,8 @@ const capItem = (item, profile) => {
 
 export async function generateAdaptivePlan(profile, ...rest) {
   const plan = applyRpeCap(await generatePlanRaw(profile, ...rest), profile);
-  return { ...plan, rationale: buildPlanRationale(profile, plan), generated_at: Date.now() };
+  const bodySummary = rest[5];
+  return { ...plan, rationale: buildPlanRationale(profile, plan, { bodySummary }), generated_at: Date.now() };
 }
 
 export async function swapExercise(currentItem, reason, profile, ...rest) {
@@ -410,4 +414,33 @@ export async function extractLabReport({ file, apiKey, model }) {
   const labs = sanitizeLabs({ date: parsed.report_date || '', source: 'upload', markers: parsed.markers });
   if (!labs) throw new Error('No readable results found. Try a sharper photo, or type the key values in.');
   return labs;
+}
+
+/** Reads an InBody (or similar) body-composition result sheet. Returns a sanitized scan or throws. */
+export async function extractBodyScan({ file, apiKey, model }) {
+  if (!apiKey) throw new Error('Reading a scan needs a Gemini API key. You can type the numbers in instead.');
+  const ai = await getAI(apiKey);
+  const parsed = await requestJson(
+    ai,
+    {
+      model,
+      contents: [
+        {
+          role: 'user',
+          parts: [
+            {
+              text: `This should be a body-composition result sheet (InBody, Tanita or similar). Extract the CURRENT test's values only (not history columns, not normal ranges). Fields: weightKg (weight), smmKg (skeletal muscle mass), bfmKg (body fat mass), pbf (percent body fat), visceralFat (visceral fat level), bmi, ffmKg (fat free mass), bmr (basal metabolic rate, kcal), tbwL (total body water), proteinKg, mineralsKg, inbodyScore, whr (waist-hip ratio), and segmental LEAN analysis in kg: leanRightArm, leanLeftArm, leanTrunk, leanRightLeg, leanLeftLeg. Use null for anything not printed. mass_unit is "kg" or "lb" as printed. test_date as YYYY-MM-DD. device = machine model if shown. If this is not a body-composition report, set is_body_composition_report false.`,
+            },
+            { inlineData: { mimeType: file.mimeType, data: file.data } },
+          ],
+        },
+      ],
+      config: { responseMimeType: 'application/json', responseSchema: BODY_SCAN_SCHEMA, temperature: 0, maxOutputTokens: 8192 },
+    },
+    mustBeObject
+  );
+  if (parsed.is_body_composition_report === false) throw new Error("That doesn't look like a body-composition report. Try a clearer photo of the result sheet.");
+  const scan = normalizeExtracted(parsed);
+  if (!scan) throw new Error('No readable values found. Try a sharper photo, or type the main numbers in.');
+  return scan;
 }

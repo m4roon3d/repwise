@@ -33,7 +33,7 @@ function planStats(plan) {
 /**
  * Returns [{ id, icon, title, text, ask }]; `ask` is a ready-made question for the coach.
  */
-export function buildPlanRationale(profile, plan) {
+export function buildPlanRationale(profile, plan, { bodySummary } = {}) {
   const out = [];
   const add = (id, icon, title, text, ask) => out.push({ id, icon, title, text, ask });
   const s = planStats(plan);
@@ -118,6 +118,10 @@ export function buildPlanRationale(profile, plan) {
     );
   } else if (adj.labs?.results?.length) {
     add('labs', '🩸', 'From your blood report', 'Everything we could read is within typical ranges, so it did not change the plan.', 'Is there anything in my blood report I should watch?');
+  }
+
+  if (bodySummary && !/^No /.test(bodySummary)) {
+    add('body', '📊', 'Your body scan', `${bodySummary.replace(/^Latest scan /, 'From your scan on ')}. ${plan?.source === 'gemini' ? 'The coach used these to balance muscle-building volume against conditioning.' : 'Add a Gemini key and the coach will use these to fine-tune volume.'} Track every scan on the Progress tab.`, 'What do my body scan results mean for this plan?');
   }
 
   const extras = [];

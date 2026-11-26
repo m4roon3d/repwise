@@ -9,15 +9,19 @@ import Logo from './components/Logo';
 import Watermark from './components/Watermark';
 import Onboarding from './components/Onboarding';
 import PlanWhy from './components/PlanWhy';
+import ProgressView from './components/ProgressView';
+import { describeBodyCompForPrompt } from './services/bodyComp';
 import { AboutYou, FitnessTest, HealthCheck, InjuryGrid, LabReport, profileCompleteness } from './components/HealthSections';
 import { retestDue } from './services/baseline';
-import { ChatIcon, CoachIcon, ExercisesIcon, KeyIcon, WorkoutIcon } from './components/Icons';
+import { ChatIcon, CoachIcon, ExercisesIcon, KeyIcon, ProgressIcon, WorkoutIcon } from './components/Icons';
 import {
   appendFeedback,
   loadApiKey,
   loadFeedbackHistory,
   loadHealthAck,
   loadOnboarded,
+  loadBodyScans,
+  saveBodyScans,
   saveOnboarded,
   listProfiles,
   getActiveProfileId,
@@ -42,6 +46,7 @@ import {
   adaptSingleDay,
   askCoach,
   extractLabReport,
+  extractBodyScan,
   generateAdaptivePlan,
   resolveSwapConflict,
   carryProgression,
@@ -108,6 +113,14 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
   const [askBusy, setAskBusy] = useState(false);
   const [askError, setAskError] = useState('');
   const [askFocus, setAskFocus] = useState(null);
+  const [scans, setScans] = useState(() => loadBodyScans());
+  const scansRef = useRef(scans);
+  const commitScans = (next) => {
+    const clean = saveBodyScans(next);
+    scansRef.current = clean;
+    setScans(clean);
+    return clean;
+  };
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [busyKey, setBusyKey] = useState('');
@@ -125,6 +138,19 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
   };
 
   const handleExtractLabs = (file) => extractLabReport({ file, apiKey, model });
+  const handleExtractScan = (file) => extractBodyScan({ file, apiKey, model });
+
+  // Saves (or replaces) a scan. When asked, and when it's the newest scan, profile weight and body fat follow it.
+  const handleSaveScan = (scan, updateWeight) => {
+    const saved = commitScans([...scansRef.current.filter((s) => s.id !== scan.id), scan]);
+    if (updateWeight && saved.at(-1)?.id === scan.id) {
+      const next = { ...profile };
+      if (scan.metrics.weightKg != null) next.weightKg = Math.min(180, Math.max(40, Number(scan.metrics.weightKg.toFixed(1))));
+      if (scan.metrics.pbf != null) next.bodyFatPct = String(scan.metrics.pbf);
+      handleProfileChange(next);
+    }
+  };
+  const handleDeleteScan = (id) => commitScans(scansRef.current.filter((s) => s.id !== id));
 
   const handleProfileChange = (next) => {
     setProfile(next);
@@ -258,6 +284,7 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
         profile,
         plan: planRef.current,
         logs: logsRef.current,
+        bodySummary: describeBodyCompForPrompt(scansRef.current),
         focusExerciseId,
         photos,
         apiKey,
@@ -297,7 +324,8 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
         apiKey,
         model,
         feedbackHistory,
-        summarizeLogsForPrompt(logsRef.current, profile.unitSystem)
+        summarizeLogsForPrompt(logsRef.current, profile.unitSystem),
+        describeBodyCompForPrompt(scansRef.current)
       );
       commitPlan(nextPlan);
       setTab('routine');
@@ -413,6 +441,8 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
     planRef.current = restored.activePlan;
     setPlan(restored.activePlan);
     setFeedbackHistory(restored.feedbackHistory);
+    scansRef.current = restored.bodyScans || [];
+    setScans(scansRef.current);
     logsRef.current = restored.workoutLogs || [];
     setLogs(logsRef.current);
   };
@@ -552,6 +582,20 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
           />
         )}
 
+        {tab === 'progress' && (
+          <ProgressView
+            scans={scans}
+            onSaveScan={handleSaveScan}
+            onDeleteScan={handleDeleteScan}
+            onExtract={handleExtractScan}
+            apiKey={apiKey}
+            profile={profile}
+            logs={logs}
+            onAsk={apiKey ? askQuestion : null}
+            onRetest={() => setTab('assess')}
+          />
+        )}
+
         {tab === 'library' && <CatalogBrowser defaultTier={profile.equipmentTier} />}
       </main>
 
@@ -588,6 +632,17 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
             <ChatIcon size={21} />
           </span>
           <span className="nav-label">Ask</span>
+        </button>
+        <button
+          type="button"
+          className={`nav-item ${tab === 'progress' ? 'nav-active' : ''}`}
+          aria-current={tab === 'progress' ? 'page' : undefined}
+          onClick={() => setTab('progress')}
+        >
+          <span className="nav-icon-wrap">
+            <ProgressIcon size={21} />
+          </span>
+          <span className="nav-label">Progress</span>
         </button>
         <button
           type="button"

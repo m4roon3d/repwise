@@ -88,3 +88,38 @@ export function logStats(logs) {
   const week = (logs || []).filter((l) => Date.now() - l.ts < 7 * day);
   return { sessions: sessions.size, exercisesThisWeek: week.length };
 }
+
+/** Epley estimated one-rep max for the best set of a logged session (kg), or null for bodyweight work. */
+export function sessionE1rm(entry) {
+  const best = Math.max(0, ...entry.sets.filter((s) => s.weightKg > 0).map((s) => s.weightKg * (1 + Math.min(s.reps, 12) / 30)));
+  return best > 0 ? Number(best.toFixed(1)) : null;
+}
+
+/** The most-logged loaded exercises with an estimated-1RM series (oldest first). */
+export function strengthTrends(logs, limit = 4) {
+  const byEx = new Map();
+  for (const l of logs || []) {
+    const e = sessionE1rm(l);
+    if (e == null) continue;
+    if (!byEx.has(l.exercise_id)) byEx.set(l.exercise_id, []);
+    byEx.get(l.exercise_id).push({ ts: l.ts, value: e });
+  }
+  return [...byEx.entries()]
+    .map(([id, pts]) => {
+      const sorted = pts.sort((a, b) => a.ts - b.ts);
+      return { id, name: EXERCISE_MAP[id]?.name || id, points: sorted, change: sorted.length > 1 ? sorted.at(-1).value - sorted[0].value : null };
+    })
+    .sort((a, b) => b.points.length - a.points.length || a.name.localeCompare(b.name))
+    .slice(0, limit);
+}
+
+/** Training days in each of the last `weeks` weeks (oldest first). */
+export function weeklySessions(logs, weeks = 8, now = Date.now()) {
+  const WEEK = 7 * 86400000;
+  const out = Array.from({ length: weeks }, (_, i) => ({ start: now - (weeks - i) * WEEK, days: new Set() }));
+  for (const l of logs || []) {
+    const idx = weeks - 1 - Math.floor((now - l.ts) / WEEK);
+    if (idx >= 0 && idx < weeks) out[idx].days.add(new Date(l.ts).toDateString());
+  }
+  return out.map((w) => ({ start: w.start, count: w.days.size }));
+}
