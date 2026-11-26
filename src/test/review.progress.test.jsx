@@ -92,7 +92,7 @@ describe('Progress tab', () => {
     render(<App />);
     await open(user);
     expect(screen.getByText(/Add your InBody/)).toBeInTheDocument();
-    expect(screen.queryByLabelText(/Upload body scan report/)).not.toBeInTheDocument(); // no key
+    expect(screen.queryByLabelText(/Upload scan photo/)).not.toBeInTheDocument(); // no key
 
     await user.click(screen.getByRole('button', { name: /Type it in/i }));
     await user.clear(screen.getByLabelText(/Scan date/));
@@ -143,7 +143,7 @@ describe('Progress tab', () => {
     const user = userEvent.setup({ applyAccept: false });
     render(<App />);
     await open(user);
-    await user.upload(screen.getByLabelText(/Upload body scan report/i), new File(['%PDF-1.4'], 'inbody.pdf', { type: 'application/pdf' }));
+    await user.upload(screen.getByLabelText(/Upload scan PDF/i), new File(['%PDF-1.4'], 'inbody.pdf', { type: 'application/pdf' }));
     expect(await screen.findByText(/Check these against your report/)).toBeInTheDocument();
     expect(screen.getByLabelText(/Skeletal muscle mass/)).toHaveValue(34.1);
     expect(screen.getByLabelText(/Basal metabolic rate/)).toHaveValue(1720); // more fields opened automatically
@@ -160,5 +160,35 @@ describe('Progress tab', () => {
     render(<App />);
     await open(user);
     expect(within(document.querySelector('.stat-grid')).getByText('176.4 lb')).toBeInTheDocument();
+  });
+});
+
+describe('phone photo pickers', () => {
+  it('photo buttons open the gallery (image/*), PDFs have their own button', async () => {
+    localStorage.setItem('mf_byok_gemini_api_key', 'k');
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(screen.getByRole('button', { name: /^Progress$/ }));
+    expect(screen.getByLabelText(/Upload scan photo/)).toHaveAttribute('accept', 'image/*');
+    expect(screen.getByLabelText(/Upload scan PDF/)).toHaveAttribute('accept', 'application/pdf,.pdf');
+  });
+
+  it('accepts an iPhone HEIC photo and a gallery file with no type', async () => {
+    const { prepareReportFile, imageType } = await import('../services/images');
+    const heic = await prepareReportFile(new File([new Uint8Array(500)], 'IMG_1234.HEIC', { type: 'image/heic' }));
+    expect(['image/heic', 'image/jpeg']).toContain(heic.mimeType);
+    expect(imageType(new File(['x'], 'scan.jpg', { type: '' }))).toBe('image/jpeg');
+    const pdf = await prepareReportFile(new File(['%PDF'], 'report.pdf', { type: '' }));
+    expect(pdf.mimeType).toBe('application/pdf');
+  });
+
+  it('a HEIC photo goes through to Gemini for a scan', async () => {
+    localStorage.setItem('mf_byok_gemini_api_key', 'k');
+    mockGenerateContent.mockResolvedValueOnce(ok({ is_body_composition_report: true, test_date: '2026-11-25', weightKg: 78 }));
+    const user = userEvent.setup({ applyAccept: true });
+    render(<App />);
+    await user.click(screen.getByRole('button', { name: /^Progress$/ }));
+    await user.upload(screen.getByLabelText(/Upload scan photo/), new File([new Uint8Array(300)], 'IMG_9.HEIC', { type: 'image/heic' }));
+    expect(await screen.findByText(/Check these against your report/)).toBeInTheDocument();
   });
 });

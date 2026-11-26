@@ -277,10 +277,16 @@ export function LabReport({ profile, onChange, apiKey, onExtract }) {
       </p>
 
       {apiKey && (
-        <label className={`secondary-btn ${busy ? 'is-disabled' : ''}`} style={{ display: 'inline-block', cursor: 'pointer' }}>
-          {busy ? 'Reading report…' : '📄 Upload report (photo or PDF)'}
-          <input type="file" accept="application/pdf,image/jpeg,image/png,image/webp" hidden disabled={busy} onChange={pick} aria-label="Upload blood report" />
-        </label>
+        <div className="button-row">
+          <label className={`secondary-btn ${busy ? 'is-disabled' : ''}`} style={{ cursor: 'pointer' }}>
+            {busy ? 'Reading report…' : '📷 Photo of report'}
+            <input type="file" accept="image/*" hidden disabled={busy} onChange={pick} aria-label="Upload report photo" />
+          </label>
+          <label className={`secondary-btn ${busy ? 'is-disabled' : ''}`} style={{ cursor: 'pointer' }}>
+            📄 PDF
+            <input type="file" accept="application/pdf,.pdf" hidden disabled={busy} onChange={pick} aria-label="Upload report PDF" />
+          </label>
+        </div>
       )}
       {error && <div className="status-banner status-error" role="alert">{error}</div>}
 

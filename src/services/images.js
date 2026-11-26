@@ -1,6 +1,15 @@
 // Turns a photo the user picked into a small base64 JPEG for Gemini vision. Phone photos are 3-8 MB; sending them
 // raw is slow and wasteful, so they are scaled down first (when the browser can), and anything still too big is refused.
-const ALLOWED = new Set(['image/jpeg', 'image/png', 'image/webp']);
+const ALLOWED = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif']);
+const EXT_TYPES = { jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', webp: 'image/webp', heic: 'image/heic', heif: 'image/heif' };
+
+/** Some phone galleries hand over files with an empty or generic type; fall back to the file extension. */
+export function imageType(file) {
+  const t = (file?.type || '').toLowerCase();
+  if (ALLOWED.has(t)) return t;
+  const ext = String(file?.name || '').split('.').pop().toLowerCase();
+  return EXT_TYPES[ext] || (t.startsWith('image/') ? t : '');
+}
 export const MAX_PHOTOS = 3;
 const MAX_SIDE = 1280;
 const MAX_BASE64_CHARS = 5_000_000; // ~3.7 MB of image data
@@ -15,7 +24,8 @@ function readAsBase64(blob) {
 }
 
 export async function prepareImage(file) {
-  if (!file || !ALLOWED.has(file.type)) throw new Error('Please choose a JPEG, PNG or WebP photo.');
+  const type = imageType(file);
+  if (!file || !ALLOWED.has(type)) throw new Error('Please choose a photo (JPEG, PNG, WebP or HEIC).');
   if (file.size > 30 * 1024 * 1024) throw new Error('That photo is too large.');
 
   if (typeof createImageBitmap === 'function' && typeof document !== 'undefined') {
@@ -33,9 +43,10 @@ export async function prepareImage(file) {
       // fall through to the raw path
     }
   }
+  // Browsers that can't decode it (e.g. HEIC on Android Chrome) send the original; Gemini reads HEIC natively.
   const data = await readAsBase64(file);
   if (!data || data.length > MAX_BASE64_CHARS) throw new Error('That photo is too large to send. Try a smaller one.');
-  return { mimeType: file.type, data, name: file.name };
+  return { mimeType: type, data, name: file.name };
 }
 
 const MAX_PDF_BYTES = 8 * 1024 * 1024;
@@ -48,6 +59,7 @@ export async function prepareReportFile(file) {
     if (!data) throw new Error('Could not read that PDF.');
     return { mimeType: 'application/pdf', data, name: file.name };
   }
-  if (file && !ALLOWED.has(file.type)) throw new Error('Please choose a PDF or a JPEG, PNG or WebP photo.');
+  if (file && /\.pdf$/i.test(file.name || '') && !file.type) return prepareReportFile(new File([file], file.name, { type: 'application/pdf' }));
+  if (file && !imageType(file)) throw new Error('Please choose a PDF or a photo.');
   return prepareImage(file);
 }

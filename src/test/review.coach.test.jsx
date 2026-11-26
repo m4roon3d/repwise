@@ -198,7 +198,7 @@ describe('Form coaching', () => {
     await openAsk(user);
     const input = screen.getByLabelText('Attach photos');
     await user.upload(input, new File(['x'], 'doc.pdf', { type: 'application/pdf' }));
-    expect(await screen.findByRole('alert')).toHaveTextContent(/JPEG, PNG or WebP/);
+    expect(await screen.findByRole('alert')).toHaveTextContent(/JPEG, PNG, WebP or HEIC/);
 
     await user.upload(input, new File([new Uint8Array(200)], 'squat.png', { type: 'image/png' }));
     await user.click(await screen.findByRole('button', { name: /Remove photo 1/i }));

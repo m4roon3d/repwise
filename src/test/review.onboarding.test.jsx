@@ -124,7 +124,7 @@ describe('profile extras on the Coach tab', () => {
     const user = userEvent.setup();
     render(<App />);
     await user.click(screen.getByRole('button', { name: /Blood report/i }));
-    expect(screen.queryByLabelText(/Upload blood report/i)).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/Upload report photo/i)).not.toBeInTheDocument();
     await user.selectOptions(screen.getByLabelText(/type a value in/i), 'vitamin_d');
     await user.type(screen.getByLabelText('Value'), '14');
     await user.click(screen.getByRole('button', { name: 'Add' }));
@@ -142,7 +142,7 @@ describe('profile extras on the Coach tab', () => {
     const user = userEvent.setup({ applyAccept: false });
     render(<App />);
     await user.click(screen.getByRole('button', { name: /Blood report/i }));
-    await user.upload(screen.getByLabelText(/Upload blood report/i), new File(['%PDF-1.4 fake'], 'report.pdf', { type: 'application/pdf' }));
+    await user.upload(screen.getByLabelText(/Upload report PDF/i), new File(['%PDF-1.4 fake'], 'report.pdf', { type: 'application/pdf' }));
 
     expect(await screen.findByText(/Check these against your report/)).toBeInTheDocument();
     const req = mockGenerateContent.mock.calls[0][0];
@@ -162,7 +162,7 @@ describe('profile extras on the Coach tab', () => {
     const user = userEvent.setup({ applyAccept: false });
     render(<App />);
     await user.click(screen.getByRole('button', { name: /Blood report/i }));
-    await user.upload(screen.getByLabelText(/Upload blood report/i), new File([new Uint8Array(100)], 'cat.png', { type: 'image/png' }));
+    await user.upload(screen.getByLabelText(/Upload report photo/i), new File([new Uint8Array(100)], 'cat.png', { type: 'image/png' }));
     expect(await screen.findByRole('alert')).toHaveTextContent(/doesn't look like a blood test/);
   });
 });

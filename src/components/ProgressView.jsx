@@ -174,10 +174,16 @@ export default function ProgressView({ scans, onSaveScan, onDeleteScan, onExtrac
         {!editing && (
           <div className="button-row" style={{ marginTop: '12px' }}>
             {apiKey && (
-              <label className={`primary-btn ${busy ? 'is-disabled' : ''}`} style={{ cursor: 'pointer' }}>
-                {busy ? 'Reading scan…' : '📄 Upload scan report'}
-                <input type="file" accept="application/pdf,image/jpeg,image/png,image/webp" hidden disabled={busy} onChange={pick} aria-label="Upload body scan report" />
-              </label>
+              <>
+                <label className={`primary-btn ${busy ? 'is-disabled' : ''}`} style={{ cursor: 'pointer' }}>
+                  {busy ? 'Reading scan…' : '📷 Photo of report'}
+                  <input type="file" accept="image/*" hidden disabled={busy} onChange={pick} aria-label="Upload scan photo" />
+                </label>
+                <label className={`secondary-btn ${busy ? 'is-disabled' : ''}`} style={{ cursor: 'pointer' }}>
+                  📄 PDF
+                  <input type="file" accept="application/pdf,.pdf" hidden disabled={busy} onChange={pick} aria-label="Upload scan PDF" />
+                </label>
+              </>
             )}
             <button type="button" className="secondary-btn" onClick={() => setEditing('new')}>
               Type it in

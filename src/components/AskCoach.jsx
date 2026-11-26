@@ -163,7 +163,7 @@ export default function AskCoach({ apiKey, chat, busy, error, focus, onClearFocu
           <input
             ref={fileRef}
             type="file"
-            accept="image/jpeg,image/png,image/webp"
+            accept="image/*"
             multiple
             hidden
             onChange={pickPhotos}
