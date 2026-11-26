@@ -46,5 +46,7 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: './src/test/setup.js',
+    // CI runners are several times slower than a laptop; UI tests that render the animator need headroom.
+    testTimeout: 15000,
   },
 });
