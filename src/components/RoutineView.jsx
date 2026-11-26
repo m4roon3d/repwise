@@ -96,7 +96,7 @@ export default function RoutineView({
   const adaptBusyId = `adapt-${safeWeekIdx}-${safeDayIdx}`;
 
   return (
-    <div className="panel-stack">
+    <div className="panel-stack routine-view">
       {/* Program Summary Banner */}
       <section className="card hero-card">
         <div className="card-head">

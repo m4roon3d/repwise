@@ -426,3 +426,61 @@ input[type='date'] { width: 100%; padding: 11px 13px; border-radius: var(--radiu
 .rx-intensity { margin: -4px 0 12px; font-size: 0.86rem; color: var(--text-2); background: #fff7ed; padding: 9px 12px; border-radius: 10px; }
 .log-row-timed { grid-template-columns: 52px 1fr auto; }
 .brand-h1 { margin: 0; font-size: inherit; }
+
+/* ==== Desktop & laptop (≥ 1024px): sidebar navigation, wider content, multi-column views ==== */
+@media (min-width: 1024px) {
+  .app-shell { max-width: none; margin: 0; padding: 32px 48px 48px 304px; }
+  .app-shell::before {
+    content: ''; position: fixed; inset: 0 auto 0 0; width: 264px; z-index: 14;
+    background: rgba(255, 255, 255, 0.9); border-right: 1px solid var(--border);
+    -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  }
+  .top-bar {
+    position: fixed; top: 0; left: 0; width: 264px; margin: 0; z-index: 30;
+    flex-direction: column; align-items: stretch; gap: 12px; padding: 28px 22px 18px;
+    background: transparent; -webkit-backdrop-filter: none; backdrop-filter: none;
+  }
+  .top-bar .brand { margin-bottom: 10px; }
+  .wordmark-word { font-size: 1.9rem; }
+  .person-select { margin: 0; max-width: none; width: 100%; padding: 10px 14px; }
+  .key-pill { justify-content: center; padding: 10px 14px; }
+  .key-pill span { position: static; width: auto; height: auto; clip: auto; overflow: visible; }
+
+  .bottom-nav {
+    top: 236px; bottom: auto; left: 0; transform: none; width: 264px; max-width: none; z-index: 30;
+    display: flex; flex-direction: column; gap: 2px; padding: 0 14px;
+    background: transparent; border: 0; border-radius: 0; box-shadow: none;
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+  }
+  .bottom-nav .nav-item { flex-direction: row; justify-content: flex-start; gap: 12px; min-height: 46px; padding: 8px 10px; border-radius: 12px; }
+  .bottom-nav .nav-item:hover { background: var(--surface-2); color: var(--text); }
+  .bottom-nav .nav-label { font-size: 0.95rem; font-weight: 600; }
+  .bottom-nav .nav-active { background: var(--accent-soft); }
+  .bottom-nav .nav-active .nav-icon-wrap { background: transparent; }
+
+  .main-content { max-width: 1180px; margin: 0 auto; }
+  .card { padding: 22px; }
+
+  /* Multi-column views: cards flow into two balanced columns */
+  .coach-view, .progress-view, .health-view, .library-view { display: block; column-count: 2; column-gap: 18px; }
+  .coach-view > *, .progress-view > *, .health-view > *, .library-view > * { break-inside: avoid; margin: 0 0 18px; display: block; width: 100%; }
+  .coach-view > .kpi-grid { display: grid; column-span: all; }
+  .library-view > section:first-child { column-span: all; }
+
+  /* Workout: plan header and day controls span the width, exercise cards sit two-up */
+  .routine-view { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; align-items: start; }
+  .routine-view > * { grid-column: 1 / -1; margin: 0; }
+  .routine-view > article { grid-column: auto; }
+
+  /* Focused, single-column flows stay comfortably narrow */
+  .tab-ask .main-content, .onboarding { max-width: 820px; }
+  .onboarding { margin: 0 auto; }
+  .chat-log { max-height: 62vh; }
+
+  .wm-big, .bg-scene-img { opacity: 0.18; }
+}
+
+@media (min-width: 1440px) {
+  .app-shell { padding-left: 330px; }
+  .routine-view { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

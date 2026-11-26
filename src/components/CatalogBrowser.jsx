@@ -37,7 +37,7 @@ export default function CatalogBrowser({ defaultTier }) {
   }, [tierFilter, patternFilter, styleFilter, query]);
 
   return (
-    <div className="panel-stack">
+    <div className="panel-stack library-view">
       <section className="card">
         <h2>Personal Exercise Library ({filtered.length} / {exercises.length})</h2>
         <p className="muted">

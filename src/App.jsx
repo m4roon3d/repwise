@@ -486,7 +486,7 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
   return (
     <>
     <Watermark tab={tab} />
-    <div className="app-shell">
+    <div className={`app-shell tab-${tab}`}>
       <header className="top-bar">
         <div className="brand">
           <h1 className="brand-h1" aria-label="Repwise">

@@ -38,7 +38,7 @@ export default function AssessmentForm({
   const updateField = (key, value) => onChange({ ...profile, [key]: value });
   
   return (
-    <div className="panel-stack">
+    <div className="panel-stack coach-view">
       {/* Live Readiness Preview Strip */}
       <div className="kpi-grid">
         <div className="kpi-card">
