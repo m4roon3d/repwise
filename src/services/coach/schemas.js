@@ -206,3 +206,26 @@ export const BODY_SCAN_SCHEMA = {
   },
   required: ['is_body_composition_report'],
 };
+
+export const LAB_ANALYSIS_SCHEMA = {
+  type: Type.OBJECT,
+  properties: {
+    summary: { type: Type.STRING },
+    overall: { type: Type.STRING, enum: ['good', 'mixed', 'needs_attention'] },
+    markers: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: { name: { type: Type.STRING }, meaning: { type: Type.STRING }, training: { type: Type.STRING }, tips: { type: Type.ARRAY, items: { type: Type.STRING } } },
+        required: ['name', 'meaning'],
+      },
+    },
+    lifestyle_tips: {
+      type: Type.ARRAY,
+      items: { type: Type.OBJECT, properties: { area: { type: Type.STRING, enum: ['nutrition', 'sleep', 'cardio', 'strength', 'lifestyle'] }, tip: { type: Type.STRING } }, required: ['area', 'tip'] },
+    },
+    training_adjustments: { type: Type.ARRAY, items: { type: Type.STRING } },
+    doctor_questions: { type: Type.ARRAY, items: { type: Type.STRING } },
+  },
+  required: ['summary', 'overall'],
+};

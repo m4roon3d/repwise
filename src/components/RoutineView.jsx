@@ -366,6 +366,15 @@ export default function RoutineView({
         );
       })}
 
+      {day.finisher && (
+        <section className="card finisher-card">
+          <span className="pattern-tag">Finisher</span>
+          <h3>🚶 {day.finisher.title}</h3>
+          <p className="summary-text">{day.finisher.text}</p>
+          <p className="muted" style={{ marginTop: '6px' }}>{day.finisher.why}</p>
+        </section>
+      )}
+
       {/* Weekly Progression Check-In */}
       <section className="card">
         <h3>Week {week.week_number} Check-In (Steers Next Regeneration)</h3>

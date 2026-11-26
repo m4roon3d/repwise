@@ -5,16 +5,17 @@ import userEvent from '@testing-library/user-event';
 import App from '../App';
 
 describe('Repwise End-to-End UI Flow', () => {
-  it('renders clean vector bottom tabs (Coach, Workout, Ask, Progress, Exercises) without raw emojis', () => {
+  it('renders clean vector bottom tabs (Coach, Workout, Ask, Health, Progress, Exercises) without raw emojis', () => {
     render(<App />);
     const nav = screen.getByRole('navigation', { name: /Primary navigation/i });
     expect(nav).toHaveTextContent('Coach');
     expect(nav).toHaveTextContent('Workout');
     expect(nav).toHaveTextContent('Ask');
+    expect(nav).toHaveTextContent('Health');
     expect(nav).toHaveTextContent('Progress');
     expect(nav).toHaveTextContent('Exercises');
     expect(nav.textContent).not.toMatch(/[🎯⚡📚]/);
-    expect(nav.querySelectorAll('svg').length).toBe(5);
+    expect(nav.querySelectorAll('svg').length).toBe(6);
   });
 
   it('generates a 4-week training block and shows real start/finish photos for each exercise', async () => {

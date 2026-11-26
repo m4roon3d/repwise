@@ -1,6 +1,6 @@
 import { sanitizeHealth, EMPTY_HEALTH } from './health';
 import { sanitizeBaselines } from './baseline';
-import { sanitizeLabs } from './labs';
+import { sanitizeLabs, sanitizeReports } from './labs';
 import { sanitizeScans } from './bodyComp';
 import exerciseCatalog from '../data/exercises.json';
 
@@ -15,6 +15,7 @@ const KEYS = {
   COACH_CHAT: 'mf_coach_chat_v1',
   ONBOARDED: 'mf_onboarded_v1',
   BODY_SCANS: 'mf_body_scans_v1',
+  LAB_REPORTS: 'mf_lab_reports_v1',
   PROFILES: 'mf_profiles_v1', // device-level: [{ id, name }]
   ACTIVE_PROFILE: 'mf_active_profile_v1', // device-level
 };
@@ -419,6 +420,25 @@ export function saveBodyScans(scans) {
   return clean;
 }
 
+// ---- Blood reports -------------------------------------------------------------------------------
+/** Report history; a report saved before history existed (profile.labs) becomes the first entry. */
+export function loadLabReports() {
+  try {
+    const raw = safeGet(KEYS.LAB_REPORTS);
+    if (raw !== null) return sanitizeReports(JSON.parse(raw));
+    const legacy = loadProfile().labs;
+    return legacy ? sanitizeReports([{ ...legacy, id: 'lab_initial' }]) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function saveLabReports(reports) {
+  const clean = sanitizeReports(reports);
+  safeSet(KEYS.LAB_REPORTS, JSON.stringify(clean));
+  return clean;
+}
+
 // ---- Ask-your-coach chat ------------------------------------------------------------------------
 const MAX_CHAT_MESSAGES = 30;
 
@@ -457,6 +477,7 @@ export function exportBackupJson() {
     feedbackHistory: loadFeedbackHistory(),
     workoutLogs: logs,
     bodyScans: loadBodyScans(),
+    labReports: loadLabReports(),
   };
 
   return JSON.stringify(payload, null, 2);
@@ -489,12 +510,16 @@ export function importBackupJson(jsonText) {
   if (Array.isArray(data.bodyScans)) {
     saveBodyScans(data.bodyScans);
   }
+  if (Array.isArray(data.labReports)) {
+    saveLabReports(data.labReports);
+  }
   return {
     profile: loadProfile(),
     activePlan: loadPlan(),
     feedbackHistory: loadFeedbackHistory(),
     workoutLogs: loadWorkoutLogs(),
     bodyScans: loadBodyScans(),
+    labReports: loadLabReports(),
     skipped,
   };
 }

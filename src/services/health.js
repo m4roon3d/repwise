@@ -245,3 +245,26 @@ export function describeHealthForPrompt(profile) {
     `- HARD LIMITS: never prescribe above RPE ${adj.rpeCap ?? 9}. Safety notes to respect: ${adj.notes.map((n) => n.text).join(' ') || 'none'}`,
   ].join('\n');
 }
+
+/**
+ * A short conditioning finisher added to every training day when the blood report or conditions call for it
+ * (high sugar or lipids, high blood pressure). Skipped when effort is capped hard for another reason.
+ */
+export function labFinisher(profile) {
+  const adj = healthAdjustments(profile);
+  if (adj.clearance === 'strong') return null;
+  const h = sanitizeHealth(profile?.health);
+  const lowOxygen = adj.labs?.flagged?.some((r) => (r.id === 'hemoglobin' || r.id === 'ferritin') && r.status === 'low');
+  const why = [];
+  if (adj.labs?.glucose) why.push('blood sugar');
+  if (adj.labs?.wantsCardio) why.push('cholesterol');
+  if (h.conditions.includes('hypertension')) why.push('blood pressure');
+  if (!why.length) return null;
+  return {
+    title: lowOxygen ? 'Easy walk to finish' : 'Cardio finisher',
+    text: lowOxygen
+      ? '10 minutes of easy walking. Keep it gentle while your haemoglobin or iron recovers.'
+      : '12 to 15 minutes of brisk walking, incline treadmill or easy cycling. You should be able to talk, but not sing.',
+    why: `Added for your ${why.join(' and ')}: steady cardio after lifting is one of the best ways to improve ${why.length > 1 ? 'these numbers' : 'this number'}.`,
+  };
+}

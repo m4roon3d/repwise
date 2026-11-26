@@ -176,15 +176,118 @@ export function sanitizeLabs(raw) {
     });
   if (!markers.length) return null;
   const date = typeof raw.date === 'string' ? raw.date.slice(0, 20) : '';
-  return { date, source: raw.source === 'manual' ? 'manual' : 'upload', markers };
+  const out = { date, source: raw.source === 'manual' ? 'manual' : 'upload', markers };
+  const ai = Array.isArray(raw.aiAdjustments) ? raw.aiAdjustments.filter((x) => typeof x === 'string').map((x) => x.slice(0, 220)).slice(0, 6) : [];
+  if (ai.length) out.aiAdjustments = ai;
+  return out;
 }
 
 export function describeLabsForPrompt(labs, sex) {
   if (!labs?.markers?.length) return 'Not provided';
   const { flagged, results } = analyzeLabs(labs, sex);
   const known = results.filter((r) => r.id);
-  if (!flagged.length) return `${known.length} markers provided (${labs.date || 'undated'}), all within typical ranges`;
-  return flagged
-    .map((r) => `${r.name} ${r.value} ${r.unit} (${r.status}${r.band ? `, ${r.band}` : ''})`)
-    .join('; ') + ` [report ${labs.date || 'undated'}]`;
+  const ai = labs.aiAdjustments?.length ? ` | Blood-report analysis suggests: ${labs.aiAdjustments.join('; ')}` : '';
+  if (!flagged.length) return `${known.length} markers provided (${labs.date || 'undated'}), all within typical ranges${ai}`;
+  return (
+    flagged.map((r) => `${r.name} ${r.value} ${r.unit} (${r.status}${r.band ? `, ${r.band}` : ''})`).join('; ') +
+    ` [report ${labs.date || 'undated'}]${ai}`
+  );
+}
+
+// ---- Practical tips (offline fallback; the AI analysis adds personalised ones) --------------------
+export const MARKER_TIPS = {
+  hemoglobin: { low: ['Eat iron-rich foods (lentils, chickpeas, spinach, red meat, eggs) with vitamin C (lemon, amla, citrus) to boost absorption.', 'Keep tea and coffee away from meals; they block iron absorption.', 'Ask your doctor to check iron, B12 and folate to find the cause.'] },
+  ferritin: { low: ['Pair iron-rich meals with vitamin C and avoid tea or coffee within an hour of them.', 'Ask your doctor whether an iron supplement is right for you; do not self-dose.'] },
+  hba1c: { high: ['Lift weights 2 to 4 times a week; muscle is the biggest user of blood sugar.', 'Walk 10 to 15 minutes after your largest meals.', 'Swap refined carbs and sugary drinks for whole grains, dal, vegetables and protein.'] },
+  fasting_glucose: { high: ['A 10 to 15 minute walk after meals lowers blood sugar spikes.', 'Prioritise sleep; one short night raises next-day glucose.', 'Build meals around protein and fibre; limit sweets and refined flour.'], low: ['Eat a balanced snack 1 to 2 hours before training.'] },
+  vitamin_d: { low: ['Get 15 to 20 minutes of midday sun on arms and legs a few times a week.', 'Eat eggs, oily fish or fortified foods.', 'Ask your doctor about a vitamin D supplement and dose.'] },
+  vitamin_b12: { low: ['Include eggs, dairy, fish or fortified foods; vegetarians often need a supplement.', 'Ask your doctor about B12 supplements or injections.'] },
+  tsh: { high: ['Ask your doctor about a full thyroid panel before reading too much into one value.', 'Judge sessions by effort, not the weight on the bar; energy may vary.'], low: ['Keep sessions moderate until your doctor has reviewed it.'] },
+  total_cholesterol: { high: ['Add 150 minutes a week of brisk walking, cycling or swimming.', 'More fibre: oats, dal, fruit, vegetables; fewer fried and processed foods.'] },
+  ldl: { high: ['Regular cardio plus strength training both help lower LDL.', 'Cut back on fried food, ghee-heavy and processed snacks; add nuts, oats and fibre.', 'Ask your doctor whether you need more than lifestyle changes.'] },
+  hdl: { low: ['Aerobic exercise is one of the few things that raises HDL: aim for 30 minutes most days.', 'Stop smoking if you smoke; it lowers HDL.'] },
+  triglycerides: { high: ['Cut sugary drinks, sweets and alcohol; they drive triglycerides up fast.', 'Daily brisk walks and regular training bring them down within weeks.'] },
+  crp: { high: ['If you are unwell, rest and recover before training hard.', 'Sleep, a less processed diet and regular moderate exercise lower inflammation over time.'] },
+  creatinine: { high: ['Drink enough water, especially around training.', 'Mention any protein powders or creatine you take to your doctor; they can raise this number.'] },
+};
+
+export function tipsFor(id, status) {
+  return MARKER_TIPS[id]?.[status] || [];
+}
+
+// ---- Report history --------------------------------------------------------------------------
+const str = (v, n) => (typeof v === 'string' ? v.trim().slice(0, n) : '');
+const strList = (a, n, len) => (Array.isArray(a) ? a.map((x) => str(x, len)).filter(Boolean).slice(0, n) : []);
+
+/** AI output is untrusted: keep only short strings in the expected shape. */
+export function sanitizeAnalysis(raw) {
+  if (!raw || typeof raw !== 'object') return null;
+  const overall = ['good', 'mixed', 'needs_attention'].includes(raw.overall) ? raw.overall : 'mixed';
+  const markers = Array.isArray(raw.markers)
+    ? raw.markers
+        .filter((m) => m && typeof m.name === 'string')
+        .slice(0, 30)
+        .map((m) => ({ name: str(m.name, 80), meaning: str(m.meaning, 400), training: str(m.training, 300), tips: strList(m.tips, 4, 240) }))
+    : [];
+  const areas = ['nutrition', 'sleep', 'cardio', 'strength', 'lifestyle'];
+  const rawTips = raw.lifestyle_tips ?? raw.lifestyleTips;
+  const tips = Array.isArray(rawTips)
+    ? rawTips.filter((t) => t && typeof t.tip === 'string').slice(0, 10).map((t) => ({ area: areas.includes(t.area) ? t.area : 'lifestyle', tip: str(t.tip, 260) }))
+    : [];
+  const summary = str(raw.summary, 900);
+  if (!summary && !markers.length) return null;
+  return {
+    overall,
+    summary,
+    markers,
+    lifestyleTips: tips,
+    trainingAdjustments: strList(raw.training_adjustments ?? raw.trainingAdjustments, 6, 220),
+    doctorQuestions: strList(raw.doctor_questions ?? raw.doctorQuestions, 6, 220),
+    generatedAt: Number.isFinite(Number(raw.generatedAt)) ? Number(raw.generatedAt) : Date.now(),
+  };
+}
+
+export function sanitizeReport(raw) {
+  const labs = sanitizeLabs(raw);
+  if (!labs) return null;
+  return {
+    id: typeof raw.id === 'string' && raw.id ? raw.id.slice(0, 40) : `lab_${labs.date || 'undated'}_${Math.random().toString(36).slice(2, 7)}`,
+    ...labs,
+    date: labs.date && /^\d{4}-\d{2}-\d{2}$/.test(labs.date) ? labs.date : new Date().toISOString().slice(0, 10),
+    analysis: sanitizeAnalysis(raw.analysis),
+  };
+}
+
+/** Oldest first, unique ids, capped. */
+export function sanitizeReports(raw) {
+  if (!Array.isArray(raw)) return [];
+  const seen = new Set();
+  return raw
+    .map(sanitizeReport)
+    .filter((r) => r && !seen.has(r.id) && seen.add(r.id))
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .slice(-24);
+}
+
+/** The latest report in the shape the rest of the app reads from profile.labs (plus the AI's training advice). */
+export function latestLabsForProfile(reports) {
+  const r = reports.at(-1);
+  if (!r) return null;
+  return { date: r.date, source: r.source, markers: r.markers, aiAdjustments: r.analysis?.trainingAdjustments || [] };
+}
+
+/** Same marker in the previous report, for "since last time". */
+export function previousValue(reports, reportIdx, markerId) {
+  for (let i = reportIdx - 1; i >= 0; i--) {
+    const hit = analyzeLabs(reports[i]).results.find((r) => r.id === markerId && r.canonical != null);
+    if (hit) return { value: hit.canonical, date: reports[i].date };
+  }
+  return null;
+}
+
+export function markerSeries(reports, markerId, sex) {
+  return reports
+    .map((r) => ({ date: r.date, hit: analyzeLabs(r, sex).results.find((x) => x.id === markerId && x.canonical != null) }))
+    .filter((x) => x.hit)
+    .map((x) => ({ date: x.date, value: x.hit.canonical }));
 }

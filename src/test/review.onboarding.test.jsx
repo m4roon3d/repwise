@@ -120,50 +120,12 @@ describe('profile extras on the Coach tab', () => {
     expect(screen.getByLabelText(/Profile 33% complete/)).toBeInTheDocument();
   });
 
-  it('typed blood values are analysed and saved without a key', async () => {
+  it('the blood report section points to the Health tab', async () => {
     const user = userEvent.setup();
     render(<App />);
     await user.click(screen.getByRole('button', { name: /Blood report/i }));
-    expect(screen.queryByLabelText(/Upload report photo/i)).not.toBeInTheDocument();
-    await user.selectOptions(screen.getByLabelText(/type a value in/i), 'vitamin_d');
-    await user.type(screen.getByLabelText('Value'), '14');
-    await user.click(screen.getByRole('button', { name: 'Add' }));
-    expect(screen.getByText(/Low vitamin D is very common/)).toBeInTheDocument();
-    expect(loadProfile().labs.markers[0]).toMatchObject({ id: 'vitamin_d', value: 14 });
-    await user.click(screen.getByRole('button', { name: /Delete blood report data/i }));
-    expect(loadProfile().labs).toBeNull();
-  });
-
-  it('an uploaded report is read by Gemini, reviewed, then only the numbers are stored', async () => {
-    localStorage.setItem('mf_byok_gemini_api_key', 'k');
-    mockGenerateContent.mockResolvedValueOnce(
-      ok({ is_lab_report: true, report_date: '2026-11-01', markers: [{ name: 'Haemoglobin', value: 10.9, unit: 'g/dL' }, { name: 'Platelet count', value: 240, unit: '10^3/uL' }] })
-    );
-    const user = userEvent.setup({ applyAccept: false });
-    render(<App />);
-    await user.click(screen.getByRole('button', { name: /Blood report/i }));
-    await user.upload(screen.getByLabelText(/Upload report PDF/i), new File(['%PDF-1.4 fake'], 'report.pdf', { type: 'application/pdf' }));
-
-    expect(await screen.findByText(/Check these against your report/)).toBeInTheDocument();
-    const req = mockGenerateContent.mock.calls[0][0];
-    expect(req.contents[0].parts[1].inlineData.mimeType).toBe('application/pdf');
-    await user.click(screen.getByRole('button', { name: /Remove Platelet count/i }));
-    await user.click(screen.getByRole('button', { name: /Save these results/i }));
-
-    const labs = loadProfile().labs;
-    expect(labs).toMatchObject({ date: '2026-11-01', source: 'upload' });
-    expect(labs.markers).toHaveLength(1);
-    expect(JSON.stringify(localStorage)).not.toContain(req.contents[0].parts[1].inlineData.data);
-  });
-
-  it('a non-report upload gets a clear message', async () => {
-    localStorage.setItem('mf_byok_gemini_api_key', 'k');
-    mockGenerateContent.mockResolvedValueOnce(ok({ is_lab_report: false, markers: [] }));
-    const user = userEvent.setup({ applyAccept: false });
-    render(<App />);
-    await user.click(screen.getByRole('button', { name: /Blood report/i }));
-    await user.upload(screen.getByLabelText(/Upload report photo/i), new File([new Uint8Array(100)], 'cat.png', { type: 'image/png' }));
-    expect(await screen.findByRole('alert')).toHaveTextContent(/doesn't look like a blood test/);
+    await user.click(screen.getByRole('button', { name: /Open Health tab/i }));
+    expect(screen.getByRole('heading', { name: 'Blood reports' })).toBeInTheDocument();
   });
 });
 

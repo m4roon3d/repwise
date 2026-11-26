@@ -113,7 +113,7 @@ export function buildPlanRationale(profile, plan, { bodySummary } = {}) {
       'labs',
       '🩸',
       'From your blood report',
-      `${adj.labs.flagged.map((r) => `${r.name} is ${r.status}`).join(', ')}. ${adj.labs.rpeCap ? `Effort is held at RPE ${adj.labs.rpeCap} or below until that is sorted. ` : ''}${adj.labs.wantsCardio ? 'Adding 2 to 3 brisk 20-minute walks a week will help these markers. ' : ''}${adj.labs.doctor ? 'Some of these are worth discussing with your doctor.' : ''}`.trim(),
+      `${adj.labs.flagged.map((r) => `${r.name} is ${r.status}`).join(', ')}. ${adj.labs.rpeCap ? `Effort is held at RPE ${adj.labs.rpeCap} or below until that is sorted. ` : ''}${adj.labs.wantsCardio ? 'Adding 2 to 3 brisk 20-minute walks a week will help these markers. ' : ''}${adj.labs.doctor ? 'Some of these are worth discussing with your doctor.' : ''}${plan?.weeks?.[0]?.days?.[0]?.finisher ? ` ${plan.weeks[0].days[0].finisher.why}` : ''}`.trim(),
       'What do my blood report results mean for my training?'
     );
   } else if (adj.labs?.results?.length) {

@@ -10,10 +10,12 @@ import Watermark from './components/Watermark';
 import Onboarding from './components/Onboarding';
 import PlanWhy from './components/PlanWhy';
 import ProgressView from './components/ProgressView';
+import HealthView from './components/HealthView';
+import { latestLabsForProfile } from './services/labs';
 import { describeBodyCompForPrompt } from './services/bodyComp';
 import { AboutYou, FitnessTest, HealthCheck, InjuryGrid, LabReport, profileCompleteness } from './components/HealthSections';
 import { retestDue } from './services/baseline';
-import { ChatIcon, CoachIcon, ExercisesIcon, KeyIcon, ProgressIcon, WorkoutIcon } from './components/Icons';
+import { ChatIcon, CoachIcon, ExercisesIcon, HealthIcon, KeyIcon, ProgressIcon, WorkoutIcon } from './components/Icons';
 import {
   appendFeedback,
   loadApiKey,
@@ -21,6 +23,8 @@ import {
   loadHealthAck,
   loadOnboarded,
   loadBodyScans,
+  loadLabReports,
+  saveLabReports,
   saveBodyScans,
   saveOnboarded,
   listProfiles,
@@ -47,6 +51,7 @@ import {
   askCoach,
   extractLabReport,
   extractBodyScan,
+  analyzeLabReport,
   generateAdaptivePlan,
   resolveSwapConflict,
   carryProgression,
@@ -113,6 +118,8 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
   const [askBusy, setAskBusy] = useState(false);
   const [askError, setAskError] = useState('');
   const [askFocus, setAskFocus] = useState(null);
+  const [reports, setReports] = useState(() => loadLabReports());
+  const reportsRef = useRef(reports);
   const [scans, setScans] = useState(() => loadBodyScans());
   const scansRef = useRef(scans);
   const commitScans = (next) => {
@@ -153,8 +160,35 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
   const handleDeleteScan = (id) => commitScans(scansRef.current.filter((s) => s.id !== id));
 
   const handleProfileChange = (next) => {
+    // A report added through the guided setup becomes part of the report history.
+    if (next.labs !== profile.labs) {
+      const others = reportsRef.current.filter((r) => r.id !== 'lab_profile');
+      const stored = commitReports(next.labs ? [...others, { ...next.labs, id: 'lab_profile' }] : others, false);
+      next = { ...next, labs: latestLabsForProfile(stored) };
+    }
     setProfile(next);
     saveProfile(next);
+  };
+
+  // Saves the report list and keeps profile.labs (which drives plan safety) equal to the latest report.
+  const commitReports = (list, syncProfile = true) => {
+    const clean = saveLabReports(list);
+    reportsRef.current = clean;
+    setReports(clean);
+    if (syncProfile) {
+      setProfile((p) => {
+        const next = { ...p, labs: latestLabsForProfile(clean) };
+        saveProfile(next);
+        return next;
+      });
+    }
+    return clean;
+  };
+  const handleSaveReport = (report) => commitReports([...reportsRef.current.filter((r) => r.id !== report.id), report]);
+  const handleDeleteReport = (id) => commitReports(reportsRef.current.filter((r) => r.id !== id));
+  const handleAnalyzeReport = async (id) => {
+    const analysis = await analyzeLabReport({ reports: reportsRef.current, reportId: id, profile, apiKey, model });
+    commitReports(reportsRef.current.map((r) => (r.id === id ? { ...r, analysis } : r)));
   };
 
   const handleApplyChatPatch = (patch) => {
@@ -441,6 +475,8 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
     planRef.current = restored.activePlan;
     setPlan(restored.activePlan);
     setFeedbackHistory(restored.feedbackHistory);
+    reportsRef.current = restored.labReports || [];
+    setReports(reportsRef.current);
     scansRef.current = restored.bodyScans || [];
     setScans(scansRef.current);
     logsRef.current = restored.workoutLogs || [];
@@ -532,6 +568,7 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
                 apiKey={apiKey}
                 onExtract={handleExtractLabs}
                 canRemove={profileId !== 'default'}
+                onOpenHealth={() => setTab('health')}
                 onRemove={() => onRemovePerson(profileId)}
               />
             }
@@ -579,6 +616,19 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
               setAskError('');
             }}
             onOpenSettings={() => setSettingsOpen(true)}
+          />
+        )}
+
+        {tab === 'health' && (
+          <HealthView
+            reports={reports}
+            profile={profile}
+            apiKey={apiKey}
+            onSave={handleSaveReport}
+            onDelete={handleDeleteReport}
+            onExtract={handleExtractLabs}
+            onAnalyze={handleAnalyzeReport}
+            onAsk={apiKey ? askQuestion : null}
           />
         )}
 
@@ -635,6 +685,17 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
         </button>
         <button
           type="button"
+          className={`nav-item ${tab === 'health' ? 'nav-active' : ''}`}
+          aria-current={tab === 'health' ? 'page' : undefined}
+          onClick={() => setTab('health')}
+        >
+          <span className="nav-icon-wrap">
+            <HealthIcon size={21} />
+          </span>
+          <span className="nav-label">Health</span>
+        </button>
+        <button
+          type="button"
           className={`nav-item ${tab === 'progress' ? 'nav-active' : ''}`}
           aria-current={tab === 'progress' ? 'page' : undefined}
           onClick={() => setTab('progress')}
@@ -679,7 +740,7 @@ const EXTRA_SECTIONS = [
 ];
 
 /** The setup questions, editable any time from the Coach tab. */
-function ProfileExtras({ profile, onChange, apiKey, onExtract, canRemove, onRemove }) {
+function ProfileExtras({ profile, onChange, apiKey, onExtract, canRemove, onRemove, onOpenHealth }) {
   const [open, setOpen] = useState(null);
   const { checks, pct } = profileCompleteness(profile);
   const done = Object.fromEntries(checks.map(([k, v]) => [k, v]));
@@ -706,7 +767,14 @@ function ProfileExtras({ profile, onChange, apiKey, onExtract, canRemove, onRemo
               {id === 'health' && <HealthCheck profile={profile} onChange={onChange} />}
               {id === 'injuries' && <InjuryGrid profile={profile} onChange={onChange} />}
               {id === 'test' && <FitnessTest profile={profile} onChange={onChange} />}
-              {id === 'labs' && <LabReport profile={profile} onChange={onChange} apiKey={apiKey} onExtract={onExtract} />}
+              {id === 'labs' && (
+                <div>
+                  <p className="muted">Blood reports now have their own tab, with history, AI analysis and tips.</p>
+                  <button type="button" className="secondary-btn" onClick={onOpenHealth} style={{ marginTop: '8px' }}>
+                    Open Health tab
+                  </button>
+                </div>
+              )}
               {id === 'about' && <AboutYou profile={profile} onChange={onChange} />}
             </div>
           )}

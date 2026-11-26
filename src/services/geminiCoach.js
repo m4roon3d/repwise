@@ -8,10 +8,10 @@ import { SYSTEM_INSTRUCTION, DEFAULT_STRATEGY, DAY_ITEM_SCHEMA, COMPACT_BLOCK_SC
 import { parseGeminiJson, enforceWeeklyVariety } from './coach/validate';
 import { buildIntakePrompt, buildPlanPrompt, buildSwapPrompt, buildAdaptPrompt, ASK_SYSTEM_INSTRUCTION, buildAskContext } from './coach/prompts';
 import { summarizeLogsForPrompt } from './progress';
-import { applyRpeCap, healthAdjustments } from './health';
+import { applyRpeCap, healthAdjustments, labFinisher, sanitizeHealth } from './health';
 import { buildPlanRationale } from './rationale';
-import { sanitizeLabs } from './labs';
-import { LAB_REPORT_SCHEMA, BODY_SCAN_SCHEMA } from './coach/schemas';
+import { sanitizeLabs, analyzeLabs, sanitizeAnalysis, previousValue, MARKER_MAP } from './labs';
+import { LAB_REPORT_SCHEMA, BODY_SCAN_SCHEMA, LAB_ANALYSIS_SCHEMA } from './coach/schemas';
 import { normalizeExtracted } from './bodyComp';
 import { buildDeterministicFallbackPlan, localIntakeTurn, localSwap, localAdaptDay } from './coach/localEngine';
 
@@ -372,7 +372,11 @@ const capItem = (item, profile) => {
 export async function generateAdaptivePlan(profile, ...rest) {
   const plan = applyRpeCap(await generatePlanRaw(profile, ...rest), profile);
   const bodySummary = rest[5];
-  return { ...plan, rationale: buildPlanRationale(profile, plan, { bodySummary }), generated_at: Date.now() };
+  const finisher = labFinisher(profile);
+  const withFinisher = finisher
+    ? { ...plan, weeks: plan.weeks.map((w) => ({ ...w, days: w.days.map((d) => ({ ...d, finisher })) })) }
+    : plan;
+  return { ...withFinisher, rationale: buildPlanRationale(profile, withFinisher, { bodySummary }), generated_at: Date.now() };
 }
 
 export async function swapExercise(currentItem, reason, profile, ...rest) {
@@ -443,4 +447,48 @@ export async function extractBodyScan({ file, apiKey, model }) {
   const scan = normalizeExtracted(parsed);
   if (!scan) throw new Error('No readable values found. Try a sharper photo, or type the main numbers in.');
   return scan;
+}
+
+/**
+ * Plain-language analysis of one blood report, with what it means for training and practical tips.
+ * Grounded in the app's own range checks so the model explains values rather than re-judging them.
+ */
+export async function analyzeLabReport({ reports, reportId, profile, apiKey, model }) {
+  if (!apiKey) throw new Error('AI analysis needs a Gemini API key. The basic checks and tips below still work without one.');
+  const idx = reports.findIndex((r) => r.id === reportId);
+  const report = reports[idx];
+  if (!report) throw new Error('Report not found.');
+  const { results } = analyzeLabs(report, profile?.sex);
+  const lines = results.map((r) => {
+    const prev = r.id ? previousValue(reports, idx, r.id) : null;
+    const range = r.range ? ` [typical ${r.range.low}–${r.range.high >= 1000 ? '∞' : r.range.high} ${r.canonicalUnit}]` : '';
+    const trend = prev ? ` (previous ${prev.value} ${MARKER_MAP[r.id].unit} on ${prev.date})` : '';
+    return `- ${r.name}: ${r.value} ${r.unit} → ${r.status}${r.band ? ` (${r.band})` : ''}${range}${trend}`;
+  });
+  const h = sanitizeHealth(profile?.health);
+  const ai = await getAI(apiKey);
+  const parsed = await requestJson(
+    ai,
+    {
+      model,
+      contents: `Blood report dated ${report.date}. Person: age ${profile?.age}, sex ${profile?.sex || 'not given'}, goal ${profile?.goal}, trains ${profile?.daysPerWeek} days/week, known conditions: ${h.conditions.join(', ') || 'none reported'}.
+Results (status from typical adult reference ranges):
+${lines.join('\n')}
+
+Write for a non-medical reader:
+- summary: 2 to 4 sentences: the overall picture and the most important thing to act on, and what improved if there is a previous value.
+- overall: good | mixed | needs_attention.
+- markers: ONLY for values that are low/high or changed meaningfully: meaning (what it is and why it matters, 1 to 2 sentences), training (how it should change their exercise, 1 sentence), tips (2 to 3 practical food/sleep/activity tips; Indian diet examples welcome).
+- lifestyle_tips: up to 6 across nutrition, sleep, cardio, strength, lifestyle.
+- training_adjustments: up to 4 short, concrete changes to their workout plan (e.g. add a 15-minute brisk walk after lifting).
+- doctor_questions: up to 4 questions worth asking their doctor.
+Rules: never diagnose, never give medication or supplement doses (say "ask your doctor about…"), be encouraging and specific.`,
+      config: { responseMimeType: 'application/json', responseSchema: LAB_ANALYSIS_SCHEMA, temperature: 0.3, maxOutputTokens: 16384 },
+    },
+    (p) => {
+      mustBeObject(p);
+      if (!sanitizeAnalysis(p)) throw new Error('The analysis came back empty. Try again.');
+    }
+  );
+  return sanitizeAnalysis({ ...parsed, generatedAt: Date.now() });
 }

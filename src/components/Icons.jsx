@@ -103,3 +103,12 @@ export function ProgressIcon({ size = 22 }) {
     </svg>
   );
 }
+
+export function HealthIcon({ size = 22 }) {
+  return (
+    <svg {...baseProps} width={size} height={size}>
+      <path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" />
+      <path d="M7.5 12h2.5l1.2-2.2 1.8 4.4 1.2-2.2h2.3" />
+    </svg>
+  );
+}

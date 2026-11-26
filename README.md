@@ -4,6 +4,11 @@
 
 A zero-backend, personal-use Progressive Web App (Vite + React) powered by your own **Gemini API key**.
 
+## Health tab (blood reports)
+- Upload a photo or PDF (Gemini reads the values; only numbers are kept) or type values in. Full report history with per-marker trends and "since last report" comparisons.
+- **AI analysis** (Gemini key): plain-language summary, what each flagged marker means, how it should change training, practical food/sleep/activity tips, and questions for your doctor. Offline, the app still flags out-of-range values and shows built-in tips.
+- **Shapes your routine:** high sugar, cholesterol or blood pressure add a cardio finisher to every session; low haemoglobin/iron, thyroid or inflammation markers cap effort; the AI's training suggestions feed the next plan. "Why this plan" says which result changed what.
+
 ## Guided setup & health-aware planning
 - **Guided first-run setup:** name, training basics, a 7-question health check based on the PAR-Q+, injuries for 8 body areas (fine / old / sore now), then optional extras. Everything stays editable on the Coach tab, with a completeness bar.
 - **Health-aware plans:** conditions (blood pressure, heart, diabetes, asthma, osteoporosis, arthritis, thyroid), beta-blockers, and pregnancy/postpartum stages cap effort, remove unsuitable exercises and add safety notes. Gemini plans are clamped to the same limits.

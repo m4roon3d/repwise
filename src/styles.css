@@ -258,14 +258,14 @@ input[type='checkbox'] { accent-color: var(--accent); width: 18px; height: 18px;
 /* ---- Bottom navigation -------------------------------------------------------------------- */
 .bottom-nav {
   position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(12px + env(safe-area-inset-bottom));
-  width: calc(100% - 24px); max-width: 460px; z-index: 20;
+  width: calc(100% - 16px); max-width: 500px; z-index: 20;
   background: rgba(255, 255, 255, 0.92); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
   border: 1px solid var(--border); border-radius: 24px; box-shadow: var(--shadow-lg);
-  display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; padding: 6px;
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; padding: 5px;
 }
 .bottom-nav .nav-item { border: none; background: transparent; color: #94a3b8; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; min-height: 52px; padding: 6px 4px; border-radius: 18px; font-family: inherit; transition: color 0.15s; }
-.bottom-nav .nav-icon-wrap { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 28px; border-radius: 999px; transition: background-color 0.15s; }
-.bottom-nav .nav-label { font-size: 0.7rem; font-weight: 650; line-height: 1; }
+.bottom-nav .nav-icon-wrap { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 28px; border-radius: 999px; transition: background-color 0.15s; }
+.bottom-nav .nav-label { font-size: 0.64rem; font-weight: 650; line-height: 1; }
 .bottom-nav .nav-active { color: var(--text); }
 .bottom-nav .nav-active .nav-icon-wrap { background: var(--accent-soft); color: var(--accent-strong); }
 
@@ -376,3 +376,21 @@ input[type='checkbox'] { accent-color: var(--accent); width: 18px; height: 18px;
 .scan-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 12px; }
 .check-row { display: flex; gap: 8px; align-items: center; font-size: 0.86rem; margin-top: 8px; color: var(--text-2); }
 input[type='date'] { width: 100%; padding: 11px 13px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); background: #fff; color: var(--text); font-size: 0.95rem; font-family: inherit; }
+
+/* ---- Health (blood reports) --------------------------------------------------------------- */
+.marker-list { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 10px; }
+.marker-card { padding: 12px 14px; border-radius: 14px; background: var(--surface-2); }
+.marker-card.lab-low, .marker-card.lab-high { background: var(--warn-bg); }
+.marker-text { margin: 6px 0 0; font-size: 0.86rem; line-height: 1.5; color: var(--text-2); }
+.marker-prev { margin: 4px 0 0; font-size: 0.78rem; }
+.tip-list { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 4px; font-size: 0.85rem; line-height: 1.5; color: var(--text-2); }
+.tip-list li::marker { color: var(--accent); }
+.range-bar { position: relative; height: 8px; margin: 10px 0 4px; border-radius: 8px; background: #e2e8f0; }
+.range-ok { position: absolute; top: 0; bottom: 0; background: #a7f3d0; border-radius: 8px; }
+.range-dot { position: absolute; top: 50%; width: 14px; height: 14px; margin-left: -7px; margin-top: -7px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 1px 3px rgba(15,23,42,0.3); background: var(--accent-strong); }
+.range-low, .range-high { background: #d97706; }
+.lab-edit-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.lab-edit-list li { display: grid; grid-template-columns: 1fr 88px 52px 34px; gap: 6px; align-items: center; }
+.lab-edit-name { font-size: 0.86rem; font-weight: 600; }
+.lab-edit-unit { font-size: 0.74rem; color: var(--muted); overflow-wrap: anywhere; }
+.finisher-card { background: rgba(236, 253, 245, 0.92); }

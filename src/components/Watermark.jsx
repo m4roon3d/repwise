@@ -67,6 +67,7 @@ const PAIRS = {
   ask: ['runner', 'press'],
   library: ['crossTrainer', 'deadlift'],
   progress: ['runner', 'deadlift'],
+  health: ['runner', 'press'],
 };
 
 export function Figure({ name, className, style }) {
