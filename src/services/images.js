@@ -37,3 +37,17 @@ export async function prepareImage(file) {
   if (!data || data.length > MAX_BASE64_CHARS) throw new Error('That photo is too large to send. Try a smaller one.');
   return { mimeType: file.type, data, name: file.name };
 }
+
+const MAX_PDF_BYTES = 8 * 1024 * 1024;
+
+/** A photo or PDF of a lab report, ready to send to Gemini. PDFs are sent as-is (Gemini reads them natively). */
+export async function prepareReportFile(file) {
+  if (file?.type === 'application/pdf') {
+    if (file.size > MAX_PDF_BYTES) throw new Error('That PDF is over 8 MB. Try a photo of the results page instead.');
+    const data = await readAsBase64(file);
+    if (!data) throw new Error('Could not read that PDF.');
+    return { mimeType: 'application/pdf', data, name: file.name };
+  }
+  if (file && !ALLOWED.has(file.type)) throw new Error('Please choose a PDF or a JPEG, PNG or WebP photo.');
+  return prepareImage(file);
+}

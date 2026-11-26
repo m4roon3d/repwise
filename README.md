@@ -4,6 +4,14 @@
 
 A zero-backend, personal-use Progressive Web App (Vite + React) powered by your own **Gemini API key**.
 
+## Guided setup & health-aware planning
+- **Guided first-run setup:** name, training basics, a 7-question health check based on the PAR-Q+, injuries for 8 body areas (fine / old / sore now), then optional extras. Everything stays editable on the Coach tab, with a completeness bar.
+- **Health-aware plans:** conditions (blood pressure, heart, diabetes, asthma, osteoporosis, arthritis, thyroid), beta-blockers, and pregnancy/postpartum stages cap effort, remove unsuitable exercises and add safety notes. Gemini plans are clamped to the same limits.
+- **Fitness baseline:** push-ups, 30-second chair stand, plank, plus overhead-reach and squat-depth checks. Results set the starting effort; a retest prompt appears after each block, with your change since last time.
+- **Blood report:** upload a photo or PDF (Gemini reads the values; only the numbers are kept) or type values in. 13 common markers are checked against typical ranges with plain-language notes. Not a diagnosis.
+- **Why this plan:** every plan explains its schedule, goal focus, starting effort, what was left out and why, health and blood-report considerations, with one-tap follow-up questions to the coach.
+- **Two people, one phone:** switch person from the header. Each person has their own profile, plans, logs and chat; the API key is shared by the device.
+
 ## Training log, progression and Ask Your Coach
 - **68-exercise library:** now covers arms (curls, pushdowns), calves, push-ups, pull-ups, planks, hip thrusts, single-leg work and more hip/spine mobility, across all three equipment tiers.
 - **Workout logging:** log weight and reps per set on any exercise card. Weights are stored in kg and shown in your unit; logs are included in backups.

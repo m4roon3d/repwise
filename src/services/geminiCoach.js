@@ -8,6 +8,10 @@ import { SYSTEM_INSTRUCTION, DEFAULT_STRATEGY, DAY_ITEM_SCHEMA, COMPACT_BLOCK_SC
 import { parseGeminiJson, enforceWeeklyVariety } from './coach/validate';
 import { buildIntakePrompt, buildPlanPrompt, buildSwapPrompt, buildAdaptPrompt, ASK_SYSTEM_INSTRUCTION, buildAskContext } from './coach/prompts';
 import { summarizeLogsForPrompt } from './progress';
+import { applyRpeCap, healthAdjustments } from './health';
+import { buildPlanRationale } from './rationale';
+import { sanitizeLabs } from './labs';
+import { LAB_REPORT_SCHEMA } from './coach/schemas';
 import { buildDeterministicFallbackPlan, localIntakeTurn, localSwap, localAdaptDay } from './coach/localEngine';
 
 // Public API (kept stable): everything the UI and tests import comes from this file.
@@ -92,7 +96,7 @@ export async function runCoachIntakeTurn(messages, currentProfile, apiKey, model
   return { ...parsed, source: 'gemini' };
 }
 
-export async function generateAdaptivePlan(
+async function generatePlanRaw(
   profile,
   safeExercises,
   apiKey,
@@ -208,7 +212,7 @@ export async function generateAdaptivePlan(
   };
 }
 
-export async function swapExercise(
+async function swapRaw(
   currentItem,
   reason,
   profile,
@@ -271,7 +275,7 @@ export async function swapExercise(
   return { ...parsed, source: 'gemini' };
 }
 
-export async function adaptSingleDay(dayPlan, constraint, profile, safeExercises, apiKey, model) {
+async function adaptRaw(dayPlan, constraint, profile, safeExercises, apiKey, model) {
   if (!apiKey) return localAdaptDay(dayPlan, constraint, safeExercises);
 
   const ai = await getAI(apiKey);
@@ -352,4 +356,58 @@ export async function askCoach({ messages, profile, plan, logs = [], focusExerci
       ? 'Gemini declined to answer that one. Try rewording it.'
       : 'The coach sent back an empty reply. Try asking again or rephrasing.'
   );
+}
+
+// ---- Health-aware wrappers ------------------------------------------------------------------------
+// Whatever Gemini or the local engine produce, effort never exceeds the cap set by the health answers,
+// and every new plan carries its "why this plan" explanation.
+const capItem = (item, profile) => {
+  const { rpeCap } = healthAdjustments(profile);
+  return rpeCap && Number(item?.target_rpe) > rpeCap ? { ...item, target_rpe: rpeCap } : item;
+};
+
+export async function generateAdaptivePlan(profile, ...rest) {
+  const plan = applyRpeCap(await generatePlanRaw(profile, ...rest), profile);
+  return { ...plan, rationale: buildPlanRationale(profile, plan), generated_at: Date.now() };
+}
+
+export async function swapExercise(currentItem, reason, profile, ...rest) {
+  return capItem(await swapRaw(currentItem, reason, profile, ...rest), profile);
+}
+
+export async function adaptSingleDay(dayPlan, constraint, profile, ...rest) {
+  const day = await adaptRaw(dayPlan, constraint, profile, ...rest);
+  return { ...day, exercises: (day.exercises || []).map((e) => capItem(e, profile)) };
+}
+
+/**
+ * Reads the numbers off a photo or PDF of a blood report. Returns sanitized { date, source, markers } or throws.
+ * The file goes to Gemini once; only the extracted numbers are kept by the app.
+ */
+export async function extractLabReport({ file, apiKey, model }) {
+  if (!apiKey) throw new Error('Reading a report needs a Gemini API key. You can type the values in instead.');
+  const ai = await getAI(apiKey);
+  const parsed = await requestJson(
+    ai,
+    {
+      model,
+      contents: [
+        {
+          role: 'user',
+          parts: [
+            {
+              text: 'Extract every numeric blood test result from this lab report. Use the test name exactly as printed, the numeric result (no ranges, no flags) and its unit. Skip anything without a number. report_date as YYYY-MM-DD if shown. If this is not a medical lab report, set is_lab_report to false and return no markers.',
+            },
+            { inlineData: { mimeType: file.mimeType, data: file.data } },
+          ],
+        },
+      ],
+      config: { responseMimeType: 'application/json', responseSchema: LAB_REPORT_SCHEMA, temperature: 0, maxOutputTokens: 16384 },
+    },
+    mustBeObject
+  );
+  if (parsed.is_lab_report === false) throw new Error("That doesn't look like a blood test report. Try a clearer photo of the results page.");
+  const labs = sanitizeLabs({ date: parsed.report_date || '', source: 'upload', markers: parsed.markers });
+  if (!labs) throw new Error('No readable results found. Try a sharper photo, or type the key values in.');
+  return labs;
 }

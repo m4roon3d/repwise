@@ -26,6 +26,7 @@ export default function AssessmentForm({
   loading,
   apiKey,
   model,
+  extraSections = null,
 }) {
   const metrics = computeReadinessMetrics(profile);
   const safeExercises = filterSafeExercises(profile);
@@ -34,12 +35,7 @@ export default function AssessmentForm({
   const weightLbs = kgToLbs(profile.weightKg);
 
   const updateField = (key, value) => onChange({ ...profile, [key]: value });
-  const toggleJoint = (joint) =>
-    onChange({
-      ...profile,
-      jointFlags: { ...profile.jointFlags, [joint]: !profile.jointFlags[joint] },
-    });
-
+  
   return (
     <div className="panel-stack">
       {/* Live Readiness Preview Strip */}
@@ -281,9 +277,11 @@ export default function AssessmentForm({
         </div>
       </section>
 
+      {extraSections}
+
       {/* Goal, Multi-Week Block Length, Schedule & Joint Safety */}
       <section className="card">
-        <h2>3. Goal, Block Length & Joint Protection</h2>
+        <h2>3. Goal, Schedule & Block Length</h2>
         <div className="grid-2">
           <div className="form-group">
             <label htmlFor="f-goal">Primary Goal</label>
@@ -341,27 +339,6 @@ export default function AssessmentForm({
               value={profile.sessionMinutes}
               onChange={(e) => updateField('sessionMinutes', Number(e.target.value))}
             />
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label id="f-joints-label">Joint Sensitivity Flags (Pre-filters catalog before AI runs)</label>
-          <div className="chip-row" role="group" aria-labelledby="f-joints-label">
-            {[
-              { id: 'knee', label: 'Protect Knees' },
-              { id: 'shoulder', label: 'Protect Shoulders' },
-              { id: 'lower_back', label: 'Protect Lower Back' },
-            ].map((j) => (
-              <button
-                key={j.id}
-                type="button"
-                className={`chip ${profile.jointFlags[j.id] ? 'chip-active' : ''}`}
-                onClick={() => toggleJoint(j.id)}
-              >
-                {profile.jointFlags[j.id] ? '✓ ' : '+ '}
-                {j.label}
-              </button>
-            ))}
           </div>
         </div>
 

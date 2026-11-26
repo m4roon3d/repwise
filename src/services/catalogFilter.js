@@ -1,4 +1,5 @@
 import exercises from '../data/exercises.json';
+import { healthAdjustments } from './health';
 
 export const EXERCISE_MAP = Object.fromEntries(exercises.map((e) => [e.id, e]));
 
@@ -34,11 +35,18 @@ export function filterSafeExercises(profile) {
     .filter(([, flagged]) => Boolean(flagged))
     .map(([joint]) => joint);
 
-  const filtered = exercises.filter((ex) => {
+  const { exclusions } = healthAdjustments(profile);
+  const blocked = new Set(exclusions.filter((e) => !/don't enjoy/.test(e.reason)).flatMap((e) => e.ids));
+  const disliked = new Set(exclusions.filter((e) => /don't enjoy/.test(e.reason)).flatMap((e) => e.ids));
+
+  const base = exercises.filter((ex) => {
     const matchesTier = ex.equipment_tiers.includes(tier);
     const conflictsJoint = ex.joint_stress_flags.some((f) => activeJoints.includes(f));
-    return matchesTier && !conflictsJoint;
+    return matchesTier && !conflictsJoint && !blocked.has(ex.id);
   });
+  // Dislikes are a preference, safety exclusions are not: drop dislikes only while enough choice remains.
+  const liked = base.filter((ex) => !disliked.has(ex.id));
+  const filtered = liked.length >= 12 ? liked : base;
 
   return filtered.length >= 6
     ? filtered
@@ -66,7 +74,8 @@ export function computeReadinessMetrics(profile) {
   const sleepBonus = sleep >= 7.5 ? 6 : sleep >= 6.5 ? 2 : sleep >= 5.5 ? -5 : -12;
   const stressPenalty =
     profile.stressLevel === 'high' ? -8 : profile.stressLevel === 'low' ? 4 : 0;
-  const rhrPenalty = rhr > 78 ? -8 : rhr > 72 ? -3 : 4;
+  // Beta-blockers hold resting HR down, so it says nothing about readiness.
+  const rhrPenalty = profile.health?.betaBlocker ? 0 : rhr > 78 ? -8 : rhr > 72 ? -3 : 4;
   const layoffPenalty = Math.min(16, Math.round(weeksAway * 1.3));
   const jointCount = Object.values(profile.jointFlags || {}).filter(Boolean).length;
 
@@ -81,5 +90,8 @@ export function computeReadinessMetrics(profile) {
       ? 'RPE 7–7.5 (Steady, sustainable build)'
       : 'RPE 7.5–8.5 (Progressive build)';
 
-  return { bmi, readinessScore, recommendedRpe, activeJointCount: jointCount };
+  const { rpeCap } = healthAdjustments(profile);
+  const cappedRpe = rpeCap && rpeCap < 7.5 ? `RPE ${rpeCap} max (set by your health answers)` : recommendedRpe;
+
+  return { bmi, readinessScore, recommendedRpe: cappedRpe, activeJointCount: jointCount };
 }

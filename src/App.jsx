@@ -6,12 +6,23 @@ import SettingsModal from './components/SettingsModal';
 import HealthNotice from './components/HealthNotice';
 import AskCoach from './components/AskCoach';
 import Logo from './components/Logo';
+import Onboarding from './components/Onboarding';
+import PlanWhy from './components/PlanWhy';
+import { AboutYou, FitnessTest, HealthCheck, InjuryGrid, LabReport, profileCompleteness } from './components/HealthSections';
+import { retestDue } from './services/baseline';
 import { ChatIcon, CoachIcon, ExercisesIcon, KeyIcon, WorkoutIcon } from './components/Icons';
 import {
   appendFeedback,
   loadApiKey,
   loadFeedbackHistory,
   loadHealthAck,
+  loadOnboarded,
+  saveOnboarded,
+  listProfiles,
+  getActiveProfileId,
+  switchProfile,
+  createProfile,
+  deleteProfile,
   loadCoachChat,
   loadWorkoutLogs,
   saveCoachChat,
@@ -29,6 +40,7 @@ import { filterSafeExercises } from './services/catalogFilter';
 import {
   adaptSingleDay,
   askCoach,
+  extractLabReport,
   generateAdaptivePlan,
   resolveSwapConflict,
   carryProgression,
@@ -48,7 +60,29 @@ const VALID_TIERS = new Set(['commercial_gym', 'apartment_gym', 'home_setup']);
 const VALID_LEVELS = new Set(['low', 'moderate', 'high']);
 const VALID_EXPERIENCE = new Set(['beginner', 'intermediate', 'advanced']);
 
+/** Each person gets a fresh ProfileApp: remounting on switch reloads all of their state from storage. */
 export default function App() {
+  const [profileId, setProfileId] = useState(() => getActiveProfileId());
+  const go = (id) => {
+    if (switchProfile(id)) setProfileId(id);
+  };
+  return (
+    <ProfileApp
+      key={profileId}
+      profileId={profileId}
+      onSwitch={go}
+      onAddPerson={() => setProfileId(createProfile(''))}
+      onRemovePerson={(id) => {
+        deleteProfile(id);
+        setProfileId(getActiveProfileId());
+      }}
+    />
+  );
+}
+
+function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
+  const [onboarded, setOnboarded] = useState(() => loadOnboarded());
+  const people = listProfiles();
   const [tab, setTab] = useState(() => (loadPlan() ? 'routine' : 'assess'));
   const [apiKey, setApiKey] = useState(() => loadApiKey());
   const [model, setModel] = useState(() => loadModel());
@@ -77,6 +111,19 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [busyKey, setBusyKey] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+
+  const finishOnboarding = () => {
+    saveOnboarded(true);
+    setOnboarded(true);
+  };
+
+  const askQuestion = (text) => {
+    setAskFocus({ exerciseId: null, draft: text, nonce: Date.now() });
+    setAskError('');
+    setTab('ask');
+  };
+
+  const handleExtractLabs = (file) => extractLabReport({ file, apiKey, model });
 
   const handleProfileChange = (next) => {
     setProfile(next);
@@ -238,6 +285,7 @@ export default function App() {
   };
 
   const handleGenerate = async () => {
+    finishOnboarding();
     setLoading(true);
     setErrorMsg('');
     try {
@@ -379,6 +427,20 @@ export default function App() {
           </div>
         </div>
 
+        <select
+          className="person-select"
+          aria-label="Switch person"
+          value={profileId}
+          onChange={(e) => (e.target.value === '__add' ? onAddPerson() : onSwitch(e.target.value))}
+        >
+          {people.map((p) => (
+            <option key={p.id} value={p.id}>
+              {p.id === profileId && profile.name ? profile.name : p.name}
+            </option>
+          ))}
+          {people.length < 6 && <option value="__add">+ Add a person</option>}
+        </select>
+
         <button
           type="button"
           className={`key-pill ${apiKey ? 'key-pill-on' : ''}`}
@@ -409,7 +471,19 @@ export default function App() {
           />
         )}
 
-        {tab === 'assess' && (
+        {tab === 'assess' && !onboarded && (
+          <Onboarding
+            profile={profile}
+            onChange={handleProfileChange}
+            apiKey={apiKey}
+            onExtract={handleExtractLabs}
+            onFinish={handleGenerate}
+            onSkip={finishOnboarding}
+            loading={loading}
+          />
+        )}
+
+        {tab === 'assess' && onboarded && (
           <AssessmentForm
             profile={profile}
             onChange={handleProfileChange}
@@ -418,8 +492,29 @@ export default function App() {
             loading={loading}
             apiKey={apiKey}
             model={model}
+            extraSections={
+              <ProfileExtras
+                profile={profile}
+                onChange={handleProfileChange}
+                apiKey={apiKey}
+                onExtract={handleExtractLabs}
+                canRemove={profileId !== 'default'}
+                onRemove={() => onRemovePerson(profileId)}
+              />
+            }
           />
         )}
+
+        {tab === 'routine' && plan && retestDue(profile) && (
+          <div className="status-banner status-warning" style={{ marginBottom: '12px' }}>
+            <span>⏱️ Block done? Retest your fitness to see how far you've come.</span>
+            <button type="button" className="link-btn" onClick={() => setTab('assess')}>
+              Retest
+            </button>
+          </div>
+        )}
+
+        {tab === 'routine' && plan && <PlanWhy plan={plan} profile={profile} onAsk={askQuestion} />}
 
         {tab === 'routine' && (
           <RoutineView
@@ -513,5 +608,63 @@ export default function App() {
         onDataImported={handleDataImported}
       />
     </div>
+  );
+}
+
+const EXTRA_SECTIONS = [
+  ['health', 'Health check', '❤️'],
+  ['injuries', 'Injuries & sore spots', '🩹'],
+  ['test', 'Fitness test', '🧪'],
+  ['labs', 'Blood report', '🩸'],
+  ['about', 'About you', '🙋'],
+];
+
+/** The setup questions, editable any time from the Coach tab. */
+function ProfileExtras({ profile, onChange, apiKey, onExtract, canRemove, onRemove }) {
+  const [open, setOpen] = useState(null);
+  const { checks, pct } = profileCompleteness(profile);
+  const done = Object.fromEntries(checks.map(([k, v]) => [k, v]));
+  const doneFor = { health: done['Health check'], injuries: done.Injuries, test: done['Fitness test'], labs: done['Blood report'], about: done['About you'] };
+  return (
+    <section className="card">
+      <div className="card-head">
+        <h2>Health & background</h2>
+        <span className="muted">{pct}% complete</span>
+      </div>
+      <div className="completeness" aria-label={`Profile ${pct}% complete`}>
+        <i style={{ width: `${pct}%` }} />
+      </div>
+      {EXTRA_SECTIONS.map(([id, title, icon]) => (
+        <div key={id} className="extra-section">
+          <button type="button" className="plan-why-toggle" aria-expanded={open === id} onClick={() => setOpen(open === id ? null : id)}>
+            <span>
+              {icon} <strong>{title}</strong> {doneFor[id] ? <span className="muted">✓</span> : <span className="muted">· to do</span>}
+            </span>
+            <span aria-hidden="true">{open === id ? '▴' : '▾'}</span>
+          </button>
+          {open === id && (
+            <div style={{ padding: '6px 0 12px' }}>
+              {id === 'health' && <HealthCheck profile={profile} onChange={onChange} />}
+              {id === 'injuries' && <InjuryGrid profile={profile} onChange={onChange} />}
+              {id === 'test' && <FitnessTest profile={profile} onChange={onChange} />}
+              {id === 'labs' && <LabReport profile={profile} onChange={onChange} apiKey={apiKey} onExtract={onExtract} />}
+              {id === 'about' && <AboutYou profile={profile} onChange={onChange} />}
+            </div>
+          )}
+        </div>
+      ))}
+      <p className="muted" style={{ fontSize: '0.8rem' }}>Changes apply the next time you generate a plan.</p>
+      {canRemove && (
+        <button
+          type="button"
+          className="secondary-btn"
+          onClick={() => {
+            if (typeof window === 'undefined' || !window.confirm || window.confirm(`Remove ${profile.name || 'this person'} and all their data from this device?`)) onRemove();
+          }}
+        >
+          Remove this person from the device
+        </button>
+      )}
+    </section>
   );
 }

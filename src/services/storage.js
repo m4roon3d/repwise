@@ -1,3 +1,8 @@
+import { sanitizeHealth, EMPTY_HEALTH } from './health';
+import { sanitizeBaselines } from './baseline';
+import { sanitizeLabs } from './labs';
+import exerciseCatalog from '../data/exercises.json';
+
 const KEYS = {
   API_KEY: 'mf_byok_gemini_api_key',
   MODEL: 'mf_byok_gemini_model',
@@ -7,20 +12,45 @@ const KEYS = {
   HEALTH_ACK: 'mf_health_notice_ack_v1',
   WORKOUT_LOGS: 'mf_workout_logs_v1',
   COACH_CHAT: 'mf_coach_chat_v1',
+  ONBOARDED: 'mf_onboarded_v1',
+  PROFILES: 'mf_profiles_v1', // device-level: [{ id, name }]
+  ACTIVE_PROFILE: 'mf_active_profile_v1', // device-level
 };
 
-// localStorage can throw (Safari "block all cookies", embedded webviews, quota exceeded, private mode).
-// Persistence is best-effort: the app must keep working in-memory when it fails.
-function safeGet(key) {
+// ---- Profiles (two people, one phone) --------------------------------------------------------------
+// The first person keeps the original, unprefixed keys so existing data needs no migration. Everyone else's
+// data lives under `mf_p_<id>__…`. The API key and model are shared by the device.
+const DEVICE_KEYS = new Set([KEYS.API_KEY, KEYS.MODEL, KEYS.PROFILES, KEYS.ACTIVE_PROFILE]);
+const DEFAULT_PROFILE_ID = 'default';
+
+function rawGet(key) {
   try {
     return localStorage.getItem(key);
   } catch {
     return null;
   }
 }
+function activeProfileId() {
+  const id = rawGet(KEYS.ACTIVE_PROFILE);
+  return id && /^[a-z0-9]{1,16}$/.test(id) ? id : DEFAULT_PROFILE_ID;
+}
+function scoped(key, id = activeProfileId()) {
+  if (DEVICE_KEYS.has(key) || id === DEFAULT_PROFILE_ID) return key;
+  return key.replace(/^mf_/, `mf_p_${id}__`);
+}
+
+// localStorage can throw (Safari "block all cookies", embedded webviews, quota exceeded, private mode).
+// Persistence is best-effort: the app must keep working in-memory when it fails.
+function safeGet(key) {
+  try {
+    return localStorage.getItem(scoped(key));
+  } catch {
+    return null;
+  }
+}
 function safeSet(key, value) {
   try {
-    localStorage.setItem(key, value);
+    localStorage.setItem(scoped(key), value);
     return true;
   } catch {
     return false;
@@ -28,7 +58,7 @@ function safeSet(key, value) {
 }
 function safeRemove(key) {
   try {
-    localStorage.removeItem(key);
+    localStorage.removeItem(scoped(key));
   } catch {
     /* ignore */
   }
@@ -60,6 +90,12 @@ export const DEFAULT_PROFILE = {
     lower_back: false,
   },
   notes: '',
+  name: '',
+  sex: '', // female | male | other | '' (used for reference ranges and pregnancy questions only)
+  health: EMPTY_HEALTH,
+  baselines: [], // fitness test history, newest first
+  labs: null, // { date, source, markers: [{ id, name, value, unit }] } — never the image itself
+  preferences: { specificGoal: '', goalWhy: '', activity: '', sports: '', timeOfDay: '', likes: [], dislikes: [] },
 };
 
 /**
@@ -147,12 +183,101 @@ export function sanitizeProfile(raw) {
   for (const key of ['bodyFatPct', 'bloodPressure', 'notes']) {
     if (typeof src[key] === 'string') out[key] = src[key];
   }
+  if (typeof src.name === 'string') out.name = src.name.trim().slice(0, 30);
+  if (['female', 'male', 'other'].includes(src.sex)) out.sex = src.sex;
+  out.health = sanitizeHealth(src.health);
+  out.baselines = sanitizeBaselines(src.baselines);
+  out.labs = sanitizeLabs(src.labs);
+  out.preferences = sanitizePreferences(src.preferences);
   if (src.jointFlags && typeof src.jointFlags === 'object') {
     for (const joint of Object.keys(DEFAULT_PROFILE.jointFlags)) {
       if (typeof src.jointFlags[joint] === 'boolean') out.jointFlags[joint] = src.jointFlags[joint];
     }
   }
   return out;
+}
+
+const EXERCISE_IDS = new Set(exerciseCatalog.map((e) => e.id));
+const text = (v, n) => (typeof v === 'string' ? v.slice(0, n) : '');
+function sanitizePreferences(raw) {
+  const src = raw && typeof raw === 'object' ? raw : {};
+  const ids = (a) => (Array.isArray(a) ? [...new Set(a.filter((id) => EXERCISE_IDS.has(id)))].slice(0, 20) : []);
+  return {
+    specificGoal: text(src.specificGoal, 160),
+    goalWhy: text(src.goalWhy, 200),
+    activity: ['sedentary', 'light', 'active', 'very_active'].includes(src.activity) ? src.activity : '',
+    sports: text(src.sports, 100),
+    timeOfDay: ['morning', 'afternoon', 'evening', 'any'].includes(src.timeOfDay) ? src.timeOfDay : '',
+    likes: ids(src.likes),
+    dislikes: ids(src.dislikes),
+  };
+}
+
+// ---- Onboarding ------------------------------------------------------------------------------------
+/** True once this person finished (or skipped) the guided setup. Anyone with saved data counts as done. */
+export function loadOnboarded() {
+  return safeGet(KEYS.ONBOARDED) === '1' || safeGet(KEYS.PROFILE) !== null || safeGet(KEYS.PLAN) !== null;
+}
+export function saveOnboarded(done = true) {
+  if (done) safeSet(KEYS.ONBOARDED, '1');
+  else safeRemove(KEYS.ONBOARDED);
+}
+
+export function listProfiles() {
+  let list = [];
+  try {
+    list = JSON.parse(rawGet(KEYS.PROFILES) || '[]');
+  } catch {
+    list = [];
+  }
+  list = Array.isArray(list) ? list.filter((p) => p && /^[a-z0-9]{1,16}$/.test(p.id)) : [];
+  if (!list.some((p) => p.id === DEFAULT_PROFILE_ID)) list.unshift({ id: DEFAULT_PROFILE_ID, name: '' });
+  return list.map((p) => {
+    // A person's display name comes from their own profile, so renaming in the form is enough.
+    let name = '';
+    try {
+      name = JSON.parse(rawGet(scoped(KEYS.PROFILE, p.id)) || '{}')?.name || '';
+    } catch {
+      /* ignore */
+    }
+    return { id: p.id, name: (name || p.name || (p.id === DEFAULT_PROFILE_ID ? 'Me' : 'New person')).slice(0, 30) };
+  });
+}
+
+export function getActiveProfileId() {
+  const id = activeProfileId();
+  return listProfiles().some((p) => p.id === id) ? id : DEFAULT_PROFILE_ID;
+}
+
+export function switchProfile(id) {
+  if (!listProfiles().some((p) => p.id === id)) return false;
+  safeSet(KEYS.ACTIVE_PROFILE, id);
+  return true;
+}
+
+export function createProfile(name) {
+  const list = listProfiles();
+  if (list.length >= 6) throw new Error('You can have up to 6 people on one device.');
+  const id = Math.random().toString(36).slice(2, 10) || `p${Date.now()}`;
+  const clean = String(name || '').trim().slice(0, 30) || 'New person';
+  safeSet(KEYS.PROFILES, JSON.stringify([...list.map(({ id: i, name: n }) => ({ id: i, name: n })), { id, name: clean }]));
+  safeSet(KEYS.ACTIVE_PROFILE, id);
+  return id;
+}
+
+/** Removes a person and every key of theirs. The first person cannot be deleted. */
+export function deleteProfile(id) {
+  if (id === DEFAULT_PROFILE_ID) return false;
+  const list = listProfiles().filter((p) => p.id !== id);
+  safeSet(KEYS.PROFILES, JSON.stringify(list));
+  try {
+    const prefix = `mf_p_${id}__`;
+    for (const k of Object.keys(localStorage)) if (k.startsWith(prefix)) localStorage.removeItem(k);
+  } catch {
+    /* ignore */
+  }
+  if (activeProfileId() === id) safeSet(KEYS.ACTIVE_PROFILE, DEFAULT_PROFILE_ID);
+  return true;
 }
 
 export function loadHealthAck() {

@@ -99,7 +99,8 @@ describe('AI chat intake — profile patch validation (model output is untrusted
     expect(screen.getAllByRole('spinbutton')[0]).toHaveValue(30); // Age (labels aren't associated — see a11y test)
     expect(screen.getByDisplayValue('175')).toBeInTheDocument(); // height unchanged
     expect(screen.getByDisplayValue('6.5')).toBeInTheDocument(); // sleep applied
-    expect(screen.getByRole('button', { name: /Protect Knees/i })).toHaveClass('chip-active');
+    await user.click(screen.getByRole('button', { name: /Injuries & sore spots/i }));
+    expect(screen.getByRole('button', { name: 'Knee: Sore now' })).toHaveAttribute('aria-pressed', 'true');
     expect(screen.getByDisplayValue(/Moderate — Normal work week/i)).toBeInTheDocument(); // stress unchanged
   });
 
@@ -144,7 +145,8 @@ describe('Plan generation error handling', () => {
   it('a joint-flagged profile never shows a contraindicated exercise in the generated plan', async () => {
     const user = userEvent.setup();
     render(<App />);
-    await user.click(screen.getByRole('button', { name: /Protect Knees/i }));
+    await user.click(screen.getByRole('button', { name: /Injuries & sore spots/i }));
+    await user.click(screen.getByRole('button', { name: 'Knee: Sore now' }));
     await user.click(screen.getByRole('button', { name: /Generate 4-Week Block/i }));
     await screen.findByText('Week 1');
     const { default: exercises } = await import('../data/exercises.json');

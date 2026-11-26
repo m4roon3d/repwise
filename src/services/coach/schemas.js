@@ -170,3 +170,24 @@ export const INTAKE_CHAT_SCHEMA = {
   },
   required: ['coach_reply', 'ready_to_generate', 'profile_patch'],
 };
+
+export const LAB_REPORT_SCHEMA = {
+  type: Type.OBJECT,
+  properties: {
+    is_lab_report: { type: Type.BOOLEAN },
+    report_date: { type: Type.STRING },
+    markers: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          name: { type: Type.STRING },
+          value: { type: Type.NUMBER },
+          unit: { type: Type.STRING },
+        },
+        required: ['name', 'value'],
+      },
+    },
+  },
+  required: ['is_lab_report', 'markers'],
+};

@@ -1,3 +1,4 @@
+import { adjustedStartingRpe } from '../health';
 // Keyless (offline) engine: deterministic plans, swaps, day adaptation and chat keyword parsing.
 import { EQUIPMENT_TIER_LABELS, EXERCISE_MAP } from '../catalogFilter';
 import { pickLeastUsedExercise } from './validate';
@@ -6,7 +7,7 @@ import { pickLeastUsedExercise } from './validate';
 export function startingRpe(profile) {
   const base = { beginner: 6.5, intermediate: 7.0, advanced: 7.5 }[profile.experience] ?? 7.0;
   const eased = profile.energyLevel === 'low' || Number(profile.weeksAway) >= 8 || Number(profile.sleepHours) < 6;
-  return eased ? Math.max(6.0, base - 0.5) : base;
+  return adjustedStartingRpe(eased ? Math.max(6.0, base - 0.5) : base, profile);
 }
 
 /**

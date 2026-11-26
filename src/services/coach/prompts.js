@@ -1,3 +1,4 @@
+import { describeHealthForPrompt } from '../health';
 // Prompt builders (pure string functions, easy to snapshot-test).
 import { EQUIPMENT_TIER_LABELS, EXERCISE_MAP, cmToFeetInches, kgToLbs } from '../catalogFilter';
 
@@ -60,6 +61,7 @@ USER VITALS & PROFILE:
 - Equipment Environment: ${EQUIPMENT_TIER_LABELS[profile.equipmentTier]}
 - Flagged Joints to Protect: ${activeJoints.length ? activeJoints.join(', ') : 'None'}
 - Personal Notes / Chat Intake Summary: ${profile.notes || 'None'}
+${describeHealthForPrompt(profile)}
 - Recent Weekly Feedback: ${
     recentFeedback.length
       ? recentFeedback.slice(0, 2).map((f) => f.rating).join(', ')
@@ -126,6 +128,7 @@ export function buildAskContext({ profile, plan, logSummary, focusExercise }) {
     `FLAGGED JOINTS: ${joints.length ? joints.join(', ') : 'none'}.`,
   ];
   if (profile?.notes) lines.push(`PERSONAL NOTES: ${String(profile.notes).slice(0, 400)}`);
+  if (profile) lines.push(`HEALTH & BACKGROUND:\n${describeHealthForPrompt(profile)}`);
   const week = plan?.weeks?.[0];
   if (week?.days?.length) {
     lines.push(`CURRENT PLAN "${plan.program_title || 'Program'}", week 1 layout:`);

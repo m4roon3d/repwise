@@ -1,6 +1,6 @@
 # Repwise — code review & test notes
 
-Test suite: `npm test` → 212 tests (19 original + 193 new in `src/test/review.*`).
+Test suite: `npm test` → 241 tests (19 original + 222 new in `src/test/review.*`).
 `it.fails(...)` = a **confirmed bug**; the assertion states the correct behaviour. When you fix a bug the test
 turns red ("expected to fail") → just delete the `.fails`.
 
@@ -49,3 +49,9 @@ turns red ("expected to fail") → just delete the `.fails`.
 - ✅ `review.library.test.js` guards record shape, per-tier coverage, regression chains and animation geometry (bone lengths, mirroring, floor contact). It caught a stretched forearm while authoring.
 - Note: the offline (no-key) engine still builds sessions from the original 10 patterns, so arms and calves appear in Gemini plans, swaps and the Exercises tab, not in keyless plans.
 - Note: a few new mobility moves and the 90/90 / thread-the-needle style stretches reuse the generic mobility animation.
+
+## Onboarding & health journey
+- ✅ `services/health.js` (PAR-Q+ style screening, conditions, injuries, pregnancy, RPE caps, exclusions), `labs.js` (13 markers, unit conversion, sex-specific ranges), `baseline.js` (fitness tests), `rationale.js` (Why this plan).
+- ✅ Caps are enforced on every plan, swap and adapt result, whichever engine produced them.
+- ✅ Per-person storage: first person keeps the original keys (no migration); others are namespaced `mf_p_<id>__…`.
+- Verified in real Chrome at 390 px with a mocked Gemini endpoint: full setup, plan with reasons, PDF report extraction, no console errors.
