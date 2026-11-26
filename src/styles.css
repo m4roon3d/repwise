@@ -396,18 +396,19 @@ input[type='date'] { width: 100%; padding: 11px 13px; border-radius: var(--radiu
 .finisher-card { background: rgba(236, 253, 245, 0.92); }
 
 /* ---- Wordmark ----------------------------------------------------------------------------- */
-.wordmark { display: inline-flex; flex-direction: column; gap: 1px; color: var(--text); line-height: 1; }
-.wordmark-word { display: inline-block; font-size: 1.55rem; font-weight: 800; letter-spacing: -0.045em; line-height: 1.05; white-space: nowrap; }
-.wordmark-r { display: inline-block; height: 0.76em; width: auto; vertical-align: baseline; margin-right: 0.02em; overflow: visible; }
-.wordmark-rest { font: inherit; }
-.wordmark-bar { width: 92%; height: 8px; margin-top: 1px; color: var(--text); overflow: visible; }
-.wordmark-bar .plate { transform-box: fill-box; transform-origin: center; }
+.wordmark { display: inline-flex; flex-direction: column; gap: 3px; color: var(--text); line-height: 1; }
+.wordmark-word { display: inline-block; font-family: 'Montserrat', Inter, system-ui, sans-serif; font-weight: 800; font-size: 1.6rem; letter-spacing: -0.045em; line-height: 1; white-space: nowrap; }
+.wordmark-i { position: relative; display: inline-block; }
+.wordmark-plate { position: absolute; left: 50%; top: 0.01em; width: 0.27em; height: 0.27em; transform: translateX(-50%); border-radius: 50%; background: var(--accent); }
+.wordmark-plate::after { content: ''; position: absolute; inset: 31%; border-radius: 50%; background: #fff; }
+.wordmark-bar { width: 100%; height: 0.62rem; color: var(--text); overflow: visible; }
+.wordmark-bar .plates { transform-box: fill-box; transform-origin: center; }
 @media (prefers-reduced-motion: no-preference) {
-  .wordmark-bar .plate-l { animation: plate-in-l 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both 0.15s; }
-  .wordmark-bar .plate-r { animation: plate-in-r 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both 0.15s; }
+  .wordmark-bar .plates-l { animation: plate-in-l 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both 0.15s; }
+  .wordmark-bar .plates-r { animation: plate-in-r 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both 0.15s; }
 }
-@keyframes plate-in-l { from { transform: translateX(-14px); opacity: 0; } to { transform: none; opacity: 1; } }
-@keyframes plate-in-r { from { transform: translateX(14px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes plate-in-l { from { transform: translateX(-12px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes plate-in-r { from { transform: translateX(12px); opacity: 0; } to { transform: none; opacity: 1; } }
 
 /* ---- Training styles ---------------------------------------------------------------------- */
 .style-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
@@ -441,7 +442,8 @@ input[type='date'] { width: 100%; padding: 11px 13px; border-radius: var(--radiu
     background: transparent; -webkit-backdrop-filter: none; backdrop-filter: none;
   }
   .top-bar .brand { margin-bottom: 10px; }
-  .wordmark-word { font-size: 1.9rem; }
+  .wordmark-word { font-size: 2rem; }
+  .wordmark-bar { height: 0.75rem; }
   .person-select { margin: 0; max-width: none; width: 100%; padding: 10px 14px; }
   .key-pill { justify-content: center; padding: 10px 14px; }
   .key-pill span { position: static; width: auto; height: auto; clip: auto; overflow: visible; }
