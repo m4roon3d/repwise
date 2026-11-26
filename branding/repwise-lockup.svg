@@ -28,9 +28,14 @@
   </g>
   <!-- mark tile -->
   <g transform="translate(120 175) scale(0.55)">
-    <rect width="512" height="512" rx="112" fill="url(#tile)" stroke="#1e2b44" stroke-width="3"/>
-    <path d="M168 136 V380 M168 136 H216 A78 78 0 0 1 216 292 H168 M236 298 L336 380" fill="none" stroke="url(#accent)" stroke-width="46" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M212 228 L234 204 L256 228" fill="none" stroke="#e6fffb" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect width="512" height="512" rx="114" fill="url(#tile)" stroke="#1e2b44" stroke-width="3"/>
+    <path d="M188 110 V330" stroke="#fff" stroke-width="44" stroke-linecap="round"/>
+    <circle cx="260" cy="182" r="68" fill="none" stroke="url(#accent)" stroke-width="36"/>
+    <circle cx="260" cy="182" r="13" fill="url(#accent)"/>
+    <path d="M270 256 L332 330" stroke="#fff" stroke-width="44" stroke-linecap="round"/>
+    <rect x="84" y="384" width="344" height="18" rx="9" fill="#fff"/>
+    <rect x="100" y="344" width="34" height="98" rx="12" fill="url(#accent)"/>
+    <rect x="378" y="344" width="34" height="98" rx="12" fill="url(#accent)"/>
   </g>
   <text x="450" y="342" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="132" font-weight="700" letter-spacing="-3" fill="#f1f5f9">Rep<tspan fill="url(#accent)">wise</tspan></text>
   <text x="454" y="410" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="38" font-weight="500" fill="#94a3b8">Your plan. Your reps. Your AI coach.</text>
