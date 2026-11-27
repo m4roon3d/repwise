@@ -12,6 +12,7 @@ export const FEATURE_LABELS = {
   ask: 'Ask Your Coach',
   lab_read: 'Read blood report',
   lab_analysis: 'Blood report analysis',
+  exercise_ideas: 'Exercise ideas',
   scan_read: 'Read body scan',
 };
 

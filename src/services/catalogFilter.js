@@ -1,7 +1,7 @@
-import exercises from '../data/exercises.json';
+import { exercises, EXERCISE_MAP } from './catalog';
 import { healthAdjustments } from './health';
 
-export const EXERCISE_MAP = Object.fromEntries(exercises.map((e) => [e.id, e]));
+export { EXERCISE_MAP };
 
 export const EQUIPMENT_TIER_LABELS = {
   commercial_gym: 'Full Commercial Gym',

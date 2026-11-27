@@ -13,7 +13,8 @@ import { applyRpeCap, healthAdjustments, labFinisher, sanitizeHealth } from './h
 import { buildPlanRationale } from './rationale';
 import { assignDayStyles, isStrengthStyle, modalitiesOf, normalizeDoses, normalizeItem, weaveStyleDays, doseOf } from './styles';
 import { sanitizeLabs, analyzeLabs, sanitizeAnalysis, previousValue, MARKER_MAP } from './labs';
-import { LAB_REPORT_SCHEMA, BODY_SCAN_SCHEMA, LAB_ANALYSIS_SCHEMA } from './coach/schemas';
+import { LAB_REPORT_SCHEMA, BODY_SCAN_SCHEMA, LAB_ANALYSIS_SCHEMA, NEW_EXERCISES_SCHEMA } from './coach/schemas';
+import { exercises as CATALOG, sanitizeCustomExercise, slugFor, BUILT_IN_IDS } from './catalog';
 import { normalizeExtracted } from './bodyComp';
 import { buildDeterministicFallbackPlan, localIntakeTurn, localSwap, localAdaptDay } from './coach/localEngine';
 
@@ -514,4 +515,61 @@ Rules: never diagnose, never give medication or supplement doses (say "ask your 
     }
   );
   return sanitizeAnalysis({ ...parsed, generatedAt: Date.now() });
+}
+
+/**
+ * Suggests new exercises for the library from a plain request ("kettlebell moves for shoulders").
+ * Returns sanitized drafts (not saved): the person picks which to keep. Skips anything already in the library.
+ */
+export async function suggestExercises({ request, profile, apiKey, model, count = 4 }) {
+  if (!apiKey) throw new Error('Adding exercises with AI needs a Gemini API key. Add one in Settings, or add an exercise by hand.');
+  const ask = String(request || '').trim().slice(0, 300);
+  if (!ask) throw new Error('Describe what you want, for example "kettlebell moves for shoulders".');
+  const norm = (n) => n.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const known = new Set(CATALOG.map((e) => norm(e.name)));
+  const ai = await getAI(apiKey, 'exercise_ideas');
+  const parsed = await requestJson(
+    ai,
+    {
+      model,
+      contents: [
+        {
+          role: 'user',
+          parts: [
+            {
+              text: [
+                `Suggest up to ${count} well-established exercises for this request: "${ask}".`,
+                `The person trains at: ${profile?.equipmentTier || 'commercial_gym'}; experience: ${profile?.experienceLevel || 'unknown'}.`,
+                `Do NOT repeat any of these existing exercises: ${CATALOG.map((e) => e.name).join(', ')}.`,
+                'Only safe, mainstream movements a coach would teach; no stunts. Use standard names.',
+                'equipment_tiers: every setup where it can be done (home_setup = dumbbells/bands/bodyweight only).',
+                'dose: reps for sets x reps, time for holds/poses in seconds, duration for continuous cardio minutes.',
+                'joint_stress_flags: areas it loads hard enough to avoid when that area is injured; "impact" for jumping or running.',
+                'cues: exactly 3 short coaching cues, each under 15 words.',
+                `regression_id: an easier option from this list if one fits, else empty: ${[...BUILT_IN_IDS].join(', ')}.`,
+              ].join('\n'),
+            },
+          ],
+        },
+      ],
+      config: { responseMimeType: 'application/json', responseSchema: NEW_EXERCISES_SCHEMA, temperature: 0.4, maxOutputTokens: 8192 },
+    },
+    mustBeObject
+  );
+  const taken = new Set(CATALOG.map((e) => e.id));
+  const out = [];
+  for (const raw of Array.isArray(parsed.exercises) ? parsed.exercises : []) {
+    const name = typeof raw?.name === 'string' ? raw.name : '';
+    if (!name || known.has(norm(name))) continue;
+    const id = slugFor(name, taken);
+    const ex = sanitizeCustomExercise({ ...raw, id, source: 'ai' });
+    if (ex) {
+      taken.add(id);
+      known.add(norm(name));
+      out.push(ex);
+    }
+    if (out.length >= count) break;
+  }
+  if (!out.length) throw new Error('No new exercises came back for that. Try a different or more specific request.');
+  return out;
 }

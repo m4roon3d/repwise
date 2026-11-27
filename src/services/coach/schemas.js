@@ -229,3 +229,30 @@ export const LAB_ANALYSIS_SCHEMA = {
   },
   required: ['summary', 'overall'],
 };
+
+// "Add exercises with AI": new exercises in the catalogue's own shape. Enums keep them plannable.
+export const NEW_EXERCISES_SCHEMA = {
+  type: Type.OBJECT,
+  properties: {
+    exercises: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          name: { type: Type.STRING },
+          movement_pattern: { type: Type.STRING, enum: ['squat', 'hinge', 'lunge', 'horizontal_push', 'vertical_push', 'horizontal_pull', 'vertical_pull', 'core', 'carry', 'arms', 'calves', 'mobility', 'yoga', 'cardio'] },
+          primary_muscles: { type: Type.ARRAY, items: { type: Type.STRING } },
+          equipment_label: { type: Type.STRING },
+          equipment_tiers: { type: Type.ARRAY, items: { type: Type.STRING, enum: ['commercial_gym', 'apartment_gym', 'home_setup'] } },
+          modalities: { type: Type.ARRAY, items: { type: Type.STRING, enum: ['gym', 'calisthenics', 'yoga', 'cardio'] } },
+          dose: { type: Type.STRING, enum: ['reps', 'time', 'duration'] },
+          joint_stress_flags: { type: Type.ARRAY, items: { type: Type.STRING, enum: ['knee', 'shoulder', 'lower_back', 'wrist', 'elbow', 'hip', 'ankle', 'neck', 'impact'] } },
+          cues: { type: Type.ARRAY, items: { type: Type.STRING } },
+          regression_id: { type: Type.STRING },
+        },
+        required: ['name', 'movement_pattern', 'primary_muscles', 'equipment_label', 'equipment_tiers', 'modalities', 'dose', 'joint_stress_flags', 'cues'],
+      },
+    },
+  },
+  required: ['exercises'],
+};

@@ -179,7 +179,7 @@ export default function RoutineView({
 
         <div className="adapt-bar">
           <span className="adapt-label">Adapt Today (Quick Presets or Custom Request):</span>
-          <div className="chip-row">
+          <div className="chip-row chip-scroll">
             {ADAPT_PRESETS.map((preset) => (
               <button
                 key={preset}

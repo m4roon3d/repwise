@@ -13,7 +13,7 @@ import {
 import { BASELINE_TESTS, LEVEL_LABEL, MOBILITY_CHECKS, baselineDelta, latestBaseline, retestDue, scoreBaseline } from '../services/baseline';
 import { MARKERS, MARKER_MAP, analyzeLabs } from '../services/labs';
 import { prepareReportFile } from '../services/images';
-import exercises from '../data/exercises.json';
+import { exercises } from '../services/catalog';
 
 const YesNo = ({ value, onChange, label }) => (
   <div className="segmented yesno" role="group" aria-label={label}>

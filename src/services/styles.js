@@ -1,7 +1,7 @@
 // Training styles: gym, calisthenics, yoga and cardio. Decides which style each training day gets, builds yoga
 // and cardio days deterministically (so timing and safety are predictable), and gives timed or duration-based
 // exercises their prescription and weekly progression.
-import exercises from '../data/exercises.json';
+import { exercises, EXERCISE_MAP as BY_ID } from './catalog';
 
 export const STYLES = [
   { id: 'gym', label: 'Gym', icon: '🏋️', blurb: 'Weights and machines' },
@@ -11,7 +11,6 @@ export const STYLES = [
 ];
 const STYLE_IDS = STYLES.map((s) => s.id);
 const STRENGTH = new Set(['gym', 'calisthenics']);
-const BY_ID = Object.fromEntries(exercises.map((e) => [e.id, e]));
 
 export const modalitiesOf = (ex) => ex?.modalities || ['gym'];
 export const doseOf = (idOrEx) => (typeof idOrEx === 'string' ? BY_ID[idOrEx]?.dose : idOrEx?.dose) || 'reps';

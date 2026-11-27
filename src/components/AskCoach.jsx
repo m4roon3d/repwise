@@ -99,7 +99,7 @@ export default function AskCoach({ apiKey, chat, busy, error, focus, onClearFocu
 
       <div className="chat-log" role="log" aria-live="polite" aria-label="Conversation with your coach">
         {chat.length === 0 && (
-          <div className="chip-row">
+          <div className="chip-row chip-scroll">
             {STARTERS.map((s) => (
               <button key={s} type="button" className="chip chip-active" onClick={() => setInput(s)}>{s}</button>
             ))}

@@ -246,7 +246,7 @@ describe('Accessibility', () => {
     expect(screen.getByRole('button', { name: /Coach/i })).toHaveAttribute('aria-current', 'page');
     await user.click(screen.getByRole('button', { name: /Exercises/i }));
     expect(screen.getByRole('button', { name: /Exercises/i })).toHaveAttribute('aria-current', 'page');
-    expect(screen.getByText(/Personal Exercise Library/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Exercise library/i })).toBeInTheDocument();
   });
 });
 

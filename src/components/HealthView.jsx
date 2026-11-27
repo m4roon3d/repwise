@@ -194,7 +194,7 @@ export default function HealthView({ reports, profile, apiKey, onSave, onDelete,
           />
         )}
         {reports.length > 1 && !editing && (
-          <div className="chip-row" style={{ marginTop: '12px' }} role="group" aria-label="Choose report">
+          <div className="chip-row chip-scroll" style={{ marginTop: '12px' }} role="group" aria-label="Choose report">
             {[...reports].reverse().map((r) => (
               <button key={r.id} type="button" aria-pressed={r.id === report.id} className={`chip ${r.id === report.id ? 'chip-active' : ''}`} onClick={() => setSelectedId(r.id)}>
                 {fmtDate(r.date)}

@@ -2,7 +2,7 @@ import { sanitizeHealth, EMPTY_HEALTH } from './health';
 import { sanitizeBaselines } from './baseline';
 import { sanitizeLabs, sanitizeReports } from './labs';
 import { sanitizeScans } from './bodyComp';
-import exerciseCatalog from '../data/exercises.json';
+import { EXERCISE_MAP, setCustomExercises, sanitizeCustomList } from './catalog';
 import { sanitizeStyles } from './styles';
 
 const KEYS = {
@@ -17,6 +17,7 @@ const KEYS = {
   ONBOARDED: 'mf_onboarded_v1',
   BODY_SCANS: 'mf_body_scans_v1',
   LAB_REPORTS: 'mf_lab_reports_v1',
+  CUSTOM_EXERCISES: 'mf_custom_exercises_v1',
   PROFILES: 'mf_profiles_v1', // device-level: [{ id, name }]
   ACTIVE_PROFILE: 'mf_active_profile_v1', // device-level
 };
@@ -203,11 +204,10 @@ export function sanitizeProfile(raw) {
   return out;
 }
 
-const EXERCISE_IDS = new Set(exerciseCatalog.map((e) => e.id));
 const text = (v, n) => (typeof v === 'string' ? v.slice(0, n) : '');
 function sanitizePreferences(raw) {
   const src = raw && typeof raw === 'object' ? raw : {};
-  const ids = (a) => (Array.isArray(a) ? [...new Set(a.filter((id) => EXERCISE_IDS.has(id)))].slice(0, 20) : []);
+  const ids = (a) => (Array.isArray(a) ? [...new Set(a.filter((id) => Boolean(EXERCISE_MAP[id])))].slice(0, 20) : []);
   return {
     specificGoal: text(src.specificGoal, 160),
     goalWhy: text(src.goalWhy, 200),
@@ -316,7 +316,25 @@ export function saveModel(model) {
   safeSet(KEYS.MODEL, (model || DEFAULT_MODEL).trim());
 }
 
+// ---- My exercises (added in the app, by hand or by AI) -----------------------------------------------
+/** Reads this person's own exercises and makes them part of the live catalogue. */
+export function loadCustomExercises() {
+  let list = [];
+  try {
+    list = sanitizeCustomList(JSON.parse(safeGet(KEYS.CUSTOM_EXERCISES) || '[]'));
+  } catch {
+    list = [];
+  }
+  return setCustomExercises(list);
+}
+export function saveCustomExercises(list) {
+  const clean = setCustomExercises(list);
+  safeSet(KEYS.CUSTOM_EXERCISES, JSON.stringify(clean));
+  return clean;
+}
+
 export function loadProfile() {
+  loadCustomExercises();
   try {
     const raw = safeGet(KEYS.PROFILE);
     return raw ? sanitizeProfile(JSON.parse(raw)) : sanitizeProfile(null);
@@ -330,6 +348,7 @@ export function saveProfile(profile) {
 }
 
 export function loadPlan() {
+  loadCustomExercises();
   try {
     const raw = safeGet(KEYS.PLAN);
     return raw ? normalizePlan(JSON.parse(raw)) : null;
@@ -483,6 +502,7 @@ export function exportBackupJson() {
     workoutLogs: logs,
     bodyScans: loadBodyScans(),
     labReports: loadLabReports(),
+    customExercises: loadCustomExercises(),
   };
 
   return JSON.stringify(payload, null, 2);
@@ -494,6 +514,8 @@ export function importBackupJson(jsonText) {
     throw new Error('Backup file is not a Repwise export.');
   }
   const skipped = [];
+  // Exercises first: the profile's likes/dislikes and the plan may refer to them.
+  if (Array.isArray(data.customExercises)) saveCustomExercises(data.customExercises);
 
   if (data.profile !== undefined) {
     if (data.profile && typeof data.profile === 'object') saveProfile(sanitizeProfile(data.profile));
@@ -538,6 +560,7 @@ const AREA_LABELS = {
   COACH_CHAT: 'Coach chat',
   BODY_SCANS: 'Body scans',
   LAB_REPORTS: 'Blood reports',
+  CUSTOM_EXERCISES: 'My exercises',
 };
 
 /** Bytes used by each area for the current person, plus device totals. Strings count 2 bytes per char. */

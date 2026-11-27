@@ -1,7 +1,7 @@
 // Pre-exercise health screening and the training adjustments it implies.
 // Nothing here diagnoses. It decides how cautious the plan should be, which exercises to leave out,
 // and what safety notes to show, and it says when a doctor's OK is a good idea first.
-import exercises from '../data/exercises.json';
+import { exercises, EXERCISE_MAP as byId, customLoading } from './catalog';
 import { analyzeLabs, describeLabsForPrompt } from './labs';
 import { baselineRpeDelta, describeBaselineForPrompt, latestBaseline } from './baseline';
 
@@ -47,7 +47,6 @@ export const INJURY_AREAS = [
 ];
 export const INJURY_STATUS = ['none', 'old', 'current'];
 
-const byId = Object.fromEntries(exercises.map((e) => [e.id, e]));
 const where = (fn) => exercises.filter(fn).map((e) => e.id);
 
 // Exercises that load each area hard. Knee / shoulder / lower back use the catalogue's own joint flags.
@@ -172,7 +171,7 @@ export function healthAdjustments(profile) {
     caps.push(7);
     advise('advised');
     notes.push({ kind: 'safety', text: 'Pregnancy: you should be able to talk through every set. Stop for dizziness, bleeding, fluid loss or pain, and check this plan with your doctor or midwife.' });
-    exclude('Pregnancy: heavy barbell lifts and jumping', [...HEAVY_BARBELL, ...IMPACT]);
+    exclude('Pregnancy: heavy barbell lifts and jumping', [...HEAVY_BARBELL, ...IMPACT, ...customLoading('impact')]);
     if (preg !== 'pregnant_t1') {
       exclude('Pregnancy: no lying flat on your back', SUPINE);
       exclude('Pregnancy: avoids strain on the abdominal wall', ABDOMINAL_PRESSURE);
@@ -181,7 +180,7 @@ export function healthAdjustments(profile) {
     caps.push(6.5);
     advise('advised');
     notes.push({ kind: 'safety', text: 'Early postpartum: wait for your 6-week check before loading, rebuild breathing and pelvic floor first, and stop for heaviness, leaking or pain.' });
-    exclude('Early postpartum: abdominal-wall, impact and heavy loading', [...ABDOMINAL_PRESSURE, ...HEAVY_BARBELL, ...IMPACT, 'pullup', 'chin_up']);
+    exclude('Early postpartum: abdominal-wall, impact and heavy loading', [...ABDOMINAL_PRESSURE, ...HEAVY_BARBELL, ...IMPACT, ...customLoading('impact'), 'pullup', 'chin_up']);
   } else if (preg === 'postpartum') {
     caps.push(7.5);
     notes.push({ kind: 'info', text: 'Postpartum: if you notice leaking, heaviness or doming of the belly, mention it to a women\'s health physio.' });
@@ -190,7 +189,7 @@ export function healthAdjustments(profile) {
   // Injuries (wrist, elbow, hip, ankle, neck; knee/shoulder/back go through the catalogue's joint flags)
   for (const area of INJURY_AREAS) {
     const status = injuryStatus(profile, area.id);
-    if (status === 'current' && AREA_EXCLUSIONS[area.id]) exclude(`${area.label}: currently sore or injured`, AREA_EXCLUSIONS[area.id]);
+    if (status === 'current' && AREA_EXCLUSIONS[area.id]) exclude(`${area.label}: currently sore or injured`, [...AREA_EXCLUSIONS[area.id], ...customLoading(area.id)]);
     if (status === 'old') notes.push({ kind: 'info', text: `Old ${area.label.toLowerCase()} injury: warm it up well and back off if it complains.` });
   }
 

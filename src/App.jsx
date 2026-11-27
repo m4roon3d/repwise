@@ -663,7 +663,9 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
           />
         )}
 
-        {tab === 'library' && <CatalogBrowser defaultTier={profile.equipmentTier} />}
+        {tab === 'library' && (
+          <CatalogBrowser key={profileId} defaultTier={profile.equipmentTier} profile={profile} onProfileChange={handleProfileChange} plan={plan} apiKey={apiKey} model={model} />
+        )}
       </main>
 
       <nav className="bottom-nav" aria-label="Primary navigation">
