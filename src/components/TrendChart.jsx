@@ -14,7 +14,7 @@ const niceTicks = (min, max) => {
  * One measure over time: 2px line, 8px points with a surface ring, three recessive gridlines,
  * first/last date on the x-axis, and tap/hover to read any point. A hidden table carries the data for screen readers.
  */
-export default function TrendChart({ title, points, format = (v) => String(v), dateLabel = (d) => d, color = '#10b981', better }) {
+export default function TrendChart({ title, points, format = (v) => String(v), dateLabel = (d) => d, color = '#006c4c', better }) {
   const [sel, setSel] = useState(points.length - 1);
   const uid = useId().replace(/:/g, '');
   if (!points.length) return null;
@@ -133,7 +133,7 @@ export function MiniBars({ title, bars, max, formatLabel, note }) {
           const bx = PAD.l + i * bw + 2;
           return (
             <g key={i}>
-              {b.value > 0 && <rect x={bx} y={base - bh} width={bw - 4} height={bh} rx="4" fill={b.highlight ? '#10b981' : '#a7f3d0'} />}
+              {b.value > 0 && <rect x={bx} y={base - bh} width={bw - 4} height={bh} rx="4" fill={b.highlight ? '#006c4c' : '#a9cfbb'} />}
               <text x={bx + (bw - 4) / 2} y={base - bh - 4} textAnchor="middle" className="trend-axis">
                 {b.value}
               </text>

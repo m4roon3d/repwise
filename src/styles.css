@@ -134,7 +134,7 @@ input[type='checkbox'] { accent-color: var(--accent); width: 18px; height: 18px;
 .secondary-btn:hover { border-color: var(--border-strong); background: var(--surface-3); }
 .secondary-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .key-pill { display: inline-flex; align-items: center; gap: 6px; background: var(--surface-2); color: var(--muted); border: 1px solid var(--border); padding: 8px 12px; font-size: 0.78rem; border-radius: 999px; white-space: nowrap; }
-.key-pill-on { color: var(--accent-strong); background: var(--accent-soft); border-color: #bbf0d9; }
+.key-pill-on { color: var(--accent-strong); background: var(--accent-soft); border-color: transparent; }
 .icon-btn { border: none; background: transparent; color: var(--muted); font-size: 1.1rem; cursor: pointer; }
 .link-btn { background: none; border: 0; padding: 4px 0; color: var(--accent-strong); font: inherit; font-size: 0.86rem; font-weight: 600; cursor: pointer; text-align: left; }
 .link-btn:hover { text-decoration: underline; }
@@ -153,7 +153,7 @@ input[type='checkbox'] { accent-color: var(--accent); width: 18px; height: 18px;
 .chip-scroll::-webkit-scrollbar { display: none; }
 .chip-scroll .chip { flex: 0 0 auto; white-space: nowrap; }
 .chip-scroll .chip:last-child { margin-right: 24px; }
-.chip-active { background: var(--accent-soft); border-color: #a7f3d0; color: var(--accent-strong); }
+.chip-active { background: var(--accent-soft); border-color: transparent; color: var(--accent-strong); }
 .pill { font-size: 0.72rem; padding: 4px 10px; border-radius: 999px; background: var(--surface-2); color: var(--muted); white-space: nowrap; }
 .source-badge { display: inline-block; font-size: 0.72rem; font-weight: 650; padding: 3px 10px; border-radius: 999px; }
 .source-ai { background: #ecfeff; color: #0e7490; }
@@ -212,7 +212,7 @@ input[type='checkbox'] { accent-color: var(--accent); width: 18px; height: 18px;
 .cues-list { margin: 10px 0 0; padding-left: 18px; font-size: 0.86rem; line-height: 1.55; color: var(--text-2); }
 .cues-list li::marker { color: var(--accent); }
 .mini-btn { display: inline-flex; align-items: center; gap: 5px; background: var(--bg); color: var(--text-2); border: 1px solid var(--border); padding: 6px 11px; font-size: 0.75rem; white-space: nowrap; }
-.mini-btn-active { color: var(--accent-strong); border-color: #a7f3d0; background: var(--accent-soft); }
+.mini-btn-active { color: var(--accent-strong); border-color: transparent; background: var(--accent-soft); }
 
 /* ---- Workout logging ---------------------------------------------------------------------- */
 .log-block { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
@@ -371,7 +371,7 @@ input[type='date'] { width: 100%; padding: 11px 13px; border-radius: var(--radiu
 .tip-list { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 4px; font-size: 0.85rem; line-height: 1.5; color: var(--text-2); }
 .tip-list li::marker { color: var(--accent); }
 .range-bar { position: relative; height: 8px; margin: 10px 0 4px; border-radius: 8px; background: #e2e8f0; }
-.range-ok { position: absolute; top: 0; bottom: 0; background: #a7f3d0; border-radius: 8px; }
+.range-ok { position: absolute; top: 0; bottom: 0; background: #b5d6c4; border-radius: 8px; }
 .range-dot { position: absolute; top: 50%; width: 14px; height: 14px; margin-left: -7px; margin-top: -7px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 1px 3px rgba(15,23,42,0.3); background: var(--accent-strong); }
 .range-low, .range-high { background: #d97706; }
 .lab-edit-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
@@ -698,3 +698,14 @@ input[type='checkbox'], input[type='range'] { accent-color: var(--accent); }
 }
 .top-bar-scrolled { box-shadow: 0 0 0 100vmax #edf2ec; clip-path: inset(0 -100vmax); }
 @media (min-width: 1024px) { .top-bar-scrolled { box-shadow: none; clip-path: none; } }
+
+/* ---- One green: dark primary for every main action; neutral avatar, key and badges ---------------- */
+.fab { background: var(--accent); color: #fff; }
+.fab:hover { background: #0d7756; }
+.person-chip .avatar { background: var(--surface-3); color: var(--text); }
+.key-pill, .key-pill-on { position: relative; color: var(--text-2); }
+.key-pill-on::after { content: ''; position: absolute; top: 12px; right: 11px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 2px var(--bg); }
+.source-badge { font-weight: 500; padding: 4px 10px; }
+.source-ai, .source-local { background: var(--surface-2); color: var(--text-2); }
+.chat-user { background: var(--accent); color: #fff; }
+@media (min-width: 1024px) { .key-pill-on::after { top: 13px; right: auto; left: 29px; box-shadow: 0 0 0 2px #f1f6f1; } }
