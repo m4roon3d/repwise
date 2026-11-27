@@ -57,3 +57,16 @@ describe('health result rows', () => {
     expect(screen.getByText('Low · target 30 or more')).toBeInTheDocument();
   });
 });
+
+describe('page photo', () => {
+  it('shows a decorative photo for the current tab', async () => {
+    await seedPlan();
+    const user = userEvent.setup();
+    const { container } = render(<App />);
+    const backdrop = () => container.querySelector('.page-backdrop');
+    expect(backdrop()).toHaveAttribute('aria-hidden', 'true');
+    expect(backdrop().style.backgroundImage).toMatch(/bg\/routine\.jpg/); // opens on Workout once a plan exists
+    await user.click(screen.getByRole('button', { name: 'Health' }));
+    expect(backdrop().style.backgroundImage).toMatch(/bg\/health\.jpg/);
+  });
+});

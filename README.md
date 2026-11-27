@@ -30,7 +30,7 @@ A zero-backend, personal-use Progressive Web App (Vite + React) powered by your 
 - **Form coaching:** a *Form help* button on every exercise opens the coach focused on that lift, and you can attach up to 3 photos for a form check. Photos are resized in the browser, sent to Gemini with your question and never stored.
 
 ## Design
-Repwise follows Material 3: Roboto type, colour roles generated from Repwise green, filled cards, pill buttons, a top app bar titled per page, a five-tab navigation bar on phones (Exercises sits in the top bar), a navigation drawer on desktop, and a "Start workout" button that opens the next exercise to log. The repwise wordmark stays as the brand mark.
+Repwise follows Material 3: Roboto type, colour roles generated from Repwise green, filled cards, pill buttons, a top app bar titled per page, a five-tab navigation bar on phones (Exercises sits in the top bar), a navigation drawer on desktop, and a "Start workout" button that opens the next exercise to log. A soft gym photo sits behind the top of each page and fades into the surface. The repwise wordmark stays as the brand mark.
 
 ## Your own exercises
 In **Exercises**, tap **+ Add exercise** to add one by hand (name, movement, equipment, muscles, style, where you can do it, form cues, and which sore areas should rule it out). Or tap **✨ Add with AI**, describe what you want ("kettlebell moves for shoulders") and tick the suggestions to keep. Your exercises carry a ★ Mine or ✨ AI tag. New plans can use them, and the injury and pregnancy safety rules apply to them. Any exercise, built-in or yours, can be set to "Don't use in my plans". Each person on the device has their own list (up to 60), and it is included in backups.

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import AssessmentForm from './components/AssessmentForm';
 import RoutineView from './components/RoutineView';
 import CatalogBrowser from './components/CatalogBrowser';
@@ -6,6 +6,7 @@ import SettingsModal from './components/SettingsModal';
 import HealthNotice from './components/HealthNotice';
 import AskCoach from './components/AskCoach';
 import Wordmark from './components/Wordmark';
+import PageBackdrop from './components/PageBackdrop';
 import Diagnostics from './components/Diagnostics';
 import Onboarding from './components/Onboarding';
 import PlanWhy from './components/PlanWhy';
@@ -94,6 +95,14 @@ export default function App() {
 function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
   const [onboarded, setOnboarded] = useState(() => loadOnboarded());
   const people = listProfiles();
+  // The top app bar sits on the page photo, then takes a solid surface once the page scrolls (M3 behaviour).
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
   const [tab, setTab] = useState(() => (loadPlan() ? 'routine' : 'assess'));
   const [apiKey, setApiKey] = useState(() => loadApiKey());
   const [model, setModel] = useState(() => loadModel());
@@ -486,7 +495,8 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
   return (
     <>
     <div className={`app-shell tab-${tab}`}>
-      <header className="top-bar">
+      <PageBackdrop tab={tab} />
+      <header className={`top-bar ${scrolled ? 'top-bar-scrolled' : ''}`}>
         <div className="brand">
           <h1 className="brand-h1" aria-label="Repwise">
             <Wordmark />

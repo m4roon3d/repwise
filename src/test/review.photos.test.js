@@ -20,3 +20,9 @@ describe('exercise photos', () => {
     }
   });
 });
+
+describe('page photos', () => {
+  it('each tab has its photo', () => {
+    for (const t of ['assess', 'routine', 'ask', 'health', 'progress', 'library']) expect(existsSync(pub(`bg/${t}.jpg`))).toBe(true);
+  });
+});

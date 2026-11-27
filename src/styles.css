@@ -682,3 +682,19 @@ input[type='checkbox'], input[type='range'] { accent-color: var(--accent); }
 .unit-toggle .unit-active { background: var(--accent-soft); color: var(--on-accent-soft); box-shadow: none; }
 .chat-user { background: var(--primary-container); color: var(--on-primary-container); }
 .unit-toggle button { white-space: nowrap; }
+
+/* ---- Page photo: a soft gym scene across the top of each page, fading into the surface ------------- */
+.page-backdrop { position: absolute; top: 0; left: calc(50% - 50vw); width: 100vw; height: 300px; z-index: -1; pointer-events: none;
+  background-size: cover; background-position: center 35%; opacity: 0.42;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0,0,0,0.75) 45%, transparent 100%); mask-image: linear-gradient(180deg, #000 0%, rgba(0,0,0,0.75) 45%, transparent 100%); }
+.page-backdrop::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(251,253,249,0.35), rgba(251,253,249,0.1) 50%, rgba(251,253,249,0.6)); }
+.top-bar { background: transparent; transition: background-color 0.2s; }
+.top-bar-scrolled { background: #edf2ec; }
+.person-chip { background: rgba(251, 253, 249, 0.85); }
+.card { background: rgba(241, 246, 241, 0.9); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+@media (min-width: 1024px) {
+  .page-backdrop { left: 304px; width: auto; right: 0; height: 360px; }
+  .top-bar, .top-bar-scrolled { background: transparent; }
+}
+.top-bar-scrolled { box-shadow: 0 0 0 100vmax #edf2ec; clip-path: inset(0 -100vmax); }
+@media (min-width: 1024px) { .top-bar-scrolled { box-shadow: none; clip-path: none; } }
