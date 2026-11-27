@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import NumberInput from './NumberInput';
 import { AboutYou, FitnessTest, HealthCheck, InjuryGrid, LabReport, ClearanceBanner } from './HealthSections';
 import { EQUIPMENT_TIER_LABELS, cmToFeetInches, feetInchesToCm, kgToLbs, lbsToKg } from '../services/catalogFilter';
 import { parqComplete } from '../services/health';
@@ -37,7 +38,7 @@ export default function Onboarding({ profile, onChange, apiKey, onExtract, onFin
       <div className="grid-2">
         <div className="form-group">
           <label htmlFor="ob-age">Age</label>
-          <input id="ob-age" type="number" min="16" max="85" value={profile.age} onChange={(e) => set('age', Number(e.target.value))} />
+          <NumberInput id="ob-age" min="16" max="85" value={profile.age} onValue={(v) => set('age', v)} />
         </div>
         <div className="form-group">
           <label htmlFor="ob-sex">Sex (for health ranges)</label>
@@ -67,24 +68,24 @@ export default function Onboarding({ profile, onChange, apiKey, onExtract, onFin
           <div className="form-group">
             <label htmlFor="ob-ft">Height</label>
             <div style={{ display: 'flex', gap: '6px' }}>
-              <input id="ob-ft" aria-label="Height feet" type="number" value={feet} onChange={(e) => set('heightCm', feetInchesToCm(e.target.value, inches))} />
-              <input aria-label="Height inches" type="number" value={inches} onChange={(e) => set('heightCm', feetInchesToCm(feet, e.target.value))} />
+              <NumberInput id="ob-ft" aria-label="Height feet" value={feet} onValue={(v) => set('heightCm', feetInchesToCm(v, inches))} />
+              <NumberInput aria-label="Height inches" value={inches} onValue={(v) => set('heightCm', feetInchesToCm(feet, v))} />
             </div>
           </div>
           <div className="form-group">
             <label htmlFor="ob-lb">Weight (lb)</label>
-            <input id="ob-lb" type="number" value={kgToLbs(profile.weightKg)} onChange={(e) => set('weightKg', lbsToKg(e.target.value))} />
+            <NumberInput id="ob-lb" value={kgToLbs(profile.weightKg)} onValue={(v) => set('weightKg', lbsToKg(v))} />
           </div>
         </div>
       ) : (
         <div className="grid-2">
           <div className="form-group">
             <label htmlFor="ob-cm">Height (cm)</label>
-            <input id="ob-cm" type="number" value={profile.heightCm} onChange={(e) => set('heightCm', Number(e.target.value))} />
+            <NumberInput id="ob-cm" value={profile.heightCm} onValue={(v) => set('heightCm', v)} />
           </div>
           <div className="form-group">
             <label htmlFor="ob-kg">Weight (kg)</label>
-            <input id="ob-kg" type="number" value={profile.weightKg} onChange={(e) => set('weightKg', Number(e.target.value))} />
+            <NumberInput id="ob-kg" value={profile.weightKg} onValue={(v) => set('weightKg', v)} />
           </div>
         </div>
       )}
@@ -139,13 +140,13 @@ export default function Onboarding({ profile, onChange, apiKey, onExtract, onFin
         </div>
         <div className="form-group">
           <label htmlFor="ob-away">Weeks since you last trained</label>
-          <input id="ob-away" type="number" min="0" max="104" value={profile.weeksAway} onChange={(e) => set('weeksAway', Number(e.target.value))} />
+          <NumberInput id="ob-away" min="0" max="104" value={profile.weeksAway} onValue={(v) => set('weeksAway', v)} />
         </div>
       </div>
       <div className="grid-2">
         <div className="form-group">
           <label htmlFor="ob-sleep">Average sleep (hours)</label>
-          <input id="ob-sleep" type="number" step="0.5" min="3" max="12" value={profile.sleepHours} onChange={(e) => set('sleepHours', Number(e.target.value))} />
+          <NumberInput id="ob-sleep" step="0.5" min="3" max="12" value={profile.sleepHours} onValue={(v) => set('sleepHours', v)} />
         </div>
         <div className="form-group">
           <label htmlFor="ob-energy">Energy lately</label>

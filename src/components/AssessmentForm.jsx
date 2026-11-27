@@ -1,4 +1,5 @@
 import React from 'react';
+import NumberInput from './NumberInput';
 import CoachIntakeChat from './CoachIntakeChat';
 import StylePicker from './StylePicker';
 import {
@@ -117,22 +118,20 @@ export default function AssessmentForm({
         <div className="grid-2">
           <div className="form-group">
             <label htmlFor="f-age">Age</label>
-            <input id="f-age"
-              type="number"
+            <NumberInput id="f-age"
               min="16"
               max="85"
               value={profile.age}
-              onChange={(e) => updateField('age', Number(e.target.value))}
+              onValue={(v) => updateField('age', v)}
             />
           </div>
           <div className="form-group">
             <label htmlFor="f-resting-hr">Resting HR (bpm)</label>
-            <input id="f-resting-hr"
-              type="number"
+            <NumberInput id="f-resting-hr"
               min="40"
               max="115"
               value={profile.restingHr}
-              onChange={(e) => updateField('restingHr', Number(e.target.value))}
+              onValue={(v) => updateField('restingHr', v)}
             />
           </div>
 
@@ -140,23 +139,21 @@ export default function AssessmentForm({
             <>
               <div className="form-group">
                 <label htmlFor="f-height-cm">Height (cm)</label>
-                <input id="f-height-cm"
-                  type="number"
+                <NumberInput id="f-height-cm"
                   min="130"
                   max="220"
                   value={profile.heightCm}
-                  onChange={(e) => updateField('heightCm', Number(e.target.value))}
+                  onValue={(v) => updateField('heightCm', v)}
                 />
               </div>
               <div className="form-group">
                 <label htmlFor="f-weight-kg">Weight (kg)</label>
-                <input id="f-weight-kg"
-                  type="number"
+                <NumberInput id="f-weight-kg"
                   step="0.5"
                   min="40"
                   max="180"
                   value={profile.weightKg}
-                  onChange={(e) => updateField('weightKg', Number(e.target.value))}
+                  onValue={(v) => updateField('weightKg', v)}
                 />
               </div>
             </>
@@ -165,36 +162,29 @@ export default function AssessmentForm({
               <div className="form-group">
                 <label id="f-height-ftin-label">Height (ft / in)</label>
                 <div className="input-row" role="group" aria-labelledby="f-height-ftin-label">
-                  <input
-                    type="number"
+                  <NumberInput
                     min="4"
                     max="7"
                     value={feet}
                     aria-label="Feet"
-                    onChange={(e) =>
-                      updateField('heightCm', feetInchesToCm(e.target.value, inches))
-                    }
+                    onValue={(v) => updateField('heightCm', feetInchesToCm(v, inches))}
                   />
-                  <input
-                    type="number"
+                  <NumberInput
                     min="0"
                     max="11"
                     value={inches}
                     aria-label="Inches"
-                    onChange={(e) =>
-                      updateField('heightCm', feetInchesToCm(feet, e.target.value))
-                    }
+                    onValue={(v) => updateField('heightCm', feetInchesToCm(feet, v))}
                   />
                 </div>
               </div>
               <div className="form-group">
                 <label htmlFor="f-weight-lbs">Weight (lbs)</label>
-                <input id="f-weight-lbs"
-                  type="number"
+                <NumberInput id="f-weight-lbs"
                   min="85"
                   max="400"
                   value={weightLbs}
-                  onChange={(e) => updateField('weightKg', lbsToKg(e.target.value))}
+                  onValue={(v) => updateField('weightKg', lbsToKg(v))}
                 />
               </div>
             </>
@@ -202,13 +192,12 @@ export default function AssessmentForm({
 
           <div className="form-group">
             <label htmlFor="f-sleep-hours">Avg Sleep (hrs/night)</label>
-            <input id="f-sleep-hours"
-              type="number"
+            <NumberInput id="f-sleep-hours"
               step="0.5"
               min="3"
               max="12"
               value={profile.sleepHours}
-              onChange={(e) => updateField('sleepHours', Number(e.target.value))}
+              onValue={(v) => updateField('sleepHours', v)}
             />
           </div>
           <div className="form-group">
@@ -237,12 +226,11 @@ export default function AssessmentForm({
           </div>
           <div className="form-group">
             <label htmlFor="f-weeks-away">Weeks Since Last Trained (0 = training now)</label>
-            <input id="f-weeks-away"
-              type="number"
+            <NumberInput id="f-weeks-away"
               min="0"
               max="104"
               value={profile.weeksAway}
-              onChange={(e) => updateField('weeksAway', Number(e.target.value))}
+              onValue={(v) => updateField('weeksAway', v)}
             />
           </div>
           <div className="form-group">
