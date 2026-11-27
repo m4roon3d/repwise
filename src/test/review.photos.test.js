@@ -19,7 +19,4 @@ describe('exercise photos', () => {
       }
     }
   });
-  it('each tab has a background scene', () => {
-    for (const t of ['assess', 'routine', 'ask', 'library']) expect(existsSync(pub(`bg/${t}.jpg`))).toBe(true);
-  });
 });

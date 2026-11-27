@@ -19,13 +19,13 @@ export default function Wordmark() {
         <g className="plates plates-l">
           <rect x="30" y="6.5" width="5" height="13" rx="1.5" fill="currentColor" />
           <rect x="18" y="3.5" width="9" height="19" rx="2.5" fill="#059669" />
-          <rect x="7" y="0" width="11" height="26" rx="3" fill="var(--accent)" />
+          <rect x="7" y="0" width="11" height="26" rx="3" fill="var(--brand)" />
           <rect x="1" y="9" width="6" height="8" rx="2" fill="currentColor" />
         </g>
         <g className="plates plates-r">
           <rect x="205" y="6.5" width="5" height="13" rx="1.5" fill="currentColor" />
           <rect x="213" y="3.5" width="9" height="19" rx="2.5" fill="#059669" />
-          <rect x="222" y="0" width="11" height="26" rx="3" fill="var(--accent)" />
+          <rect x="222" y="0" width="11" height="26" rx="3" fill="var(--brand)" />
           <rect x="233" y="9" width="6" height="8" rx="2" fill="currentColor" />
         </g>
       </svg>

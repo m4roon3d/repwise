@@ -3,6 +3,7 @@ import ExercisePhotos from './ExercisePhotos';
 import { EXERCISE_MAP, EQUIPMENT_TIER_LABELS } from '../services/catalogFilter';
 import { SAFETY_SHORT } from './HealthNotice';
 import LogSets from './LogSets';
+import { lastSession } from '../services/progress';
 
 const STYLE_ICON = { gym: '🏋️', calisthenics: '🤸', yoga: '🧘', cardio: '🏃' };
 
@@ -39,6 +40,7 @@ export default function RoutineView({
   const [swapAllWeeks, setSwapAllWeeks] = useState(true);
   const [customAdaptText, setCustomAdaptText] = useState('');
   const [feedbackSent, setFeedbackSent] = useState('');
+  const [startSignal, setStartSignal] = useState({ idx: -1, n: 0 });
 
   useEffect(() => {
     setSelectedWeekIdx(0);
@@ -68,6 +70,19 @@ export default function RoutineView({
   const week = plan.weeks[safeWeekIdx];
   const safeDayIdx = Math.min(selectedDayIdx, Math.max(0, (week.days?.length || 1) - 1));
   const day = week.days?.[safeDayIdx];
+  // Start workout / Next exercise: the first exercise of this day not yet logged today.
+  const today = new Date().toDateString();
+  const loggedToday = (id) => {
+    const last = lastSession(logs, id);
+    return Boolean(last && new Date(last.ts).toDateString() === today);
+  };
+  const dayItems = day?.exercises || [];
+  const nextIdx = dayItems.findIndex((it) => EXERCISE_MAP[it.exercise_id] && !loggedToday(it.exercise_id));
+  const startedToday = dayItems.some((it) => loggedToday(it.exercise_id));
+  const startNext = () => {
+    setStartSignal((s) => ({ idx: nextIdx, n: s.n + 1 }));
+    document.getElementById(`ex-card-${nextIdx}`)?.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
+  };
 
   if (!day) return null;
 
@@ -244,7 +259,7 @@ export default function RoutineView({
         const isSwapping = busyKey === `swap-${itemKey}`;
 
         return (
-          <article key={`${item.exercise_id}-${exIdx}`} className="card exercise-card">
+          <article key={`${item.exercise_id}-${exIdx}`} id={`ex-card-${exIdx}`} className="card exercise-card">
             <div className="card-head">
               <div>
                 <span className="pattern-tag">{meta.movement_pattern.replace('_', ' ')}</span>
@@ -384,6 +399,7 @@ export default function RoutineView({
               onLog={onLogExercise}
               onUndo={onUndoLog}
               dayStyle={day.style}
+              openSignal={startSignal.idx === exIdx ? startSignal.n : 0}
             />
           </article>
         );
@@ -421,6 +437,12 @@ export default function RoutineView({
         </div>
         {feedbackSent && <div className="status-banner status-success">{feedbackSent}</div>}
       </section>
+      {day && nextIdx >= 0 && (
+        <button type="button" className="fab" onClick={startNext}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+          {startedToday ? 'Next exercise' : 'Start workout'}
+        </button>
+      )}
     </div>
   );
 }

@@ -5,6 +5,16 @@ import { healthAdjustments, labFinisher } from '../services/health';
 import { prepareReportFile } from '../services/images';
 import { fmtDate } from '../services/bodyComp';
 
+/** "High · target 199 or less" — what the reader is aiming for. */
+function targetLine(r) {
+  const label = r.status === 'high' ? 'High' : 'Low';
+  const n = (v) => (Number.isInteger(v) ? v : Number(v).toFixed(1));
+  if (!r.range) return label;
+  // Ranges are in the marker's standard unit; say so when the report used another.
+  const u = r.canonicalUnit && r.unit && r.unit.toLowerCase() !== r.canonicalUnit.toLowerCase() ? ` ${r.canonicalUnit}` : '';
+  return r.status === 'high' ? `${label} · target ${n(r.range.high)}${u} or less` : `${label} · target ${n(r.range.low)}${u} or more`;
+}
+
 const STATUS = { low: { label: 'Low', icon: '↓' }, high: { label: 'High', icon: '↑' }, normal: { label: 'Normal', icon: '✓' }, unknown: { label: 'Not checked', icon: '·' } };
 const OVERALL = { good: ['✅', 'Looking good'], mixed: ['🟡', 'A few things to work on'], needs_attention: ['⚠️', 'Needs attention'] };
 const AREA_ICON = { nutrition: '🥗', sleep: '😴', cardio: '🚶', strength: '🏋️', lifestyle: '🌿' };
@@ -228,7 +238,10 @@ export default function HealthView({ reports, profile, apiKey, onSave, onDelete,
                         <li key={cardId(r)}>
                           <button type="button" className={`flag-row flag-${r.status}`} onClick={() => jumpTo(r)} aria-label={`${r.name}: ${r.value} ${r.unit}, ${STATUS[r.status].label}. Show details`}>
                             <span className="flag-arrow" aria-hidden="true">{STATUS[r.status].icon}</span>
-                            <span className="flag-name">{shortName(r)}</span>
+                            <span className="flag-text">
+                              <span className="flag-name">{shortName(r)}</span>
+                              <span className="flag-sub">{targetLine(r)}</span>
+                            </span>
                             <span className="flag-val">
                               {r.value} <small>{r.unit}</small>
                             </span>

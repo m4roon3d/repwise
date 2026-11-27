@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { formatWeight, fromDisplayWeight, lastSession, suggestNext, toDisplayWeight, weightUnit } from '../services/progress';
 
 const RPE_OPTIONS = ['', '6', '7', '8', '9', '10'];
@@ -9,7 +9,7 @@ function ago(ts) {
 }
 
 /** Log what you actually lifted on one exercise, see last time, and get a next-load suggestion. */
-export default function LogSets({ item, logs, unitSystem, weekNumber, dayTitle, onLog, onUndo }) {
+export default function LogSets({ item, logs, unitSystem, weekNumber, dayTitle, onLog, onUndo, openSignal = 0 }) {
   const [open, setOpen] = useState(false);
   const [rows, setRows] = useState([]);
   const [rpe, setRpe] = useState('');
@@ -32,6 +32,13 @@ export default function LogSets({ item, logs, unitSystem, weekNumber, dayTitle, 
     setSaved(false);
     setOpen(true);
   };
+
+  // The Start workout button asks this exercise to open its log form.
+  const openRef = useRef(openForm);
+  openRef.current = openForm;
+  useEffect(() => {
+    if (openSignal) openRef.current();
+  }, [openSignal]);
 
   const update = (i, key, value) => setRows((prev) => prev.map((r, idx) => (idx === i ? { ...r, [key]: value } : r)));
 

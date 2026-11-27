@@ -5,7 +5,6 @@ import CatalogBrowser from './components/CatalogBrowser';
 import SettingsModal from './components/SettingsModal';
 import HealthNotice from './components/HealthNotice';
 import AskCoach from './components/AskCoach';
-import Watermark from './components/Watermark';
 import Wordmark from './components/Wordmark';
 import Diagnostics from './components/Diagnostics';
 import Onboarding from './components/Onboarding';
@@ -486,7 +485,6 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
 
   return (
     <>
-    <Watermark tab={tab} />
     <div className={`app-shell tab-${tab}`}>
       <header className="top-bar">
         <div className="brand">
@@ -494,7 +492,10 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
             <Wordmark />
           </h1>
         </div>
+        <h2 className="page-title">{PAGE_TITLES[tab] || 'Repwise'}</h2>
 
+        <label className="person-chip">
+          <span className="avatar" aria-hidden="true">{((profile.name || people.find((p) => p.id === profileId)?.name || 'M').trim()[0] || 'M').toUpperCase()}</span>
         <select
           className="person-select"
           aria-label="Switch person"
@@ -508,13 +509,14 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
           ))}
           {people.length < 6 && <option value="__add">+ Add a person</option>}
         </select>
+        </label>
 
         <button
           type="button"
           className={`key-pill ${apiKey ? 'key-pill-on' : ''}`}
           onClick={() => setSettingsOpen(true)}
         >
-          <KeyIcon size={15} />
+          <KeyIcon size={22} />
           <span>{apiKey ? 'Gemini Connected' : 'API Key'}</span>
         </button>
       </header>
@@ -726,7 +728,7 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
         </button>
         <button
           type="button"
-          className={`nav-item ${tab === 'library' ? 'nav-active' : ''}`}
+          className={`nav-item nav-exercises ${tab === 'library' ? 'nav-active' : ''}`}
           aria-current={tab === 'library' ? 'page' : undefined}
           onClick={() => setTab('library')}
         >
@@ -753,6 +755,8 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
     </>
   );
 }
+
+const PAGE_TITLES = { assess: 'Coach', routine: 'Workout', ask: 'Ask', health: 'Health', progress: 'Progress', library: 'Exercises', diagnostics: 'Diagnostics' };
 
 const EXTRA_SECTIONS = [
   ['health', 'Health check', '❤️'],
