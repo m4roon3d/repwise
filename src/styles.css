@@ -530,3 +530,19 @@ input[type='date'] { width: 100%; padding: 11px 13px; border-radius: var(--radiu
 .ai-drafts input { margin-top: 2px; flex: 0 0 auto; }
 .ai-draft-cue { display: block; margin-top: 2px; }
 @media (min-width: 640px) { .lib-filters { grid-template-columns: 1fr 240px; } }
+
+/* ---- Blood report: results at a glance ------------------------------------------------------------ */
+.flag-headline { margin-top: 8px; font-size: 0.95rem; font-weight: 600; line-height: 1.45; color: var(--text); }
+.flag-groups { margin-top: 12px; display: flex; flex-direction: column; gap: 12px; }
+.flag-group-label { display: block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.flag-rows { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.flag-row { width: 100%; display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 12px; border: 1px solid #fde7c2; background: var(--warn-bg); color: var(--text); font: inherit; font-size: 0.88rem; text-align: left; cursor: pointer; }
+.flag-row:hover { border-color: #f5c97a; }
+.flag-arrow { width: 22px; height: 22px; border-radius: 999px; display: grid; place-items: center; font-size: 0.8rem; font-weight: 800; background: #fff; color: #b45309; }
+.flag-low .flag-arrow { color: #1d4ed8; }
+.flag-name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.flag-val { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.flag-val small { font-weight: 500; color: var(--muted); font-size: 0.74rem; }
+.marker-group + .marker-group { margin-top: 14px; }
+.marker-group-label { font-size: 0.7rem !important; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 8px 0 8px !important; }
+.marker-card { scroll-margin-top: 90px; }

@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import TrendChart from './TrendChart';
-import { MARKERS, MARKER_MAP, analyzeLabs, markerSeries, previousValue, sanitizeReport, tipsFor } from '../services/labs';
+import { MARKERS, MARKER_MAP, analyzeLabs, markerSeries, previousValue, sanitizeReport, tipsFor, groupResults, flaggedHeadline, shortName } from '../services/labs';
 import { healthAdjustments, labFinisher } from '../services/health';
 import { prepareReportFile } from '../services/images';
 import { fmtDate } from '../services/bodyComp';
@@ -118,6 +118,9 @@ export default function HealthView({ reports, profile, apiKey, onSave, onDelete,
   const results = useMemo(() => (report ? analyzeLabs(report, profile.sex).results : []), [report, profile.sex]);
   const flagged = results.filter((r) => r.status === 'low' || r.status === 'high');
   const normal = results.filter((r) => r.status === 'normal' || r.status === 'unknown');
+  const flaggedGroups = useMemo(() => groupResults(flagged), [results]); // eslint-disable-line react-hooks/exhaustive-deps
+  const cardId = (r) => `lab-card-${r.id || norm(r.name).replace(/\s+/g, '-')}`;
+  const jumpTo = (r) => document.getElementById(cardId(r))?.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
   const adj = healthAdjustments(profile);
   const finisher = labFinisher(profile);
   const trendable = MARKERS.filter((m) => markerSeries(reports, m.id, profile.sex).length >= 2);
@@ -213,14 +216,32 @@ export default function HealthView({ reports, profile, apiKey, onSave, onDelete,
                 <p className="muted">Report from {fmtDate(report.date)}</p>
               </div>
             </div>
-            {analysis?.summary ? (
-              <p className="summary-text">{analysis.summary}</p>
+            {flagged.length > 0 && !analysis?.summary && <p className="flag-headline">{flaggedHeadline(flagged)}</p>}
+            {analysis?.summary && <p className="summary-text">{analysis.summary}</p>}
+            {flagged.length > 0 ? (
+              <div className="flag-groups">
+                {flaggedGroups.map((g) => (
+                  <div key={g.id} className="flag-group">
+                    <span className="flag-group-label">{g.label}</span>
+                    <ul className="flag-rows">
+                      {g.items.map((r) => (
+                        <li key={cardId(r)}>
+                          <button type="button" className={`flag-row flag-${r.status}`} onClick={() => jumpTo(r)} aria-label={`${r.name}: ${r.value} ${r.unit}, ${STATUS[r.status].label}. Show details`}>
+                            <span className="flag-arrow" aria-hidden="true">{STATUS[r.status].icon}</span>
+                            <span className="flag-name">{shortName(r)}</span>
+                            <span className="flag-val">
+                              {r.value} <small>{r.unit}</small>
+                            </span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+                <p className="muted small">Tap a result for what it means and what helps.</p>
+              </div>
             ) : (
-              <p className="summary-text">
-                {flagged.length
-                  ? `${flagged.map((r) => `${r.name} is ${r.status}`).join(', ')}. The cards below explain what that means and what helps.`
-                  : 'Every result we could check is within the typical range. Keep doing what you are doing.'}
-              </p>
+              !analysis?.summary && <p className="summary-text">Every result we could check is within the typical range. Keep doing what you are doing.</p>
             )}
             {apiKey ? (
               <button type="button" className={analysis ? 'link-btn' : 'primary-btn'} onClick={analyze} disabled={Boolean(busy)} style={{ marginTop: '10px' }}>
@@ -233,13 +254,16 @@ export default function HealthView({ reports, profile, apiKey, onSave, onDelete,
           {flagged.length > 0 && (
             <section className="card">
               <h2>Needs attention</h2>
+              {flaggedGroups.map((g) => (
+              <div key={g.id} className="marker-group">
+              {flaggedGroups.length > 1 && <h3 className="marker-group-label">{g.label}</h3>}
               <ul className="marker-list">
-                {flagged.map((r, i) => {
+                {g.items.map((r, i) => {
                   const ai = aiFor(r);
                   const prev = r.id ? previousValue(reports, idx, r.id) : null;
                   const tips = ai?.tips?.length ? ai.tips : tipsFor(r.id, r.status);
                   return (
-                    <li key={i} className={`marker-card lab-${r.status}`}>
+                    <li key={i} id={cardId(r)} className={`marker-card lab-${r.status}`}>
                       <div className="lab-head">
                         <strong>{r.name}</strong>
                         <span>
@@ -272,13 +296,21 @@ export default function HealthView({ reports, profile, apiKey, onSave, onDelete,
                   );
                 })}
               </ul>
+              </div>
+              ))}
             </section>
           )}
 
           {normal.length > 0 && (
             <section className="card">
               <button type="button" className="plan-why-toggle" aria-expanded={showNormal} onClick={() => setShowNormal(!showNormal)}>
-                <strong>Within range ({normal.length})</strong>
+                <strong>
+                  {(() => {
+                    const ok = normal.filter((r) => r.status === 'normal').length;
+                    const other = normal.length - ok;
+                    return `${ok ? `Within range (${ok})` : 'Other results'}${other ? ` · ${other} not assessed` : ''}`;
+                  })()}
+                </strong>
                 <span aria-hidden="true">{showNormal ? '▴' : '▾'}</span>
               </button>
               {showNormal && (

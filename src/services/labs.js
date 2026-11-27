@@ -80,6 +80,55 @@ export const MARKERS = [
 
 export const MARKER_MAP = Object.fromEntries(MARKERS.map((m) => [m.id, m]));
 
+/** Body systems, in the order the Health tab shows them. */
+export const MARKER_GROUPS = [
+  { id: 'lipids', label: 'Cholesterol & blood fats', short: 'cholesterol', ids: ['total_cholesterol', 'ldl', 'hdl', 'triglycerides'] },
+  { id: 'sugar', label: 'Blood sugar', short: 'blood sugar', ids: ['fasting_glucose', 'hba1c'] },
+  { id: 'vitamins', label: 'Vitamins', short: 'vitamins', ids: ['vitamin_d', 'vitamin_b12'] },
+  { id: 'blood', label: 'Iron & blood', short: 'iron', ids: ['hemoglobin', 'ferritin'] },
+  { id: 'thyroid', label: 'Thyroid', short: 'thyroid', ids: ['tsh'] },
+  { id: 'inflammation', label: 'Inflammation', short: 'inflammation', ids: ['crp'] },
+  { id: 'kidney', label: 'Kidney', short: 'kidney', ids: ['creatinine'] },
+];
+const GROUP_OF = Object.fromEntries(MARKER_GROUPS.flatMap((g) => g.ids.map((id) => [id, g.id])));
+export const groupOf = (id) => GROUP_OF[id] || 'other';
+
+/** Results sorted into body-system groups: [{ id, label, short, items }], empty groups dropped. */
+export function groupResults(results) {
+  const groups = [...MARKER_GROUPS, { id: 'other', label: 'Other', short: 'other results', ids: [] }].map((g) => ({ ...g, items: [] }));
+  for (const r of results) groups.find((g) => g.id === groupOf(r.id)).items.push(r);
+  return groups.filter((g) => g.items.length);
+}
+
+/** Marker name without the bracketed hint: "Vitamin D (25-OH)" → "Vitamin D". */
+export const shortName = (r) => String(r?.name || '').replace(/\s*\(.*?\)\s*/g, ' ').trim();
+
+/** One plain line, e.g. "Mostly cholesterol & blood fats, plus low vitamins and raised inflammation." */
+export function flaggedHeadline(flagged) {
+  const groups = groupResults(flagged).sort((a, b) => b.items.length - a.items.length);
+  if (!groups.length) return '';
+  const word = (g) => {
+    const dirs = new Set(g.items.map((r) => r.status));
+    const lead = dirs.size === 1 ? (dirs.has('high') ? 'raised ' : 'low ') : '';
+    if (g.items.length === 1 && g.ids.length > 1) {
+      const n = shortName(g.items[0]);
+      return `${lead}${/^[A-Z][a-z]/.test(n) ? n[0].toLowerCase() + n.slice(1) : n}`;
+    }
+    return `${lead}${g.short}`;
+  };
+  const [first, ...rest] = groups;
+  if (!rest.length) return `${first.items.length > 1 ? 'All in' : 'Just'} ${first.label.toLowerCase()}.`.replace('Just ', 'One result: ');
+  const tail = rest.map(word);
+  const list = tail.length > 1 ? `${tail.slice(0, -1).join(', ')} and ${tail.at(-1)}` : tail[0];
+  return `${first.items.length > 1 ? 'Mostly' : 'Mainly'} ${first.label.toLowerCase()}, plus ${list}.`;
+}
+
+/** Ratios and derived lipids ("Chol/HDL ratio", "Non-HDL", "VLDL") are not the marker they mention. */
+export function isDerivedName(name) {
+  const n = String(name || '').toLowerCase();
+  return /\bratio\b/.test(n) || /non[\s-]*hdl/.test(n) || /\bvldl\b/.test(n) || /(chol|hdl|ldl|tg|trig)[a-z.]*\s*\/\s*(chol|hdl|ldl|tg|trig)/.test(n);
+}
+
 const norm = (s) =>
   String(s || '')
     .toLowerCase()
@@ -90,7 +139,7 @@ const norm = (s) =>
 /** Matches a printed test name to a known marker. Longest alias wins, so "LDL cholesterol" beats "cholesterol". */
 export function matchMarker(name) {
   const n = norm(name);
-  if (!n) return null;
+  if (!n || isDerivedName(name)) return null;
   let best = null;
   for (const m of MARKERS) {
     for (const a of m.aliases) {
@@ -132,8 +181,12 @@ export function assessMarker(markerId, canonicalValue, sex) {
  */
 export function analyzeLabs(labs, sex) {
   const results = [];
+  const seen = new Set();
   for (const e of labs?.markers || []) {
-    const id = e.id || matchMarker(e.name);
+    const id = isDerivedName(e.name) ? null : e.id || matchMarker(e.name);
+    // A report can print the same test twice (summary + detail page): count it once.
+    if (id && seen.has(id)) continue;
+    if (id) seen.add(id);
     const canonical = id ? toCanonical(id, e.value, e.unit) : null;
     const a = id ? assessMarker(id, canonical, sex) : null;
     results.push({
@@ -166,7 +219,7 @@ export function sanitizeLabs(raw) {
     .filter((m) => m && typeof m.name === 'string' && m.name.trim() && Number.isFinite(Number(m.value)))
     .slice(0, MAX_MARKERS)
     .map((m) => {
-      const id = typeof m.id === 'string' && MARKER_MAP[m.id] ? m.id : matchMarker(m.name);
+      const id = isDerivedName(m.name) ? null : typeof m.id === 'string' && MARKER_MAP[m.id] ? m.id : matchMarker(m.name);
       return {
         id: id || null,
         name: m.name.trim().slice(0, 80),
