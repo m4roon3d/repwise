@@ -403,3 +403,18 @@ describe('nutrition trends', () => {
     expect(onOpen).toHaveBeenCalled();
   });
 });
+
+describe('scrolling', () => {
+  it('never scrolls the page when the Nutrition screen redraws', async () => {
+    const { saveMealPlan } = await import('../services/storage');
+    saveMealPlan(JSON.parse(mealPlanReply().text));
+    const spy = vi.fn();
+    Element.prototype.scrollIntoView = spy;
+    const props = { onProfileChange: vi.fn(), plan: null, apiKey: 'k', model: 'm' };
+    const { rerender } = render(<NutritionView profile={base()} {...props} />);
+    for (let i = 0; i < 3; i++) rerender(<NutritionView profile={base()} {...props} />); // e.g. the top bar changing on scroll
+    expect(screen.getByRole('tablist', { name: 'Day' })).toBeInTheDocument();
+    expect(spy).not.toHaveBeenCalled();
+    delete Element.prototype.scrollIntoView;
+  });
+});

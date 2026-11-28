@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import BarcodeScanner from './BarcodeScanner';
 import DietFields from './DietFields';
 import { computeTargets, trainingWeekdays, dietClashes, DIET_TYPES, sanitizeDiet } from '../services/nutrition';
@@ -313,6 +313,16 @@ function MealPlanCard({ profile, plan, apiKey, model, targets, onLogMeal }) {
     }
   };
 
+  // Bring the chosen day's chip into view by scrolling the chip row sideways only. (scrollIntoView would
+  // also scroll the page, and running it on every render dragged the page back down while scrolling up.)
+  const daysRef = useRef(null);
+  const hasPlan = Boolean(mealPlan);
+  useEffect(() => {
+    const row = daysRef.current;
+    const chip = row?.children?.[dayIdx];
+    if (row && chip) row.scrollLeft = Math.max(0, chip.offsetLeft - (row.clientWidth - chip.offsetWidth) / 2);
+  }, [dayIdx, hasPlan]);
+
   const day = mealPlan?.days[Math.min(dayIdx, mealPlan.days.length - 1)];
   const dayTarget = day?.training ? targets.trainingDay.kcal : targets.restDay.kcal;
   const stale = mealPlan && Math.abs(mealPlan.targetKcal - targets.kcal) > targets.kcal * 0.08;
@@ -342,7 +352,7 @@ function MealPlanCard({ profile, plan, apiKey, model, targets, onLogMeal }) {
 
       {day && (
         <>
-          <div className="chip-row chip-scroll meal-days" role="tablist" aria-label="Day">
+          <div className="chip-row chip-scroll meal-days" role="tablist" aria-label="Day" ref={daysRef}>
             {mealPlan.days.map((d, i) => (
               <button
                 key={d.day}
@@ -351,7 +361,6 @@ function MealPlanCard({ profile, plan, apiKey, model, targets, onLogMeal }) {
                 aria-selected={i === dayIdx}
                 className={`chip ${i === dayIdx ? 'chip-active' : ''}`}
                 onClick={() => setDayIdx(i)}
-                ref={i === dayIdx ? (el) => el?.scrollIntoView?.({ block: 'nearest', inline: 'center' }) : undefined}
               >
                 {d.day.slice(0, 3)}
                 {d.training && <span className="train-dot" aria-label="training day" />}
