@@ -7,6 +7,7 @@ import HealthNotice from './components/HealthNotice';
 import AskCoach from './components/AskCoach';
 import Wordmark from './components/Wordmark';
 import PageBackdrop from './components/PageBackdrop';
+import NutritionView from './components/NutritionView';
 import Diagnostics from './components/Diagnostics';
 import Onboarding from './components/Onboarding';
 import PlanWhy from './components/PlanWhy';
@@ -45,6 +46,7 @@ import {
   saveModel,
   savePlan,
   saveProfile,
+  loadFoodLog,
 } from './services/storage';
 import { filterSafeExercises } from './services/catalogFilter';
 import {
@@ -97,6 +99,7 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
   const people = listProfiles();
   // The top app bar sits on the page photo, then takes a solid surface once the page scrolls (M3 behaviour).
   const [scrolled, setScrolled] = useState(false);
+  const [healthSection, setHealthSection] = useState('labs');
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
@@ -328,6 +331,7 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
         plan: planRef.current,
         logs: logsRef.current,
         bodySummary: describeBodyCompForPrompt(scansRef.current),
+        foodLog: loadFoodLog(),
         focusExerciseId,
         photos,
         apiKey,
@@ -629,6 +633,21 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
         )}
 
         {tab === 'health' && (
+          <div className="segmented health-switch" role="tablist" aria-label="Health section">
+            {[
+              ['labs', 'Blood reports'],
+              ['nutrition', 'Nutrition'],
+            ].map(([v, l]) => (
+              <button key={v} type="button" role="tab" aria-selected={healthSection === v} className={healthSection === v ? 'seg-active' : ''} onClick={() => setHealthSection(v)}>
+                {l}
+              </button>
+            ))}
+          </div>
+        )}
+        {tab === 'health' && healthSection === 'nutrition' && (
+          <NutritionView key={profileId} profile={profile} onProfileChange={handleProfileChange} plan={plan} apiKey={apiKey} model={model} />
+        )}
+        {tab === 'health' && healthSection === 'labs' && (
           <HealthView
             reports={reports}
             profile={profile}

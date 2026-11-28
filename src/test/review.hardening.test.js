@@ -22,7 +22,7 @@ describe('Content-Security-Policy', () => {
   it('only allows scripts from self and API calls to Gemini', () => {
     const d = directives(headerCsp);
     expect(d['script-src']).toEqual(["'self'"]);
-    expect(d['connect-src']).toEqual(["'self'", 'https://generativelanguage.googleapis.com']);
+    expect(d['connect-src']).toEqual(["'self'", 'https://generativelanguage.googleapis.com', 'https://world.openfoodfacts.org']);
     expect(d['object-src']).toEqual(["'none'"]);
     expect(d['frame-ancestors']).toEqual(["'none'"]);
     expect(headerCsp).not.toMatch(/unsafe-eval|script-src[^;]*unsafe-inline|\*/);

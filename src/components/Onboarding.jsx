@@ -4,6 +4,7 @@ import { AboutYou, FitnessTest, HealthCheck, InjuryGrid, LabReport, ClearanceBan
 import { EQUIPMENT_TIER_LABELS, cmToFeetInches, feetInchesToCm, kgToLbs, lbsToKg } from '../services/catalogFilter';
 import { parqComplete } from '../services/health';
 import StylePicker from './StylePicker';
+import DietFields from './DietFields';
 
 const GOALS = [
   ['general_fitness', 'General fitness & health'],
@@ -12,7 +13,7 @@ const GOALS = [
   ['rebuild_consistency', 'Build a habit'],
   ['mobility_longevity', 'Move better, joint health'],
 ];
-const STEPS = ['You', 'Training', 'Health', 'Injuries', 'Extras', 'Ready'];
+const STEPS = ['You', 'Training', 'Health', 'Injuries', 'Food', 'Extras', 'Ready'];
 
 /**
  * Guided first-run setup. Required: who you are, how you'll train, the health check and injuries.
@@ -171,7 +172,14 @@ export default function Onboarding({ profile, onChange, apiKey, onExtract, onFin
       <InjuryGrid profile={profile} onChange={onChange} />
     </div>,
 
-    // 4. Extras
+    // 4. Food
+    <div key="food" className="ob-body">
+      <h2>How do you eat?</h2>
+      <p className="muted">Your nutrition targets and weekly meal plan use this, along with your training and any blood report. All optional; change it any time.</p>
+      <DietFields profile={profile} onChange={onChange} idPrefix="ob-diet" />
+    </div>,
+
+    // 5. Extras
     <div key="extras" className="ob-body">
       <h2>Make it smarter (optional)</h2>
       <p className="muted">Each of these sharpens the plan. Skip any, and come back later from the Coach tab.</p>
@@ -193,7 +201,7 @@ export default function Onboarding({ profile, onChange, apiKey, onExtract, onFin
       </div>
     </div>,
 
-    // 5. Ready
+    // 6. Ready
     <div key="ready" className="ob-body">
       <h2>You're all set, {profile.name || 'friend'}</h2>
       <ClearanceBanner profile={profile} />
@@ -229,7 +237,7 @@ export default function Onboarding({ profile, onChange, apiKey, onExtract, onFin
         )}
         {step < STEPS.length - 1 ? (
           <button type="button" className="primary-btn" disabled={!canNext} onClick={() => setStep(step + 1)}>
-            {step === 4 ? 'Continue' : 'Next'}
+            {step === 5 ? 'Continue' : 'Next'}
           </button>
         ) : (
           <button type="button" className="primary-btn" disabled={loading} onClick={onFinish}>

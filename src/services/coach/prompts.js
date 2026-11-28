@@ -121,7 +121,7 @@ const fmtItem = (it) => {
   return `${m?.name || it.exercise_id} ${it.sets}x${it.rep_min}-${it.rep_max} @RPE ${it.target_rpe}`;
 };
 
-export function buildAskContext({ profile, plan, logSummary, focusExercise, bodySummary }) {
+export function buildAskContext({ profile, plan, logSummary, focusExercise, bodySummary, nutritionSummary }) {
   const joints = Object.entries(profile?.jointFlags || {})
     .filter(([, v]) => v)
     .map(([k]) => k);
@@ -140,6 +140,7 @@ export function buildAskContext({ profile, plan, logSummary, focusExercise, body
   }
   lines.push(`RECENT LOGS:\n${logSummary || 'none yet'}`);
   lines.push(`BODY COMPOSITION: ${bodySummary || 'no scans'}`);
+  if (nutritionSummary) lines.push(`NUTRITION:\n${nutritionSummary}`);
   if (focusExercise) {
     lines.push(
       `FOCUS EXERCISE: ${focusExercise.name} (${focusExercise.movement_pattern}, ${focusExercise.equipment_label}). Standard cues: ${(focusExercise.cues || []).join(' ')}`

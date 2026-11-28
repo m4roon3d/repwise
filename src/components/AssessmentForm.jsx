@@ -1,5 +1,6 @@
 import React from 'react';
 import NumberInput from './NumberInput';
+import DietFields from './DietFields';
 import CoachIntakeChat from './CoachIntakeChat';
 import StylePicker from './StylePicker';
 import {
@@ -358,6 +359,12 @@ export default function AssessmentForm({
             ? `✨ Generate ${profile.programWeeks}-Week Block with Gemini AI`
             : `⚡ Generate ${profile.programWeeks}-Week Block (Local Engine)`}
         </button>
+      </section>
+
+      <section className="card">
+        <h2>4. Food &amp; Diet</h2>
+        <p className="muted small">Used for your nutrition targets and weekly meal plan on the Health tab.</p>
+        <DietFields profile={profile} onChange={onChange} idPrefix="f-diet" />
       </section>
     </div>
   );

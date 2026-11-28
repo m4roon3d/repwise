@@ -32,6 +32,14 @@ A zero-backend, personal-use Progressive Web App (Vite + React) powered by your 
 ## Design
 Repwise follows Material 3: Roboto type, colour roles generated from Repwise green, filled cards, pill buttons, a top app bar titled per page, a five-tab navigation bar on phones (Exercises sits in the top bar), a navigation drawer on desktop, and a "Start workout" button that opens the next exercise to log. A soft gym photo sits behind the top of each page and fades into the surface. The repwise wordmark stays as the brand mark.
 
+## Nutrition
+**Health → Nutrition** builds daily targets from your weight, height, age, goal, training days, health conditions, pregnancy and latest blood report: calories (more on training days, fewer on rest days), protein, carbs, fat, fibre, and limits for sugar, saturated fat and sodium. A raised kidney marker keeps protein moderate; high cholesterol, triglycerides or blood sugar tighten the matching limits. Each adjustment is explained on screen.
+
+- **Diet profile** (set in guided setup, the Coach form or Diet settings): diet type, allergies, meals a day, foods you don't eat, favourite cuisines.
+- **Weekly meal plan** (needs a Gemini key): seven days of meals built to those targets, with training days marked, tips and a shopping list. Meals that may clash with your diet or allergies are flagged. "I ate this" logs a meal.
+- **Food log**: scan a barcode with the camera (Chrome's built-in reader, or a decoder loaded on demand in Safari), search by name, or add by hand. Products come from the free Open Food Facts database; allergens and vegan/vegetarian status are checked against your profile. Daily totals show against your targets.
+- The Ask coach sees your targets and the week's logged intake.
+
 ## Your own exercises
 In **Exercises**, tap **+ Add exercise** to add one by hand (name, movement, equipment, muscles, style, where you can do it, form cues, and which sore areas should rule it out). Or tap **✨ Add with AI**, describe what you want ("kettlebell moves for shoulders") and tick the suggestions to keep. Your exercises carry a ★ Mine or ✨ AI tag. New plans can use them, and the injury and pregnancy safety rules apply to them. Any exercise, built-in or yours, can be set to "Don't use in my plans". Each person on the device has their own list (up to 60), and it is included in backups.
 

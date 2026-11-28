@@ -3,6 +3,8 @@ import { sanitizeBaselines } from './baseline';
 import { sanitizeLabs, sanitizeReports } from './labs';
 import { sanitizeScans } from './bodyComp';
 import { EXERCISE_MAP, setCustomExercises, sanitizeCustomList } from './catalog';
+import { DEFAULT_DIET, sanitizeDiet } from './nutrition';
+import { sanitizeFoodLog, sanitizeMealPlan } from './food';
 import { sanitizeStyles } from './styles';
 
 const KEYS = {
@@ -18,6 +20,8 @@ const KEYS = {
   BODY_SCANS: 'mf_body_scans_v1',
   LAB_REPORTS: 'mf_lab_reports_v1',
   CUSTOM_EXERCISES: 'mf_custom_exercises_v1',
+  FOOD_LOG: 'mf_food_log_v1',
+  MEAL_PLAN: 'mf_meal_plan_v1',
   PROFILES: 'mf_profiles_v1', // device-level: [{ id, name }]
   ACTIVE_PROFILE: 'mf_active_profile_v1', // device-level
 };
@@ -102,6 +106,7 @@ export const DEFAULT_PROFILE = {
   labs: null, // { date, source, markers: [{ id, name, value, unit }] } — never the image itself
   preferences: { specificGoal: '', goalWhy: '', activity: '', sports: '', timeOfDay: '', likes: [], dislikes: [] },
   styles: ['gym'], // gym | calisthenics | yoga | cardio
+  diet: { ...DEFAULT_DIET },
 };
 
 /**
@@ -196,6 +201,7 @@ export function sanitizeProfile(raw) {
   out.labs = sanitizeLabs(src.labs);
   out.preferences = sanitizePreferences(src.preferences);
   out.styles = sanitizeStyles(src.styles);
+  out.diet = sanitizeDiet(src.diet);
   if (src.jointFlags && typeof src.jointFlags === 'object') {
     for (const joint of Object.keys(DEFAULT_PROFILE.jointFlags)) {
       if (typeof src.jointFlags[joint] === 'boolean') out.jointFlags[joint] = src.jointFlags[joint];
@@ -314,6 +320,28 @@ export function loadModel() {
 
 export function saveModel(model) {
   safeSet(KEYS.MODEL, (model || DEFAULT_MODEL).trim());
+}
+
+// ---- Food log and meal plan -----------------------------------------------------------------------
+const readJson = (key, fallback) => {
+  try {
+    return JSON.parse(safeGet(key) || 'null') ?? fallback;
+  } catch {
+    return fallback;
+  }
+};
+export const loadFoodLog = () => sanitizeFoodLog(readJson(KEYS.FOOD_LOG, []));
+export function saveFoodLog(list) {
+  const clean = sanitizeFoodLog(list);
+  safeSet(KEYS.FOOD_LOG, JSON.stringify(clean));
+  return clean;
+}
+export const loadMealPlan = () => sanitizeMealPlan(readJson(KEYS.MEAL_PLAN, null));
+export function saveMealPlan(plan) {
+  const clean = sanitizeMealPlan(plan);
+  if (clean) safeSet(KEYS.MEAL_PLAN, JSON.stringify(clean));
+  else safeRemove(KEYS.MEAL_PLAN);
+  return clean;
 }
 
 // ---- My exercises (added in the app, by hand or by AI) -----------------------------------------------
@@ -503,6 +531,8 @@ export function exportBackupJson() {
     bodyScans: loadBodyScans(),
     labReports: loadLabReports(),
     customExercises: loadCustomExercises(),
+    foodLog: loadFoodLog(),
+    mealPlan: loadMealPlan(),
   };
 
   return JSON.stringify(payload, null, 2);
@@ -516,6 +546,8 @@ export function importBackupJson(jsonText) {
   const skipped = [];
   // Exercises first: the profile's likes/dislikes and the plan may refer to them.
   if (Array.isArray(data.customExercises)) saveCustomExercises(data.customExercises);
+  if (Array.isArray(data.foodLog)) saveFoodLog(data.foodLog);
+  if (data.mealPlan) saveMealPlan(data.mealPlan);
 
   if (data.profile !== undefined) {
     if (data.profile && typeof data.profile === 'object') saveProfile(sanitizeProfile(data.profile));
@@ -561,6 +593,8 @@ const AREA_LABELS = {
   BODY_SCANS: 'Body scans',
   LAB_REPORTS: 'Blood reports',
   CUSTOM_EXERCISES: 'My exercises',
+  FOOD_LOG: 'Food log',
+  MEAL_PLAN: 'Meal plan',
 };
 
 /** Bytes used by each area for the current person, plus device totals. Strings count 2 bytes per char. */

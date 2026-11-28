@@ -13,7 +13,9 @@ import { applyRpeCap, healthAdjustments, labFinisher, sanitizeHealth } from './h
 import { buildPlanRationale } from './rationale';
 import { assignDayStyles, isStrengthStyle, modalitiesOf, normalizeDoses, normalizeItem, weaveStyleDays, doseOf } from './styles';
 import { sanitizeLabs, analyzeLabs, sanitizeAnalysis, previousValue, MARKER_MAP } from './labs';
-import { LAB_REPORT_SCHEMA, BODY_SCAN_SCHEMA, LAB_ANALYSIS_SCHEMA, NEW_EXERCISES_SCHEMA } from './coach/schemas';
+import { LAB_REPORT_SCHEMA, BODY_SCAN_SCHEMA, LAB_ANALYSIS_SCHEMA, NEW_EXERCISES_SCHEMA, MEAL_PLAN_SCHEMA } from './coach/schemas';
+import { computeTargets, trainingWeekdays, WEEKDAYS, DIET_TYPES, ALLERGENS, sanitizeDiet } from './nutrition';
+import { sanitizeMealPlan, recentAverage } from './food';
 import { exercises as CATALOG, sanitizeCustomExercise, slugFor, BUILT_IN_IDS } from './catalog';
 import { normalizeExtracted } from './bodyComp';
 import { buildDeterministicFallbackPlan, localIntakeTurn, localSwap, localAdaptDay } from './coach/localEngine';
@@ -321,7 +323,7 @@ async function adaptRaw(dayPlan, constraint, profile, safeExercises, apiKey, mod
  * question being asked. `photos` ({ mimeType, data }) are attached to that last question only.
  * Needs a Gemini key: there is no local fallback for open questions.
  */
-export async function askCoach({ messages, profile, plan, logs = [], bodySummary = '', focusExerciseId, photos = [], apiKey, model }) {
+export async function askCoach({ messages, profile, plan, logs = [], bodySummary = '', foodLog = [], focusExerciseId, photos = [], apiKey, model }) {
   if (!apiKey) throw new Error('Ask Your Coach needs a Gemini API key. Add one in Settings.');
   const turns = (messages || [])
     .filter((m) => (m.role === 'user' || m.role === 'coach') && typeof m.text === 'string' && m.text.trim())
@@ -341,6 +343,7 @@ export async function askCoach({ messages, profile, plan, logs = [], bodySummary
     plan,
     logSummary: summarizeLogsForPrompt(logs, profile?.unitSystem),
     bodySummary,
+    nutritionSummary: summarizeNutrition(profile, plan, foodLog),
     focusExercise: focusExerciseId ? EXERCISE_MAP[focusExerciseId] : null,
   })}`;
 
@@ -572,4 +575,70 @@ export async function suggestExercises({ request, profile, apiKey, model, count 
   }
   if (!out.length) throw new Error('No new exercises came back for that. Try a different or more specific request.');
   return out;
+}
+
+/**
+ * A 7-day meal plan built around the app's own targets (computeTargets), the person's diet type, allergies,
+ * foods to avoid, and which days they train. Gemini writes the meals; it never sets the numbers.
+ */
+export async function generateMealPlan({ profile, plan, apiKey, model }) {
+  if (!apiKey) throw new Error('A weekly meal plan needs a Gemini API key. Add one with the key button at the top.');
+  const t = computeTargets(profile, plan);
+  const diet = sanitizeDiet(profile?.diet);
+  const trainDays = trainingWeekdays(t.trainingDays).map((i) => WEEKDAYS[i]);
+  const dietLabel = DIET_TYPES.find((d) => d.id === diet.dietType)?.label || 'Eats everything';
+  const allergyLabels = diet.allergies.map((id) => ALLERGENS.find((a) => a.id === id)?.label).filter(Boolean);
+  const slots = { 3: 'Breakfast, Lunch, Dinner', 4: 'Breakfast, Lunch, Snack, Dinner', 5: 'Breakfast, Snack, Lunch, Snack, Dinner' }[diet.mealsPerDay];
+  const ai = await getAI(apiKey, 'meal_plan');
+  const parsed = await requestJson(
+    ai,
+    {
+      model,
+      contents: [
+        {
+          role: 'user',
+          parts: [
+            {
+              text: [
+                'Write a practical 7-day meal plan (Monday to Sunday) for one person.',
+                `Diet: ${dietLabel}. ${allergyLabels.length ? `ALLERGIES, never include: ${allergyLabels.join(', ')}.` : 'No allergies.'}`,
+                diet.avoid ? `Foods they don't eat: ${diet.avoid}.` : '',
+                `Cuisine: ${diet.cuisines || 'varied, everyday home cooking from any cuisine'}.`,
+                `Meals each day: ${slots}.`,
+                `Training days: ${trainDays.join(', ') || 'none'}. Set training true on those days.`,
+                `Daily targets on training days: ${t.trainingDay.kcal} kcal, ${t.protein} g protein, ${t.trainingDay.carbs} g carbs, ${t.fat} g fat, at least ${t.fibre} g fibre.`,
+                `Daily targets on rest days: ${t.restDay.kcal} kcal, ${t.protein} g protein, ${t.restDay.carbs} g carbs, ${t.fat} g fat, at least ${t.fibre} g fibre.`,
+                `Limits: saturated fat under ${t.satFatMax} g, added sugar under ${t.sugarMax} g, sodium under ${t.sodiumMax} mg.`,
+                t.notes.length ? `Health notes to respect: ${t.notes.map((n) => `${n.title}: ${n.text}`).join(' ')}` : '',
+                'Each day must land within 5% of its calorie and protein targets. Give realistic per-meal kcal, protein, carbs, fat and fibre.',
+                'items: each ingredient with an everyday amount (e.g. "Rolled oats, 60 g", "2 eggs"). On training days put a carb-and-protein meal 1–3 hours before or after training.',
+                'Reuse leftovers and ingredients across days to keep shopping simple. No supplements, no medical claims.',
+                'tips: 3–5 short practical tips for this week. shopping: a combined shopping list for the week, one item per entry with a rough total amount.',
+              ].filter(Boolean).join('\n'),
+            },
+          ],
+        },
+      ],
+      config: { responseMimeType: 'application/json', responseSchema: MEAL_PLAN_SCHEMA, temperature: 0.6, maxOutputTokens: 24000 },
+    },
+    mustBeObject
+  );
+  const clean = sanitizeMealPlan({ ...parsed, model, targetKcal: t.kcal, createdAt: Date.now() });
+  if (!clean || clean.days.length < 7) throw new Error('The meal plan came back incomplete. Try again.');
+  return clean;
+}
+
+/** Targets and the last week's logged intake, for the coach's context. */
+export function summarizeNutrition(profile, plan, foodLog = []) {
+  if (!profile) return '';
+  const t = computeTargets(profile, plan);
+  const d = sanitizeDiet(profile.diet);
+  const avg = recentAverage(foodLog, 7);
+  const lines = [
+    `Diet: ${DIET_TYPES.find((x) => x.id === d.dietType)?.label}${d.allergies.length ? `; allergies: ${d.allergies.join(', ')}` : ''}${d.avoid ? `; avoids: ${d.avoid}` : ''}.`,
+    `Targets: ${t.trainingDay.kcal} kcal training days / ${t.restDay.kcal} rest days, protein ${t.protein} g, fat ${t.fat} g, fibre ${t.fibre} g+, sodium < ${t.sodiumMax} mg.`,
+  ];
+  if (t.notes.length) lines.push(`Food focus: ${t.notes.map((n) => n.title).join('; ')}.`);
+  lines.push(avg ? `Logged intake, average of ${avg.days} day(s) this week: ${avg.kcal} kcal, ${avg.protein} g protein, ${avg.carbs} g carbs, ${avg.fat} g fat, ${avg.fibre} g fibre.` : 'No food logged this week.');
+  return lines.join('\n');
 }

@@ -256,3 +256,41 @@ export const NEW_EXERCISES_SCHEMA = {
   },
   required: ['exercises'],
 };
+
+// Weekly meal plan: seven days of meals that hit the app's own targets.
+export const MEAL_PLAN_SCHEMA = {
+  type: Type.OBJECT,
+  properties: {
+    days: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          day: { type: Type.STRING },
+          training: { type: Type.BOOLEAN },
+          meals: {
+            type: Type.ARRAY,
+            items: {
+              type: Type.OBJECT,
+              properties: {
+                slot: { type: Type.STRING },
+                name: { type: Type.STRING },
+                items: { type: Type.ARRAY, items: { type: Type.STRING } },
+                kcal: { type: Type.INTEGER },
+                protein: { type: Type.INTEGER },
+                carbs: { type: Type.INTEGER },
+                fat: { type: Type.INTEGER },
+                fibre: { type: Type.INTEGER },
+              },
+              required: ['slot', 'name', 'items', 'kcal', 'protein', 'carbs', 'fat', 'fibre'],
+            },
+          },
+        },
+        required: ['day', 'training', 'meals'],
+      },
+    },
+    tips: { type: Type.ARRAY, items: { type: Type.STRING } },
+    shopping: { type: Type.ARRAY, items: { type: Type.STRING } },
+  },
+  required: ['days', 'tips', 'shopping'],
+};

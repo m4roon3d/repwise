@@ -52,6 +52,12 @@ describe('guided setup', () => {
     await user.click(screen.getByRole('button', { name: 'Wrist: Sore now' }));
     await next(user);
 
+    // Food: diet type and an allergy
+    expect(screen.getByRole('heading', { name: 'How do you eat?' })).toBeInTheDocument();
+    await user.selectOptions(screen.getByLabelText('What do you eat?'), 'vegetarian');
+    await user.click(screen.getByRole('button', { name: 'Peanuts' }));
+    await next(user);
+
     // Extras: fitness test, then about you
     await user.type(screen.getByLabelText(/Push-ups \(reps\)/i), '6');
     await user.type(screen.getByLabelText(/chair stand/i), '13');
@@ -73,6 +79,7 @@ describe('guided setup', () => {
     const profile = loadProfile();
     expect(profile).toMatchObject({ name: 'Asha', sex: 'female', daysPerWeek: 4 });
     expect(profile.health.conditions).toEqual(['hypertension']);
+    expect(profile.diet).toMatchObject({ dietType: 'vegetarian', allergies: ['peanuts'] });
     expect(profile.baselines[0]).toMatchObject({ pushups: 6, sitToStand: 13 });
 
     // Why this plan

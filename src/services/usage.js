@@ -13,6 +13,7 @@ export const FEATURE_LABELS = {
   lab_read: 'Read blood report',
   lab_analysis: 'Blood report analysis',
   exercise_ideas: 'Exercise ideas',
+  meal_plan: 'Meal plan',
   scan_read: 'Read body scan',
 };
 
