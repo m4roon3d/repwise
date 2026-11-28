@@ -226,7 +226,7 @@ describe('Nutrition screen', () => {
     await user.type(screen.getByRole('spinbutton', { name: 'Calories' }), '320');
     await user.type(screen.getByRole('spinbutton', { name: 'Protein g' }), '18');
     await user.click(screen.getByRole('button', { name: 'Add' }));
-    expect(screen.getByText('Dal bowl')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Remove Dal bowl' })).toBeInTheDocument();
     expect(screen.getByRole('progressbar', { name: 'Calories' })).toHaveAttribute('aria-valuenow', '320');
     expect(loadFoodLog()[0]).toMatchObject({ name: 'Dal bowl', source: 'manual' });
     await user.click(screen.getByRole('button', { name: 'Remove Dal bowl' }));
@@ -274,5 +274,132 @@ describe('Health tab', () => {
     await user.click(screen.getByRole('tab', { name: 'Nutrition' }));
     expect(screen.getByRole('heading', { name: 'Your daily targets' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Scan barcode' })).toBeInTheDocument();
+  });
+});
+
+// ---- Meal tracker: faster logging, water, photos, trends ------------------------------------------
+import { recentFoods, sanitizeFoodLibrary, previousMeal, sanitizeWater, dailySeries } from '../services/food';
+import { estimateMealPhoto } from '../services/geminiCoach';
+import { saveFoodLibrary, loadFoodLibrary, loadWater } from '../services/storage';
+import NutritionTrends from '../components/NutritionTrends';
+
+const dayKey = (offset) => todayKey(new Date(Date.now() + offset * 86400000));
+const entry = (id, name, date, meal = 'breakfast', kcal = 300, protein = 20, extra = {}) => ({ id, name, date, meal, ts: Number(id.replace(/\D/g, '')) || 1, totals: { kcal, protein, carbs: 30, fat: 10 }, ...extra });
+
+describe('faster logging helpers', () => {
+  it('lists recent foods once each, skipping favourites', () => {
+    const log = sanitizeFoodLog([entry('e1', 'Oats', dayKey(-1)), entry('e2', 'Banana', dayKey(-1)), entry('e3', 'Oats', dayKey(0))]);
+    expect(recentFoods(log).map((t) => t.name)).toEqual(['Oats', 'Banana']);
+    expect(recentFoods(log, 8, new Set(['oats|'])).map((t) => t.name)).toEqual(['Banana']);
+  });
+
+  it('finds the previous day\'s meal and keeps water and the library tidy', () => {
+    const log = sanitizeFoodLog([entry('e1', 'Oats', dayKey(-1)), entry('e2', 'Rice', dayKey(-1), 'lunch')]);
+    expect(previousMeal(log, dayKey(0), 'breakfast').map((e) => e.name)).toEqual(['Oats']);
+    expect(sanitizeWater({ [dayKey(0)]: 750.4, bad: 3, '2026-01-01': -5 })).toEqual({ '2026-01-01': 0, [dayKey(0)]: 750 });
+    const lib = sanitizeFoodLibrary({ favourites: [entry('a', 'Oats', dayKey(0)), entry('b', 'Oats', dayKey(0))], meals: [{ name: 'Usual breakfast', meal: 'breakfast', items: [entry('c', 'Oats', dayKey(0))] }, { name: '', items: [] }] });
+    expect(lib.favourites).toHaveLength(1);
+    expect(lib.meals).toHaveLength(1);
+    const series = dailySeries(log, { [dayKey(-1)]: 1500 }, 3);
+    expect(series.map((r) => [r.kcal, r.waterMl, r.logged])).toEqual([[0, 0, false], [600, 1500, true], [0, 0, false]]);
+  });
+});
+
+describe('photo logging', () => {
+  const photo = { mimeType: 'image/jpeg', data: 'abc' };
+  it('turns a plate photo into checked items and logs usage', async () => {
+    mockGenerateContent.mockResolvedValueOnce({
+      candidates: [{ finishReason: 'STOP' }],
+      text: JSON.stringify({ is_food: true, meal_name: 'Dal rice', confidence: 'medium', note: 'Ghee amount is a guess.', items: [{ name: 'Dal', grams: 200, kcal: 230.6, protein: 14, carbs: 30, fat: 6, fibre: 8 }, { name: 'Rice', grams: 150, kcal: 195, protein: 4, carbs: 43, fat: 0, fibre: 1 }, { name: '', grams: 1, kcal: 1, protein: 0, carbs: 0, fat: 0, fibre: 0 }] }),
+    });
+    const r = await estimateMealPhoto({ photo, note: '2 katoris of moong dal', apiKey: 'k', model: 'm' });
+    expect(r).toMatchObject({ mealName: 'Dal rice', confidence: 'medium' });
+    expect(r.items).toEqual([expect.objectContaining({ name: 'Dal', kcal: 231 }), expect.objectContaining({ name: 'Rice' })]);
+    const parts = mockGenerateContent.mock.calls[0][0].contents[0].parts;
+    expect(parts[0].inlineData).toEqual(photo);
+    expect(parts[1].text).toContain('2 katoris of moong dal');
+    expect(loadUsage().at(-1)).toMatchObject({ feature: 'food_photo', ok: true });
+  });
+
+  it('rejects photos that aren\'t food and needs a key', async () => {
+    mockGenerateContent.mockResolvedValueOnce({ candidates: [{ finishReason: 'STOP' }], text: JSON.stringify({ is_food: false, meal_name: '', confidence: 'low', note: '', items: [] }) });
+    await expect(estimateMealPhoto({ photo, apiKey: 'k', model: 'm' })).rejects.toThrow(/doesn't look like food/);
+    await expect(estimateMealPhoto({ photo, apiKey: '' })).rejects.toThrow(/API key/);
+  });
+});
+
+describe('meal tracker screen', () => {
+  function setup(props = {}) {
+    const user = userEvent.setup();
+    render(<NutritionView profile={base()} onProfileChange={vi.fn()} plan={null} apiKey="k" model="m" {...props} />);
+    return { user };
+  }
+
+  it('copies yesterday\'s breakfast, stars a food and re-adds it from quick add', async () => {
+    saveFoodLog([entry('e1', 'Masala oats', dayKey(-1), 'breakfast', 350, 12)]);
+    const { user } = setup();
+    await user.click(screen.getByRole('button', { name: 'Copy breakfast from the day before' }));
+    expect(loadFoodLog().filter((e) => e.date === dayKey(0))).toHaveLength(1);
+
+    await user.click(screen.getByRole('button', { name: 'Favourite Masala oats' }));
+    expect(loadFoodLibrary().favourites[0].name).toBe('Masala oats');
+    const quick = screen.getByRole('group', { name: 'Quick add' });
+    await user.click(within(quick).getByRole('button', { name: '★ Masala oats' }));
+    expect(loadFoodLog().filter((e) => e.date === dayKey(0))).toHaveLength(2);
+  });
+
+  it('saves a meal and adds the whole meal in one tap', async () => {
+    saveFoodLog([entry('e1', 'Poha', dayKey(0)), entry('e2', 'Chai', dayKey(0), 'breakfast', 90, 3)]);
+    vi.stubGlobal('prompt', () => 'Weekday breakfast');
+    const { user } = setup();
+    await user.click(screen.getByRole('button', { name: 'Save as meal' }));
+    expect(loadFoodLibrary().meals[0]).toMatchObject({ name: 'Weekday breakfast', meal: 'breakfast' });
+    await user.click(within(screen.getByRole('group', { name: 'Quick add' })).getByRole('button', { name: '🍽 Weekday breakfast' }));
+    expect(loadFoodLog().filter((e) => e.meal === 'breakfast')).toHaveLength(4);
+  });
+
+  it('tracks water', async () => {
+    const { user } = setup();
+    await user.click(screen.getByRole('button', { name: '+ Glass (250 ml)' }));
+    await user.click(screen.getByRole('button', { name: '+ Bottle (500 ml)' }));
+    await user.click(screen.getByRole('button', { name: 'Remove 250 ml' }));
+    expect(loadWater()[todayKey()]).toBe(500);
+    expect(screen.getByRole('progressbar', { name: 'Water' })).toHaveAttribute('aria-valuenow', '0.5');
+  });
+
+  it('logs items estimated from a photo after you adjust them', async () => {
+    mockGenerateContent.mockResolvedValueOnce({
+      candidates: [{ finishReason: 'STOP' }],
+      text: JSON.stringify({ is_food: true, meal_name: 'Dal rice', confidence: 'medium', note: '', items: [{ name: 'Dal', grams: 200, kcal: 240, protein: 14, carbs: 30, fat: 6, fibre: 8 }, { name: 'Pickle', grams: 15, kcal: 40, protein: 0, carbs: 2, fat: 4, fibre: 0 }] }),
+    });
+    const { user } = setup();
+    await user.click(screen.getByRole('button', { name: 'Photo' }));
+    await user.upload(screen.getByLabelText('Meal photo'), new File(['x'], 'plate.jpg', { type: 'image/jpeg' }));
+    await user.click(await screen.findByRole('button', { name: 'Estimate' }));
+    const grams = await screen.findByLabelText('Dal grams');
+    await user.clear(grams);
+    await user.type(grams, '100');
+    await user.click(screen.getByRole('button', { name: 'Leave out Pickle' }));
+    await user.click(screen.getByRole('button', { name: /^Add 1 item · 120 kcal/ }));
+    expect(loadFoodLog()[0]).toMatchObject({ name: 'Dal', grams: 100, source: 'photo', totals: expect.objectContaining({ kcal: 120, protein: 7 }) });
+  });
+});
+
+describe('nutrition trends', () => {
+  it('averages logged days against targets', () => {
+    const t = computeTargets(base(), null);
+    saveFoodLog([entry('e1', 'A', dayKey(-1), 'lunch', t.kcal, t.protein), entry('e2', 'B', dayKey(-2), 'lunch', 1000, 40), entry('e3', 'Today so far', dayKey(0), 'breakfast', 200, 5)]);
+    render(<NutritionTrends profile={base()} plan={null} />);
+    const card = screen.getByRole('region', { name: 'Nutrition trends' });
+    expect(within(card).getByText(Math.round((t.kcal + 1000) / 2).toLocaleString())).toBeInTheDocument();
+    expect(within(card).getByText('days protein hit')).toBeInTheDocument();
+    expect(within(card).getByRole('img', { name: /^Calories per day/ })).toBeInTheDocument();
+  });
+
+  it('nudges to start logging when there is nothing yet', async () => {
+    const onOpen = vi.fn();
+    render(<NutritionTrends profile={base()} plan={null} onOpen={onOpen} />);
+    await userEvent.setup().click(screen.getByRole('button', { name: /Start logging/ }));
+    expect(onOpen).toHaveBeenCalled();
   });
 });

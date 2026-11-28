@@ -115,8 +115,8 @@ export default function TrendChart({ title, points, format = (v) => String(v), d
 }
 
 /** Small bar chart for counts per period (e.g. training days per week). */
-export function MiniBars({ title, bars, max, formatLabel, note }) {
-  const top = Math.max(max || 0, ...bars.map((b) => b.value), 1);
+export function MiniBars({ title, bars, max, formatLabel, note, target }) {
+  const top = Math.max(max || 0, target || 0, ...bars.map((b) => b.value), 1);
   const bw = (W - PAD.l - PAD.r) / bars.length;
   const h = 110;
   const base = h - 20;
@@ -128,15 +128,18 @@ export function MiniBars({ title, bars, max, formatLabel, note }) {
       </figcaption>
       <svg viewBox={`0 0 ${W} ${h}`} className="trend-svg" role="img" aria-label={`${title}: ${bars.map((b) => `${formatLabel(b)} ${b.value}`).join(', ')}`}>
         <line x1={PAD.l} x2={W - PAD.r} y1={base} y2={base} stroke="#e6eaef" />
+        {target > 0 && <line className="trend-target" x1={PAD.l} x2={W - PAD.r} y1={base - (target / top) * (base - 16)} y2={base - (target / top) * (base - 16)} />}
         {bars.map((b, i) => {
           const bh = (b.value / top) * (base - 16);
           const bx = PAD.l + i * bw + 2;
           return (
             <g key={i}>
               {b.value > 0 && <rect x={bx} y={base - bh} width={bw - 4} height={bh} rx="4" fill={b.highlight ? '#006c4c' : '#a9cfbb'} />}
-              <text x={bx + (bw - 4) / 2} y={base - bh - 4} textAnchor="middle" className="trend-axis">
-                {b.value}
-              </text>
+              {bars.length <= 8 && (
+                <text x={bx + (bw - 4) / 2} y={base - bh - 4} textAnchor="middle" className="trend-axis">
+                  {b.value}
+                </text>
+              )}
               {/* Many bars: label every few, always the latest, so dates never collide. */}
               {(bars.length <= 8 || i === bars.length - 1 || (bars.length - 1 - i) % Math.ceil(bars.length / 5) === 0) && (
                 <text x={bx + (bw - 4) / 2} y={h - 6} textAnchor="middle" className="trend-axis">

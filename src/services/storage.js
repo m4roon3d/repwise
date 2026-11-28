@@ -4,7 +4,7 @@ import { sanitizeLabs, sanitizeReports } from './labs';
 import { sanitizeScans } from './bodyComp';
 import { EXERCISE_MAP, setCustomExercises, sanitizeCustomList } from './catalog';
 import { DEFAULT_DIET, sanitizeDiet } from './nutrition';
-import { sanitizeFoodLog, sanitizeMealPlan } from './food';
+import { sanitizeFoodLog, sanitizeMealPlan, sanitizeFoodLibrary, sanitizeWater } from './food';
 import { sanitizeStyles } from './styles';
 
 const KEYS = {
@@ -22,6 +22,8 @@ const KEYS = {
   CUSTOM_EXERCISES: 'mf_custom_exercises_v1',
   FOOD_LOG: 'mf_food_log_v1',
   MEAL_PLAN: 'mf_meal_plan_v1',
+  FOOD_LIBRARY: 'mf_food_library_v1',
+  WATER: 'mf_water_v1',
   PROFILES: 'mf_profiles_v1', // device-level: [{ id, name }]
   ACTIVE_PROFILE: 'mf_active_profile_v1', // device-level
 };
@@ -336,6 +338,18 @@ export function saveFoodLog(list) {
   safeSet(KEYS.FOOD_LOG, JSON.stringify(clean));
   return clean;
 }
+export const loadFoodLibrary = () => sanitizeFoodLibrary(readJson(KEYS.FOOD_LIBRARY, {}));
+export function saveFoodLibrary(lib) {
+  const clean = sanitizeFoodLibrary(lib);
+  safeSet(KEYS.FOOD_LIBRARY, JSON.stringify(clean));
+  return clean;
+}
+export const loadWater = () => sanitizeWater(readJson(KEYS.WATER, {}));
+export function saveWater(water) {
+  const clean = sanitizeWater(water);
+  safeSet(KEYS.WATER, JSON.stringify(clean));
+  return clean;
+}
 export const loadMealPlan = () => sanitizeMealPlan(readJson(KEYS.MEAL_PLAN, null));
 export function saveMealPlan(plan) {
   const clean = sanitizeMealPlan(plan);
@@ -533,6 +547,8 @@ export function exportBackupJson() {
     customExercises: loadCustomExercises(),
     foodLog: loadFoodLog(),
     mealPlan: loadMealPlan(),
+    foodLibrary: loadFoodLibrary(),
+    water: loadWater(),
   };
 
   return JSON.stringify(payload, null, 2);
@@ -548,6 +564,8 @@ export function importBackupJson(jsonText) {
   if (Array.isArray(data.customExercises)) saveCustomExercises(data.customExercises);
   if (Array.isArray(data.foodLog)) saveFoodLog(data.foodLog);
   if (data.mealPlan) saveMealPlan(data.mealPlan);
+  if (data.foodLibrary) saveFoodLibrary(data.foodLibrary);
+  if (data.water) saveWater(data.water);
 
   if (data.profile !== undefined) {
     if (data.profile && typeof data.profile === 'object') saveProfile(sanitizeProfile(data.profile));
@@ -595,6 +613,8 @@ const AREA_LABELS = {
   CUSTOM_EXERCISES: 'My exercises',
   FOOD_LOG: 'Food log',
   MEAL_PLAN: 'Meal plan',
+  FOOD_LIBRARY: 'Saved foods & meals',
+  WATER: 'Water',
 };
 
 /** Bytes used by each area for the current person, plus device totals. Strings count 2 bytes per char. */

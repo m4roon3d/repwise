@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import TrendChart, { MiniBars } from './TrendChart';
+import NutritionTrends from './NutritionTrends';
 import {
   BODY_METRICS,
   HEADLINE_METRICS,
@@ -103,7 +104,7 @@ function ScanEditor({ initial, units, onSave, onCancel, currentWeightKg }) {
   );
 }
 
-export default function ProgressView({ scans, onSaveScan, onDeleteScan, onExtract, apiKey, profile, logs, onAsk, onRetest }) {
+export default function ProgressView({ scans, onSaveScan, onDeleteScan, onExtract, apiKey, profile, logs, onAsk, onRetest, plan, onOpenNutrition }) {
   const units = useUnits(profile.unitSystem);
   const [editing, setEditing] = useState(null); // null | 'new' | scan
   const [busy, setBusy] = useState(false);
@@ -308,6 +309,8 @@ export default function ProgressView({ scans, onSaveScan, onDeleteScan, onExtrac
           )}
         </section>
       )}
+
+      <NutritionTrends profile={profile} plan={plan} onOpen={onOpenNutrition} />
 
       {/* ---- Training ---- */}
       <section className="card">

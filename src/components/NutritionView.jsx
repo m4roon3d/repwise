@@ -2,9 +2,10 @@ import React, { useCallback, useMemo, useState } from 'react';
 import BarcodeScanner from './BarcodeScanner';
 import DietFields from './DietFields';
 import { computeTargets, trainingWeekdays, dietClashes, DIET_TYPES, sanitizeDiet } from '../services/nutrition';
-import { NUTRIENTS, MEAL_SLOTS, todayKey, dayTotals, lookupBarcode, searchFoods, scaleNutrients, productWarnings } from '../services/food';
-import { loadFoodLog, saveFoodLog, loadMealPlan, saveMealPlan } from '../services/storage';
-import { generateMealPlan } from '../services/geminiCoach';
+import { NUTRIENTS, MEAL_SLOTS, todayKey, dayTotals, lookupBarcode, searchFoods, scaleNutrients, productWarnings, recentFoods, foodKey, templateFrom, entriesFrom, previousMeal } from '../services/food';
+import { loadFoodLog, saveFoodLog, loadMealPlan, saveMealPlan, loadFoodLibrary, saveFoodLibrary, loadWater, saveWater } from '../services/storage';
+import { generateMealPlan, estimateMealPhoto } from '../services/geminiCoach';
+import { prepareImage } from '../services/images';
 
 const LIMITS = new Set(['sugars', 'satFat', 'sodium']);
 const weekdayIdx = (dateKey) => (new Date(`${dateKey}T12:00:00`).getDay() + 6) % 7;
@@ -19,7 +20,7 @@ const defaultMeal = () => {
   return h < 11 ? 'breakfast' : h < 15 ? 'lunch' : h < 18 ? 'snack' : 'dinner';
 };
 const fmt = (n, unit) => (n == null ? '—' : `${n.toLocaleString()}${unit === 'kcal' ? '' : ` ${unit}`}`);
-const whole = (n, unit) => fmt(n == null ? n : Math.round(n), unit);
+const whole = (n, unit) => fmt(n == null || unit === 'L' ? n : Math.round(n), unit);
 
 function Bar({ label, value, target, unit, limit }) {
   const pct = target ? Math.min(100, Math.round((value / target) * 100)) : 0;
@@ -179,6 +180,120 @@ function FoodSearch({ onPick }) {
   );
 }
 
+/** Snap a plate; Gemini estimates each food; you check the amounts before anything is logged. */
+function PhotoLogger({ apiKey, model, onAdd, onCancel }) {
+  const [photo, setPhoto] = useState(null);
+  const [note, setNote] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  const [result, setResult] = useState(null);
+  const [items, setItems] = useState([]);
+  const [meal, setMeal] = useState(defaultMeal());
+
+  const choose = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    setError('');
+    setResult(null);
+    try {
+      setPhoto(await prepareImage(file));
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+  const estimate = async () => {
+    setBusy(true);
+    setError('');
+    try {
+      const r = await estimateMealPhoto({ photo, note, apiKey, model });
+      setResult(r);
+      setItems(r.items.map((it) => ({ ...it, base: { ...it } })));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setBusy(false);
+    }
+  };
+  // Changing grams scales that item's nutrition from the AI's estimate.
+  const setGrams = (i, g) =>
+    setItems((list) =>
+      list.map((it, j) => {
+        if (j !== i) return it;
+        const f = it.base.grams ? (Number(g) || 0) / it.base.grams : 1;
+        const sc = (k) => Math.round(it.base[k] * f);
+        return { ...it, grams: g, kcal: sc('kcal'), protein: sc('protein'), carbs: sc('carbs'), fat: sc('fat'), fibre: sc('fibre') };
+      })
+    );
+  const total = items.reduce((a, it) => a + it.kcal, 0);
+
+  if (!apiKey) {
+    return (
+      <div className="food-pick">
+        <p className="muted small">Logging from a photo needs a Gemini API key. Add one with the key button at the top, or add the food by hand.</p>
+        <button type="button" className="secondary-btn" onClick={onCancel}>Close</button>
+      </div>
+    );
+  }
+  return (
+    <div className="food-pick" aria-label="Log from a photo">
+      {!result && (
+        <>
+          <label className="secondary-btn photo-pick">
+            {photo ? 'Choose a different photo' : 'Take or choose a photo'}
+            <input type="file" accept="image/*" capture="environment" onChange={choose} hidden aria-label="Meal photo" />
+          </label>
+          {photo && <img className="food-photo" src={`data:${photo.mimeType};base64,${photo.data}`} alt="Your meal" />}
+          <label className="field">
+            <span>Anything the photo won't show? (optional)</span>
+            <input type="text" maxLength={200} value={note} placeholder="e.g. 2 rotis with ghee, dal is moong" onChange={(e) => setNote(e.target.value)} />
+          </label>
+          <div className="btn-row">
+            <button type="button" className="primary-btn" disabled={!photo || busy} onClick={estimate}>{busy ? 'Looking at your plate…' : 'Estimate'}</button>
+            <button type="button" className="secondary-btn" onClick={onCancel}>Cancel</button>
+          </div>
+        </>
+      )}
+      {error && <p className="error-text" role="alert">{error}</p>}
+      {result && (
+        <>
+          <h3>{result.mealName}</h3>
+          <p className="muted small">
+            Estimate, {result.confidence} confidence. Photos can be off by 20–30%, so check the amounts.{result.note ? ` ${result.note}` : ''}
+          </p>
+          <ul className="photo-items">
+            {items.map((it, i) => (
+              <li key={i}>
+                <span className="photo-item-name">
+                  {it.name}
+                  <span className="muted small">{it.kcal} kcal · P {it.protein} · C {it.carbs} · F {it.fat}</span>
+                </span>
+                <input type="number" inputMode="numeric" min="0" aria-label={`${it.name} grams`} value={it.grams} onChange={(e) => setGrams(i, e.target.value)} />
+                <span className="muted small">g</span>
+                <button type="button" className="icon-btn" aria-label={`Leave out ${it.name}`} onClick={() => setItems(items.filter((_, j) => j !== i))}>×</button>
+              </li>
+            ))}
+          </ul>
+          <label className="field">
+            <span>Meal</span>
+            <select value={meal} onChange={(e) => setMeal(e.target.value)}>
+              {MEAL_SLOTS.map((m) => (
+                <option key={m.id} value={m.id}>{m.label}</option>
+              ))}
+            </select>
+          </label>
+          <div className="btn-row">
+            <button type="button" className="primary-btn" disabled={!items.length} onClick={() => onAdd(items, meal)}>
+              Add {items.length} item{items.length === 1 ? '' : 's'} · {total} kcal
+            </button>
+            <button type="button" className="secondary-btn" onClick={() => setResult(null)}>Retake</button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 function MealPlanCard({ profile, plan, apiKey, model, targets, onLogMeal }) {
   const [mealPlan, setMealPlan] = useState(() => loadMealPlan());
   const [busy, setBusy] = useState(false);
@@ -293,6 +408,8 @@ export default function NutritionView({ profile, onProfileChange, plan, apiKey, 
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState('');
   const [showDiet, setShowDiet] = useState(false);
+  const [library, setLibrary] = useState(() => loadFoodLibrary());
+  const [water, setWater] = useState(() => loadWater());
 
   const training = trainingWeekdays(targets.trainingDays).includes(weekdayIdx(date));
   const dayKcal = training ? targets.trainingDay.kcal : targets.restDay.kcal;
@@ -307,6 +424,37 @@ export default function NutritionView({ profile, onProfileChange, plan, apiKey, 
     setMsg(`Added ${entry.name}.`);
   };
   const remove = (id) => setLog(saveFoodLog(log.filter((e) => e.id !== id)));
+  const addMany = (templates, meal, message) => {
+    setLog(saveFoodLog([...log, ...entriesFrom(templates, date, meal)]));
+    setMode(null);
+    setProduct(null);
+    setMsg(message);
+  };
+
+  // Favourites and saved meals.
+  const favKeys = new Set(library.favourites.map(foodKey));
+  const toggleFav = (e) => {
+    const k = foodKey(e);
+    const favourites = favKeys.has(k) ? library.favourites.filter((f) => foodKey(f) !== k) : [templateFrom(e), ...library.favourites];
+    setLibrary(saveFoodLibrary({ ...library, favourites }));
+  };
+  const saveMeal = (slot, items) => {
+    const name = window.prompt('Name this meal', `My ${MEAL_SLOTS.find((m) => m.id === slot).label.toLowerCase()}`);
+    if (!name?.trim()) return;
+    setLibrary(saveFoodLibrary({ ...library, meals: [{ id: `m_${Date.now().toString(36)}`, name: name.trim(), meal: slot, items: items.map(templateFrom) }, ...library.meals] }));
+    setMsg(`Saved "${name.trim()}". Add it again from Quick add.`);
+  };
+  const deleteMeal = (id) => setLibrary(saveFoodLibrary({ ...library, meals: library.meals.filter((m) => m.id !== id) }));
+  const pickTemplate = (t) => {
+    if (t.per100) setProduct({ name: t.name, brand: t.brand, barcode: t.barcode, per100: t.per100, servingG: t.grams, source: t.source === 'scan' ? 'scan' : 'search' });
+    else addMany([t], defaultMeal(), `Added ${t.name}.`);
+    if (t.per100) setMode('quick');
+  };
+  const recent = recentFoods(log, 8, favKeys);
+
+  // Water.
+  const waterMl = water[date] || 0;
+  const addWater = (ml) => setWater(saveWater({ ...water, [date]: Math.max(0, waterMl + ml) }));
 
   const onDetected = useCallback(async (code) => {
     setMode('lookup');
@@ -414,6 +562,15 @@ export default function NutritionView({ profile, onProfileChange, plan, apiKey, 
           </div>
         </details>
 
+        <div className="water-row">
+          <Bar label="Water" value={Math.round(waterMl / 100) / 10} target={targets.waterL} unit="L" />
+          <div className="btn-row">
+            <button type="button" className="chip" onClick={() => addWater(250)}>+ Glass (250 ml)</button>
+            <button type="button" className="chip" onClick={() => addWater(500)}>+ Bottle (500 ml)</button>
+            <button type="button" className="chip" disabled={!waterMl} aria-label="Remove 250 ml" onClick={() => addWater(-250)}>− 250 ml</button>
+          </div>
+        </div>
+
         <div className="btn-row food-actions">
           <button type="button" className="primary-btn" onClick={() => { setMode('scan'); setProduct(null); setMsg(''); }}>
             Scan barcode
@@ -421,15 +578,54 @@ export default function NutritionView({ profile, onProfileChange, plan, apiKey, 
           <button type="button" className="secondary-btn" onClick={() => { setMode('search'); setProduct(null); setMsg(''); }}>
             Search
           </button>
+          <button type="button" className="secondary-btn" onClick={() => { setMode('photo'); setProduct(null); setMsg(''); }}>
+            Photo
+          </button>
           <button type="button" className="secondary-btn" onClick={() => { setMode('manual'); setProduct(null); setMsg(''); }}>
             Add by hand
           </button>
         </div>
+        {(library.meals.length > 0 || library.favourites.length > 0 || recent.length > 0) && (
+          <div className="quick-add">
+            <span className="field-label">Quick add</span>
+            <div className="chip-row chip-scroll" role="group" aria-label="Quick add">
+              {library.meals.map((m) => (
+                <button key={m.id} type="button" className="chip chip-meal" onClick={() => addMany(m.items, m.meal, `Added ${m.name}.`)}>
+                  🍽 {m.name}
+                </button>
+              ))}
+              {library.favourites.map((t) => (
+                <button key={`f-${foodKey(t)}`} type="button" className="chip" onClick={() => pickTemplate(t)}>
+                  ★ {t.name}
+                </button>
+              ))}
+              {recent.map((t) => (
+                <button key={`r-${foodKey(t)}`} type="button" className="chip" onClick={() => pickTemplate(t)}>
+                  {t.name}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
         {msg && <p className="notice-line small" role="status">{msg}</p>}
 
         {mode === 'scan' && !product && <BarcodeScanner onDetected={onDetected} onClose={() => setMode(null)} />}
         {mode === 'lookup' && busy && <p className="muted small">Looking it up…</p>}
         {mode === 'search' && !product && <FoodSearch onPick={(p) => setProduct({ ...p, source: 'search' })} />}
+        {mode === 'photo' && (
+          <PhotoLogger
+            apiKey={apiKey}
+            model={model}
+            onCancel={() => setMode(null)}
+            onAdd={(items, meal) =>
+              addMany(
+                items.map((it) => ({ name: it.name, grams: Number(it.grams) || null, source: 'photo', totals: { kcal: it.kcal, protein: it.protein, carbs: it.carbs, fat: it.fat, fibre: it.fibre } })),
+                meal,
+                `Added ${items.length} item${items.length === 1 ? '' : 's'} from your photo.`
+              )
+            }
+          />
+        )}
         {mode === 'manual' && (
           <ManualFood
             onCancel={() => setMode(null)}
@@ -438,6 +634,7 @@ export default function NutritionView({ profile, onProfileChange, plan, apiKey, 
         )}
         {product && (
           <AmountPicker
+            key={`${product.name}-${product.barcode}`}
             product={product}
             diet={diet}
             onCancel={() => { setProduct(null); setMode(null); }}
@@ -447,13 +644,33 @@ export default function NutritionView({ profile, onProfileChange, plan, apiKey, 
 
         {MEAL_SLOTS.map((slot) => {
           const items = entries.filter((e) => e.meal === slot.id);
-          if (!items.length) return null;
+          const before = items.length ? [] : previousMeal(log, date, slot.id);
+          if (!items.length && !before.length) return null;
+          if (!items.length) {
+            return (
+              <div key={slot.id} className="copy-row">
+                <span>
+                  Same {slot.label.toLowerCase()} as the day before?
+                  <span className="muted small"> {before.length} item{before.length === 1 ? '' : 's'} · {Math.round(before.reduce((a, e) => a + e.totals.kcal, 0))} kcal</span>
+                </span>
+                <button type="button" className="secondary-btn small-btn" aria-label={`Copy ${slot.label.toLowerCase()} from the day before`} onClick={() => addMany(before.map(templateFrom).filter(Boolean), slot.id, `Copied ${slot.label.toLowerCase()} from the day before.`)}>
+                  Copy
+                </button>
+              </div>
+            );
+          }
           return (
             <div key={slot.id} className="food-slot">
-              <h3 className="marker-group-label">{slot.label} · {Math.round(items.reduce((a, e) => a + e.totals.kcal, 0))} kcal</h3>
+              <div className="food-slot-head">
+                <h3 className="marker-group-label">{slot.label} · {Math.round(items.reduce((a, e) => a + e.totals.kcal, 0))} kcal</h3>
+                <button type="button" className="link-btn small" onClick={() => saveMeal(slot.id, items)}>Save as meal</button>
+              </div>
               <ul className="food-entries">
                 {items.map((e) => (
                   <li key={e.id}>
+                    <button type="button" className={`icon-btn star ${favKeys.has(foodKey(e)) ? 'star-on' : ''}`} aria-pressed={favKeys.has(foodKey(e))} aria-label={`Favourite ${e.name}`} onClick={() => toggleFav(e)}>
+                      {favKeys.has(foodKey(e)) ? '★' : '☆'}
+                    </button>
                     <span className="food-entry-name">
                       {e.name}
                       <span className="muted small">{[e.brand, e.grams && `${e.grams} g`, `P ${e.totals.protein ?? '—'} · C ${e.totals.carbs ?? '—'} · F ${e.totals.fat ?? '—'}`].filter(Boolean).join(' · ')}</span>
@@ -466,6 +683,19 @@ export default function NutritionView({ profile, onProfileChange, plan, apiKey, 
             </div>
           );
         })}
+        {library.meals.length > 0 && (
+          <details className="meal-more">
+            <summary>Saved meals ({library.meals.length})</summary>
+            <ul className="saved-meals">
+              {library.meals.map((m) => (
+                <li key={m.id}>
+                  <span>{m.name} <span className="muted small">{m.items.length} items · {Math.round(m.items.reduce((a, t) => a + t.totals.kcal, 0))} kcal</span></span>
+                  <button type="button" className="icon-btn" aria-label={`Delete saved meal ${m.name}`} onClick={() => deleteMeal(m.id)}>×</button>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )}
         {!entries.length && !mode && <p className="muted small empty-line">Nothing logged {date === todayKey() ? 'yet today' : 'this day'}. Scan a pack, search, or tick a meal from your plan.</p>}
       </section>
 

@@ -294,3 +294,31 @@ export const MEAL_PLAN_SCHEMA = {
   },
   required: ['days', 'tips', 'shopping'],
 };
+
+// A plate photo: each food with an estimated amount and nutrition.
+export const FOOD_PHOTO_SCHEMA = {
+  type: Type.OBJECT,
+  properties: {
+    is_food: { type: Type.BOOLEAN },
+    meal_name: { type: Type.STRING },
+    confidence: { type: Type.STRING, enum: ['low', 'medium', 'high'] },
+    items: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          name: { type: Type.STRING },
+          grams: { type: Type.NUMBER },
+          kcal: { type: Type.NUMBER },
+          protein: { type: Type.NUMBER },
+          carbs: { type: Type.NUMBER },
+          fat: { type: Type.NUMBER },
+          fibre: { type: Type.NUMBER },
+        },
+        required: ['name', 'grams', 'kcal', 'protein', 'carbs', 'fat', 'fibre'],
+      },
+    },
+    note: { type: Type.STRING },
+  },
+  required: ['is_food', 'meal_name', 'confidence', 'items', 'note'],
+};

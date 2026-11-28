@@ -671,6 +671,11 @@ function ProfileApp({ profileId, onSwitch, onAddPerson, onRemovePerson }) {
             logs={logs}
             onAsk={apiKey ? askQuestion : null}
             onRetest={() => setTab('assess')}
+            plan={plan}
+            onOpenNutrition={() => {
+              setHealthSection('nutrition');
+              setTab('health');
+            }}
           />
         )}
 

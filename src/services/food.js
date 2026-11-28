@@ -148,7 +148,7 @@ export function sanitizeFoodEntry(raw) {
     name,
     brand: str(raw.brand, 40),
     barcode: isBarcode(raw.barcode) ? String(raw.barcode) : '',
-    source: ['scan', 'search', 'manual', 'plan'].includes(raw.source) ? raw.source : 'manual',
+    source: ['scan', 'search', 'manual', 'plan', 'photo'].includes(raw.source) ? raw.source : 'manual',
     grams: num(raw.grams) && num(raw.grams) <= 5000 ? num(raw.grams) : null,
     per100: raw.per100 ? sanitizeNutrients(raw.per100) : null,
     totals,
@@ -220,4 +220,85 @@ export function sanitizeMealPlan(raw) {
     tips: (Array.isArray(raw.tips) ? raw.tips : []).map((t) => str(t, 200)).filter(Boolean).slice(0, 6),
     shopping: (Array.isArray(raw.shopping) ? raw.shopping : []).map((t) => str(t, 60)).filter(Boolean).slice(0, 40),
   };
+}
+
+// ---- Faster logging: recent foods, favourites, saved meals -----------------------------------------
+
+export const foodKey = (e) => `${String(e?.name || '').toLowerCase().trim()}|${String(e?.brand || '').toLowerCase().trim()}`;
+
+/** The reusable part of a log entry (no id, date or time). */
+export function templateFrom(e) {
+  const clean = sanitizeFoodEntry({ ...e, id: 'tmp', date: '2000-01-01' });
+  if (!clean) return null;
+  const { name, brand, barcode, source, grams, per100, totals, meal } = clean;
+  return { name, brand, barcode, source, grams, per100, totals, meal };
+}
+
+/** New log entries from templates, for a date and meal. */
+export function entriesFrom(templates, date, meal) {
+  const now = Date.now();
+  return templates.map((t, i) => ({ ...t, id: `f_${now.toString(36)}_${i}${Math.random().toString(36).slice(2, 5)}`, date, ts: now + i, meal: meal || t.meal || 'snack' }));
+}
+
+/** Distinct foods logged most recently, newest first. */
+export function recentFoods(log, n = 8, exclude = new Set()) {
+  const seen = new Set(exclude);
+  const out = [];
+  for (let i = log.length - 1; i >= 0 && out.length < n; i--) {
+    const k = foodKey(log[i]);
+    if (seen.has(k)) continue;
+    seen.add(k);
+    const t = templateFrom(log[i]);
+    if (t) out.push(t);
+  }
+  return out;
+}
+
+export function sanitizeFoodLibrary(raw) {
+  const src = raw && typeof raw === 'object' ? raw : {};
+  const seen = new Set();
+  const favourites = (Array.isArray(src.favourites) ? src.favourites : [])
+    .map(templateFrom)
+    .filter((t) => t && !seen.has(foodKey(t)) && seen.add(foodKey(t)))
+    .slice(0, 40);
+  const meals = (Array.isArray(src.meals) ? src.meals : [])
+    .map((m) => ({
+      id: str(m?.id, 40) || `m_${Math.random().toString(36).slice(2, 9)}`,
+      name: str(m?.name, 40),
+      meal: MEAL_SLOTS.some((x) => x.id === m?.meal) ? m.meal : 'snack',
+      items: (Array.isArray(m?.items) ? m.items : []).map(templateFrom).filter(Boolean).slice(0, 12),
+    }))
+    .filter((m) => m.name && m.items.length)
+    .slice(0, 20);
+  return { favourites, meals };
+}
+
+/** Entries from the day before for one meal, ready to copy. */
+export function previousMeal(log, date, meal) {
+  const prev = todayKey(new Date(new Date(`${date}T12:00:00`).getTime() - 86400000));
+  return log.filter((e) => e.date === prev && e.meal === meal);
+}
+
+// ---- Water ---------------------------------------------------------------------------------------
+
+export function sanitizeWater(raw) {
+  const src = raw && typeof raw === 'object' && !Array.isArray(raw) ? raw : {};
+  const days = Object.keys(src)
+    .filter((k) => /^\d{4}-\d{2}-\d{2}$/.test(k) && Number.isFinite(Number(src[k])))
+    .sort()
+    .slice(-180);
+  return Object.fromEntries(days.map((k) => [k, Math.max(0, Math.min(10000, Math.round(Number(src[k]))))]));
+}
+
+// ---- Trends ----------------------------------------------------------------------------------------
+
+/** One row per day for the last `days` days, oldest first. */
+export function dailySeries(log, water = {}, days = 14, now = new Date()) {
+  const rows = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const date = todayKey(new Date(now.getTime() - i * 86400000));
+    const t = dayTotals(log, date);
+    rows.push({ date, ...t, waterMl: water[date] || 0, logged: log.some((e) => e.date === date) });
+  }
+  return rows;
 }

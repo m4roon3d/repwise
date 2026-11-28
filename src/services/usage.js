@@ -14,6 +14,7 @@ export const FEATURE_LABELS = {
   lab_analysis: 'Blood report analysis',
   exercise_ideas: 'Exercise ideas',
   meal_plan: 'Meal plan',
+  food_photo: 'Food photo',
   scan_read: 'Read body scan',
 };
 

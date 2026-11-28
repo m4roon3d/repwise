@@ -13,7 +13,7 @@ import { applyRpeCap, healthAdjustments, labFinisher, sanitizeHealth } from './h
 import { buildPlanRationale } from './rationale';
 import { assignDayStyles, isStrengthStyle, modalitiesOf, normalizeDoses, normalizeItem, weaveStyleDays, doseOf } from './styles';
 import { sanitizeLabs, analyzeLabs, sanitizeAnalysis, previousValue, MARKER_MAP } from './labs';
-import { LAB_REPORT_SCHEMA, BODY_SCAN_SCHEMA, LAB_ANALYSIS_SCHEMA, NEW_EXERCISES_SCHEMA, MEAL_PLAN_SCHEMA } from './coach/schemas';
+import { LAB_REPORT_SCHEMA, BODY_SCAN_SCHEMA, LAB_ANALYSIS_SCHEMA, NEW_EXERCISES_SCHEMA, MEAL_PLAN_SCHEMA, FOOD_PHOTO_SCHEMA } from './coach/schemas';
 import { computeTargets, trainingWeekdays, WEEKDAYS, DIET_TYPES, ALLERGENS, sanitizeDiet } from './nutrition';
 import { sanitizeMealPlan, recentAverage } from './food';
 import { exercises as CATALOG, sanitizeCustomExercise, slugFor, BUILT_IN_IDS } from './catalog';
@@ -641,4 +641,61 @@ export function summarizeNutrition(profile, plan, foodLog = []) {
   if (t.notes.length) lines.push(`Food focus: ${t.notes.map((n) => n.title).join('; ')}.`);
   lines.push(avg ? `Logged intake, average of ${avg.days} day(s) this week: ${avg.kcal} kcal, ${avg.protein} g protein, ${avg.carbs} g carbs, ${avg.fat} g fat, ${avg.fibre} g fibre.` : 'No food logged this week.');
   return lines.join('\n');
+}
+
+/**
+ * Estimates what's on a plate from a photo. Returns per-item grams and nutrition for the person to check
+ * and adjust before anything is logged. Estimates, not measurements.
+ */
+export async function estimateMealPhoto({ photo, note = '', apiKey, model }) {
+  if (!apiKey) throw new Error('Logging from a photo needs a Gemini API key. Add one with the key button at the top.');
+  if (!photo?.data) throw new Error('Choose or take a photo of your meal first.');
+  const ai = await getAI(apiKey, 'food_photo');
+  const parsed = await requestJson(
+    ai,
+    {
+      model,
+      contents: [
+        {
+          role: 'user',
+          parts: [
+            { inlineData: { mimeType: photo.mimeType, data: photo.data } },
+            {
+              text: [
+                'Identify each food and drink in this photo and estimate the amount and nutrition of what is shown.',
+                note ? `The person says: "${String(note).slice(0, 200)}". Use this to correct names and amounts.` : '',
+                'Use typical home recipes (including oil or ghee used in cooking). grams = edible amount on the plate.',
+                'Give kcal, protein, carbs, fat and fibre for that amount, rounded to whole numbers.',
+                'meal_name: a short name for the whole meal. confidence: how sure you are about the amounts.',
+                'If the photo is not food, set is_food false and items empty. note: one short line on what was hard to judge.',
+              ].filter(Boolean).join('\n'),
+            },
+          ],
+        },
+      ],
+      config: { responseMimeType: 'application/json', responseSchema: FOOD_PHOTO_SCHEMA, temperature: 0.2, maxOutputTokens: 4096 },
+    },
+    mustBeObject
+  );
+  if (parsed.is_food === false) throw new Error("That doesn't look like food. Try another photo.");
+  const clamp = (v, max) => Math.max(0, Math.min(max, Math.round(Number(v) || 0)));
+  const items = (Array.isArray(parsed.items) ? parsed.items : [])
+    .map((it) => ({
+      name: String(it?.name || '').replace(/\s+/g, ' ').trim().slice(0, 60),
+      grams: clamp(it?.grams, 3000),
+      kcal: clamp(it?.kcal, 5000),
+      protein: clamp(it?.protein, 500),
+      carbs: clamp(it?.carbs, 1000),
+      fat: clamp(it?.fat, 500),
+      fibre: clamp(it?.fibre, 200),
+    }))
+    .filter((it) => it.name && it.kcal > 0)
+    .slice(0, 12);
+  if (!items.length) throw new Error("Couldn't make out the food. Try a clearer photo from above, or add it by hand.");
+  return {
+    mealName: String(parsed.meal_name || 'Meal').slice(0, 60),
+    confidence: ['low', 'medium', 'high'].includes(parsed.confidence) ? parsed.confidence : 'low',
+    note: String(parsed.note || '').slice(0, 200),
+    items,
+  };
 }

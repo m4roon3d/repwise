@@ -38,6 +38,10 @@ Repwise follows Material 3: Roboto type, colour roles generated from Repwise gre
 - **Diet profile** (set in guided setup, the Coach form or Diet settings): diet type, allergies, meals a day, foods you don't eat, favourite cuisines.
 - **Weekly meal plan** (needs a Gemini key): seven days of meals built to those targets, with training days marked, tips and a shopping list. Meals that may clash with your diet or allergies are flagged. "I ate this" logs a meal.
 - **Food log**: scan a barcode with the camera (Chrome's built-in reader, or a decoder loaded on demand in Safari), search by name, or add by hand. Products come from the free Open Food Facts database; allergens and vegan/vegetarian status are checked against your profile. Daily totals show against your targets.
+- **Faster logging**: a Quick add row of saved meals, ★ favourites and recent foods; copy a meal from the day before in one tap; save any meal (e.g. "Weekday breakfast") to add it whole next time.
+- **Photo logging** (needs a Gemini key): snap your plate, Gemini estimates each food's amount and nutrition, you adjust the grams or drop items, then add.
+- **Water**: tap to add a glass or bottle against your daily water target.
+- **Trends** in Progress: calories, protein and water per day over 14 or 30 days against your targets, with averages and days on target (today is left out of averages until it's over).
 - The Ask coach sees your targets and the week's logged intake.
 
 ## Your own exercises
